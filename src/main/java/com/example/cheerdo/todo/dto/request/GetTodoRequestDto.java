@@ -1,18 +1,21 @@
 package com.example.cheerdo.todo.dto.request;
 
 import com.example.cheerdo.todo.enums.Type;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @AllArgsConstructor
-@RequiredArgsConstructor
 public class GetTodoRequestDto {
     private String userId;
 
-    private Type type;
-    private LocalDateTime searchDate;
+    private String type;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate searchDate;
 }

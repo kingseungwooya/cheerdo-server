@@ -1,13 +1,10 @@
 package com.example.cheerdo.todo.dto.request;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Getter
-@AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class ModifyTodoRequestDto {
     private Long todoId;
     private String todo;
