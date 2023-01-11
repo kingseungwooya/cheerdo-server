@@ -1,4 +1,4 @@
-package com.example.swagger;
+package com.example.cheerdo.swagger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
