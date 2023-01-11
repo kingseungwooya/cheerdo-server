@@ -1,6 +1,7 @@
 package com.example.cheerdo.todo.controller;
 
 import com.example.cheerdo.todo.dto.request.GetTodoRequestDto;
+import com.example.cheerdo.todo.dto.request.ModifyTodoRequestDto;
 import com.example.cheerdo.todo.dto.request.WriteTodoRequestDto;
 import com.example.cheerdo.todo.dto.response.TodoResponseDto;
 import com.github.javafaker.Faker;
@@ -30,6 +31,12 @@ public class MainController {
                 new TodoResponseDto(faker.number().randomNumber(), faker.lorem().sentence(5))
         );
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
+    }
+
+    @PutMapping("/todo")
+    public ResponseEntity<Long> modifyTodo (@RequestBody ModifyTodoRequestDto modifyTodoRequestDto) {
+        Long todoId = modifyTodoRequestDto.getTodoId();
+        return new ResponseEntity<>(todoId, HttpStatus.OK);
     }
 
 }
