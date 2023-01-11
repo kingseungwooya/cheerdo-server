@@ -19,7 +19,7 @@ public class MainController {
     @PostMapping("/todo")
     public ResponseEntity<Long> writeTodo(@RequestBody WriteTodoRequestDto todoDto) {
         Long todoId = faker.number().randomNumber();
-        return new ResponseEntity<>(todoId, HttpStatus.OK);
+        return new ResponseEntity<>(todoId, HttpStatus.CREATED);
     }
 
     @GetMapping("/todo")
