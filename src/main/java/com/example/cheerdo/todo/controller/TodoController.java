@@ -12,18 +12,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/main")
-public class MainController {
+@RequestMapping("/api/main/todo")
+public class TodoController {
 
     private final Faker faker = new Faker();
 
-    @PostMapping("/todo")
+    @PostMapping("/")
     public ResponseEntity<Long> writeTodo(@RequestBody WriteTodoRequestDto todoDto) {
         Long todoId = faker.number().randomNumber();
         return new ResponseEntity<>(todoId, HttpStatus.CREATED);
     }
 
-    @GetMapping("/todo")
+    @GetMapping("/")
     public ResponseEntity<List<TodoResponseDto>> getMyTodo(@RequestBody GetTodoRequestDto getTodoRequestDto) {
         List<TodoResponseDto> responseDtos = List.of(
                 new TodoResponseDto(faker.number().randomNumber(), faker.lorem().sentence(5)),
@@ -33,7 +33,7 @@ public class MainController {
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
 
-    @PutMapping("/todo")
+    @PutMapping("/")
     public ResponseEntity<Long> modifyTodo (@RequestBody ModifyTodoRequestDto modifyTodoRequestDto) {
         Long todoId = modifyTodoRequestDto.getTodoId();
         return new ResponseEntity<>(todoId, HttpStatus.OK);
