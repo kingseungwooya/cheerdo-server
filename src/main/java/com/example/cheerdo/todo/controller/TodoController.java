@@ -4,6 +4,7 @@ import com.example.cheerdo.todo.dto.request.GetTodoRequestDto;
 import com.example.cheerdo.todo.dto.request.ModifyTodoRequestDto;
 import com.example.cheerdo.todo.dto.request.WriteTodoRequestDto;
 import com.example.cheerdo.todo.dto.response.TodoResponseDto;
+import com.example.cheerdo.todo.enums.Type;
 import com.github.javafaker.Faker;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +26,19 @@ public class TodoController {
 
     @GetMapping("/")
     public ResponseEntity<List<TodoResponseDto>> getMyTodo(@RequestBody GetTodoRequestDto getTodoRequestDto) {
-        List<TodoResponseDto> responseDtos = List.of(
-                new TodoResponseDto(faker.number().randomNumber(), faker.lorem().sentence(5)),
-                new TodoResponseDto(faker.number().randomNumber(), faker.lorem().sentence(5)),
-                new TodoResponseDto(faker.number().randomNumber(), faker.lorem().sentence(5))
-        );
-        return new ResponseEntity<>(responseDtos, HttpStatus.OK);
+        if ( getTodoRequestDto.getType().equals(Type.TODO)) {
+            return new ResponseEntity<>(List.of(
+                    new TodoResponseDto(faker.number().randomNumber(), Type.TODO ,faker.lorem().sentence(5)),
+                    new TodoResponseDto(faker.number().randomNumber(), Type.TODO, faker.lorem().sentence(5)),
+                    new TodoResponseDto(faker.number().randomNumber(), Type.TODO, faker.lorem().sentence(5))
+            ), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(List.of(
+                new TodoResponseDto(faker.number().randomNumber(), Type.HABIT ,faker.lorem().sentence(5)),
+                new TodoResponseDto(faker.number().randomNumber(), Type.HABIT, faker.lorem().sentence(5)),
+                new TodoResponseDto(faker.number().randomNumber(), Type.HABIT, faker.lorem().sentence(5))
+        ), HttpStatus.OK);
+
     }
 
     @PutMapping("/")
@@ -41,7 +49,7 @@ public class TodoController {
 
     @DeleteMapping("/{todoId}")
     public void deleteTodo (@PathVariable("todoId") Long todoId) {
-        
+
     }
 
 
