@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class TodoRequestDto {
+public class WriteTodoRequestDto {
     private String userId;
     // time 프론트에서 받을건지 서버에서 해결할 것인지?
     // private LocalDateTime writeTime;
