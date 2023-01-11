@@ -8,4 +8,5 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TodoResponseDto {
     private final Long todoId;
+    private final String todo;
 }

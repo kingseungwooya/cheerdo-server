@@ -22,6 +22,14 @@ public class MainController {
         return new ResponseEntity<>(todoId, HttpStatus.OK);
     }
 
-   
+    @GetMapping("/todo")
+    public ResponseEntity<List<TodoResponseDto>> getMyTodo(@RequestBody GetTodoRequestDto getTodoRequestDto) {
+        List<TodoResponseDto> responseDtos = List.of(
+                new TodoResponseDto(faker.number().randomNumber(), faker.lorem().sentence(5)),
+                new TodoResponseDto(faker.number().randomNumber(), faker.lorem().sentence(5)),
+                new TodoResponseDto(faker.number().randomNumber(), faker.lorem().sentence(5))
+        );
+        return new ResponseEntity<>(responseDtos, HttpStatus.OK);
+    }
 
 }
