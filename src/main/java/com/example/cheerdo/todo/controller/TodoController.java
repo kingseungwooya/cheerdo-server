@@ -39,4 +39,10 @@ public class TodoController {
         return new ResponseEntity<>(todoId, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{todoId}")
+    public void deleteTodo (@PathVariable("todoId") Long todoId) {
+        
+    }
+
+
 }
