@@ -41,7 +41,11 @@ InteliJ에 있는 Reformat Code 기능을 수시로 할 것
 
 reference: https://google.github.io/styleguide/javaguide.html
 
+### Constructor Pattern
 
+- Builder Pattern 을 사용 
+
+reference: https://velog.io/@yje876/Spring-Boot-%EB%B9%8C%EB%8D%94Builder-%ED%8C%A8%ED%84%B4-%EB%B0%8F-%EB%8B%A8%EC%9C%84-%ED%85%8C%EC%8A%A4%ED%8A%B8
 
 
 
