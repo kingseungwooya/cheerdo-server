@@ -8,7 +8,7 @@ public class JoinRequestDto {
 
     @Size(min = 8, max = 12, message = "아이디는 8~12 글자 사이로 만들어주세요. ")
     @NotEmpty(message = "아이디는 필수 입력 값입니다.")
-    private String id;
+    private String memberId;
 
     @NotEmpty(message = "비밀번호는 필수 입력 값입니다.")
     @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,16}",
