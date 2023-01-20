@@ -1,7 +1,5 @@
 package com.example.cheerdo.entity;
 
-import com.example.cheerdo.login.dto.response.JoinResponseDto;
-import com.example.cheerdo.login.dto.response.MemberInfoResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,12 +46,4 @@ public class Member {
         this.roles = roles;
     }
 
-    public JoinResponseDto entityToJoinResponseDto() {
-        return JoinResponseDto.builder()
-                .id(id)
-                .bio(bio)
-                .coinCount(coinCount)
-                .habitProgress(habitProgress)
-                .build();
-    }
 }
