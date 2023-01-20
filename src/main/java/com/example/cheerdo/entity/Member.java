@@ -1,13 +1,15 @@
 package com.example.cheerdo.entity;
 
+import com.example.cheerdo.login.dto.response.JoinResponseDto;
+import com.example.cheerdo.login.dto.response.MemberInfoResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter
@@ -31,13 +33,27 @@ public class Member {
     @Column(name = "habit_progress")
     private double habitProgress;
 
+    @ManyToMany(fetch=FetchType.EAGER)
+    //@Builder.Default
+    private Collection<Role> roles= new ArrayList<>();
+
     @Builder
-    public Member(String id, String password, String name, String bio, int coinCount, double habitProgress) {
+    public Member(String id, String password, String name, String bio, int coinCount, double habitProgress, List<Role> roles) {
         this.id = id;
         this.password = password;
         this.name = name;
         this.bio = bio;
         this.coinCount = coinCount;
         this.habitProgress = habitProgress;
+        this.roles = roles;
+    }
+
+    public JoinResponseDto entityToJoinResponseDto() {
+        return JoinResponseDto.builder()
+                .id(id)
+                .bio(bio)
+                .coinCount(coinCount)
+                .habitProgress(habitProgress)
+                .build();
     }
 }
