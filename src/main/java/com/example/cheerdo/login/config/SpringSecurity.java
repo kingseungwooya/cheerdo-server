@@ -2,13 +2,10 @@ package com.example.cheerdo.login.config;
 
 import com.example.cheerdo.login.config.filter.CustomAuthenticationFilter;
 import com.example.cheerdo.login.config.filter.CustomAuthorizationFilter;
+import com.example.cheerdo.login.config.util.JwtUtil;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -31,6 +28,7 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JwtUtil jwtUtil;
 
     @Override
     public void configure(WebSecurity web) {
@@ -45,26 +43,27 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // custom 화
-        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
+        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean(), jwtUtil);
         customAuthenticationFilter.setUsernameParameter("memberId");
         customAuthenticationFilter.setPasswordParameter("password");
         customAuthenticationFilter.setFilterProcessesUrl("/api/login");
 
 
         http
-                .csrf().disable().sessionManagement().sessionCreationPolicy(STATELESS)
+                .cors()
                 .and()
-                    .authorizeRequests().antMatchers("/api/login/**", "/api/token/refresh/**", "/api/join/**", "/swagger-ui.html", "/swagger/**",
-                "/swagger-resources/**", "/webjars/**", "/v2/api-docs").permitAll()
+                .csrf()
+                .disable()
+                .sessionManagement()
+                .sessionCreationPolicy(STATELESS)
                 .and()
-                    .authorizeRequests().antMatchers(GET, "/api/**").hasAnyAuthority("ROLE_USER")
+                .authorizeRequests()
+                .antMatchers("/api/login/**", "/api/token/refresh/**", "/api/join/**", "/swagger-ui.html", "/swagger/**",
+                        "/swagger-resources/**", "/webjars/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                    .authorizeRequests().antMatchers(POST, "/api/**").hasAnyAuthority("ROLE_USER")
-                .and()
-                    .authorizeRequests().anyRequest().authenticated()
-                .and()
-                    .addFilter(customAuthenticationFilter)
-                    .addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilter(customAuthenticationFilter)
+                .addFilterBefore(new CustomAuthorizationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
     }
 

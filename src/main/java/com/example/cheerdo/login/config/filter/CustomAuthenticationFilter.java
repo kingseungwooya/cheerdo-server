@@ -2,9 +2,11 @@ package com.example.cheerdo.login.config.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.example.cheerdo.login.config.util.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +16,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -30,23 +33,19 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 /**
  * 회원 로그인 검증을 위한 filter
  */
+@AllArgsConstructor
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-    private static final long ACCESS_TOKEN_EXPIRATION = 60 * 60 * 1000;
-    private static final long REFRESH_TOKEN_EXPIRATION = 365 * 24 * 60 * 60 * 1000;
 
-    // 추후 Redis를 이용해 키 Random Generate 하고 저장해보기
-    private static final String SECRET_KEY = readSecretKeyFromFile();
-    private static final Algorithm ALGORITHM = Algorithm.HMAC256(SECRET_KEY.getBytes());
-    private final Logger LOGGER = LoggerFactory.getLogger(CustomAuthenticationFilter.class);
-
-    // 인증을 수행하는 객체
     private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
+    private final Logger LOGGER = LoggerFactory.getLogger(CustomAuthenticationFilter.class);
+    // 인증을 수행하는 객체
 
-    public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
-    }
-    private static String readSecretKeyFromFile() {
-        return "secret";
+
+    public CustomAuthenticationFilter(AuthenticationManager authenticationManager, JwtUtil jwtUtil, AuthenticationManager authenticationManager1) {
+        super(authenticationManager);
+        this.jwtUtil = jwtUtil;
+        this.authenticationManager = authenticationManager1;
     }
 
     // 사용자가 전송한 인증 정보를 추출한다.
@@ -72,34 +71,18 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
         User user = (User) authentication.getPrincipal();
 
-        String access_token = createAccessToken(user, request);
-        String refresh_token = createRefreshToken(user, request);
+        String access_token = jwtUtil.generateAccessToken(user);
+        String refresh_token = jwtUtil.generateRefreshToken(user);
 
         // 클라이언트에 토큰 보내기
+        /* 헤더에다가만 보내기
+        response.setHeader("access_token",access_token);
+        response.setHeader("refresh_token",refresh_token);*/
         Map<String, String> tokens = new HashMap<>();
         tokens.put("access_token", access_token);
         tokens.put("refresh_token", refresh_token);
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
-    }
-
-    private String createAccessToken(User user, HttpServletRequest request) {
-        Date expiresAt = new Date((System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION));
-        return JWT.create()
-                .withSubject(user.getUsername())
-                .withExpiresAt(expiresAt)
-                .withIssuer(request.getRequestURI().toString())
-                .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
-                .sign(ALGORITHM);
-    }
-
-    private String createRefreshToken(User user, HttpServletRequest request) {
-        Date expiresAt = new Date((System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION));
-        return JWT.create()
-                .withSubject(user.getUsername())
-                .withExpiresAt(expiresAt)
-                .withIssuer(request.getRequestURI().toString())
-                .sign(ALGORITHM);
     }
 
 }
