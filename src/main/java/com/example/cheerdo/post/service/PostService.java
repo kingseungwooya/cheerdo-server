@@ -10,7 +10,7 @@ import java.util.List;
 public interface PostService {
     List<?> getMyPosts(PostRequestDto postRequestDto) throws Exception;
 
-    LetterResponseDto readPost(Long letterId);
+    LetterResponseDto readLetter(Long letterId) throws Exception;
 
     void writeLetter(LetterRequestDto letterRequestDto);
 }
