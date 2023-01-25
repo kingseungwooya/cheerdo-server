@@ -60,6 +60,7 @@ public class Post {
                 .letterId(id)
                 .senderId(relation.getFriendId())
                 .senderName(senderName)
+                .sendDate(sendDateTime)
                 .build();
     }
 
@@ -70,6 +71,7 @@ public class Post {
                 .message(message)
                 .title(title)
                 .relationId(relation.getId())
+                .sendDate(sendDateTime)
                 .build();
     }
 }

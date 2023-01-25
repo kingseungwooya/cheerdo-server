@@ -4,6 +4,9 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 @Getter
 public class LetterResponseDto {
@@ -20,12 +23,17 @@ public class LetterResponseDto {
     @ApiModelProperty("관계 교유키")
     private final Long relationId;
 
+    @ApiModelProperty("관계 교유키")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private final LocalDate sendDate;
+
     @Builder
-    public LetterResponseDto(Long letterId, String senderName, String title, String message, Long relationId) {
+    public LetterResponseDto(Long letterId, String senderName, String title, String message, Long relationId, LocalDate sendDate) {
         this.letterId = letterId;
         this.senderName = senderName;
         this.title = title;
         this.message = message;
         this.relationId = relationId;
+        this.sendDate = sendDate;
     }
 }
