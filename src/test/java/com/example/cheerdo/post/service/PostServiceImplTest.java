@@ -4,6 +4,7 @@ import com.example.cheerdo.entity.FriendRelation;
 import com.example.cheerdo.entity.Member;
 import com.example.cheerdo.post.dto.request.LetterRequestDto;
 import com.example.cheerdo.post.dto.request.PostRequestDto;
+import com.example.cheerdo.post.dto.response.PostResponseDto;
 import com.example.cheerdo.post.repository.PostRepository;
 import com.example.cheerdo.post.repository.RelationRepository;
 import org.junit.jupiter.api.*;
@@ -107,12 +108,12 @@ class PostServiceImplTest {
     @Test
     @Order(3)
     @DisplayName("단일 편지 읽기 기능")
-    void readPost() {
+    void readPost() throws Exception {
         // Given
         Long letterId = 1L;
 
         // When
-        var output = postService.readPost(letterId);
+        var output = postService.readLetter(letterId);
         logger.info("읽은 포스트 -> {}", output);
 
         // Then
@@ -120,6 +121,53 @@ class PostServiceImplTest {
         assertThat(output.getSenderName(), is("츄~"));
         assertThat(output.getRelationId(), is(2L));
         assertThat(output.getTitle(), is("사랑하는 승우에게"));
+
+    }
+
+    @Test
+    @Order(4)
+    @DisplayName("편지를 작성시 보상코인으로 5코인이 들어온다. .")
+    void rewardCoinWritePost() {
+        // Given
+        LetterRequestDto letterRequestDto = new LetterRequestDto(
+                1L,
+                "새로운 편지 작성",
+                "ksw123 -> chu123"
+        );
+        Member kim123Before = memberRepository.findById("kim123").get();
+        int beforeCoinCount = kim123Before.getCoinCount();
+
+        // When
+        postService.writeLetter(letterRequestDto);
+
+        //then
+        Member kim123After = memberRepository.findById("kim123").get();
+        assertThat(kim123After.getCoinCount(), is(beforeCoinCount + 5));
+
+    }
+
+    @Test
+    @Order(5)
+    @DisplayName("코인이 0개인 상태에서 코인을 읽을 시 에러가 발생한다.")
+    void exceptionCoinWritePost() throws Exception {
+        // Given
+
+        Member kim123 = memberRepository.findById("kim123").get();
+        kim123.setCoinCount(0);
+        memberRepository.save(kim123);
+
+        PostRequestDto postRequestDto = new PostRequestDto(false, "kim123");
+
+        PostResponseDto postResponseDto = (PostResponseDto) postService.getMyPosts(postRequestDto).get(0);
+        Long letterId = postResponseDto.getLetterId();
+
+        // When
+        try {
+            postService.readLetter(letterId);
+        } catch (Exception e) {
+            // Then
+            assertThat(e.getMessage(), is("보유하고 있는 코인이 부족합니다."));
+        }
 
     }
 }
