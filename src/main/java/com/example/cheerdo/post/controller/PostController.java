@@ -35,7 +35,7 @@ public class PostController {
             @ApiResponse( code = 200, message = "status ok")
     })
     public ResponseEntity<?> getMyNewPost(@ModelAttribute PostRequestDto postRequestDto) {
-        logger.info("request is -> {}", postRequestDto);
+        logger.info("request is -> {}", postRequestDto.toString());
         try {
             List<PostResponseDto> postResponseDtos = (List<PostResponseDto>) postService.getMyPosts(postRequestDto);
             return new ResponseEntity<>(postResponseDtos, HttpStatus.OK);
@@ -44,14 +44,19 @@ public class PostController {
         }
     }
 
-    @GetMapping("/letter")
-    public ResponseEntity<?> readLetter(@RequestParam Long letterId) {
-        return new ResponseEntity<>(postService.readPost(letterId), HttpStatus.OK);
+    @PutMapping("/letter/{letterId}")
+    @ApiOperation(value = "미개봉된 편지를 읽기 요청시 실행된다. "
+            , notes = "편지의 고유번호를 통해 읽기 요청시 실행된다. 현재 읽기 요청시에 일어나는 coin에 관한 service는 현재 미구현 ")
+    public ResponseEntity<?> readLetter(@PathVariable Long letterId) {
+        try {
+            return new ResponseEntity<>(postService.readLetter(letterId), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/letter")
     public ResponseEntity<?> writeLetter(@RequestBody LetterRequestDto letterRequestDto) {
-        // memberService에서 코인을 감소시키는 기능이 있어야 한다.
         postService.writeLetter(letterRequestDto);
         return new ResponseEntity<>("편지를 성공적으로 보냈습니다", HttpStatus.OK);
     }
