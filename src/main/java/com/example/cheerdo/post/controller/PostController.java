@@ -30,14 +30,14 @@ public class PostController {
 
     @GetMapping("/posts")
     @ApiOperation(value = "PostBox를 눌렀을때 나오는 읽지 않은 편지들을 반환"
-            , notes = "사용자의 ID를 통해 조회한다. ")
+            , notes = "사용자의 ID와 열려있는지 닫혀있는지 boolean 값을 입력받는다. memberid는 dummydata로 kim123을 이용한다. ")
     @ApiResponses( {
             @ApiResponse( code = 200, message = "status ok")
     })
     public ResponseEntity<?> getMyNewPost(@ModelAttribute PostRequestDto postRequestDto) {
         logger.info("request is -> {}", postRequestDto);
         try {
-            List<PostResponseDto> postResponseDtos = postService.getMyPosts(postRequestDto);
+            List<PostResponseDto> postResponseDtos = (List<PostResponseDto>) postService.getMyPosts(postRequestDto);
             return new ResponseEntity<>(postResponseDtos, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -51,6 +51,7 @@ public class PostController {
 
     @PostMapping("/letter")
     public ResponseEntity<?> writeLetter(@RequestBody LetterRequestDto letterRequestDto) {
+        // memberService에서 코인을 감소시키는 기능이 있어야 한다.
         postService.writeLetter(letterRequestDto);
         return new ResponseEntity<>("편지를 성공적으로 보냈습니다", HttpStatus.OK);
     }

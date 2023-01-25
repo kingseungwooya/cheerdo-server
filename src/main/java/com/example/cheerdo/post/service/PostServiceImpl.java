@@ -26,12 +26,16 @@ public class PostServiceImpl implements PostService {
     private final RelationRepository relationRepository;
 
     @Override
-    public List<PostResponseDto> getMyPosts(PostRequestDto postRequestDto) throws Exception {
-
-        return postRepository.findAllByReceiverIdAndIsOpenOrderBySendDateTime
+    public List<?> getMyPosts(PostRequestDto postRequestDto) throws Exception {
+        List<Post> posts = postRepository.findAllByReceiverIdAndIsOpenOrderBySendDateTime
                         (postRequestDto.getMemberId(), postRequestDto.isOpen())
-                .orElseThrow(() -> new Exception("현재 등록되어 있는 친구가 없습니다."))
-                .stream()
+                .orElseThrow(() -> new Exception("현재 등록되어 있는 친구가 없습니다."));
+        if (postRequestDto.isOpen()) {
+            return posts.stream()
+                    .map(post -> post.entityToLetterResponseDto())
+                    .collect(Collectors.toList());
+        }
+        return posts.stream()
                 .map(post -> post.entityToPostResponseDto())
                 .collect(Collectors.toList());
     }
