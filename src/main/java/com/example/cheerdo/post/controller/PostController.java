@@ -7,6 +7,7 @@ import com.example.cheerdo.post.dto.response.PostStatusResponse;
 import com.example.cheerdo.post.dto.response.LetterResponseDto;
 import com.example.cheerdo.post.service.PostService;
 import com.github.javafaker.Faker;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -55,6 +56,7 @@ public class PostController {
         }
     }
 
+    @ApiOperation(value = "편지를 쓸 수 있다.")
     @PostMapping("/letter")
     public ResponseEntity<?> writeLetter(@RequestBody LetterRequestDto letterRequestDto) {
         postService.writeLetter(letterRequestDto);
