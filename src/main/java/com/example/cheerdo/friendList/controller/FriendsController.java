@@ -46,3 +46,17 @@ public class FriendsController {
         }
     }
 
+    @ApiOperation(value = "친구 요청을 보내는 api"
+            , notes = "반환값으로 Http status가 반환된다.")
+    @PostMapping(value = "/putRquest")
+    @ApiResponse(code = 200, message = "status ok")
+    public ResponseEntity<?> putRequest(@RequestBody PutRequestDto putRequestDto) {
+        logger.info("request is -> {}", putRequestDto.toString());
+        try {
+            friendRelationService.putRequest(putRequestDto);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+}
