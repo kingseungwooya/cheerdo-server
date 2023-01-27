@@ -1,10 +1,7 @@
 package com.example.cheerdo.entity;
 
 import com.example.cheerdo.todo.enums.Type;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -15,6 +12,7 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Table(name = "friend_relation")
 @Getter
+@Setter
 @NoArgsConstructor
 public class FriendRelation {
     @Id
@@ -23,7 +21,7 @@ public class FriendRelation {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member")
     private Member member;
 
     @Column(name = "friend_id")
@@ -42,5 +40,13 @@ public class FriendRelation {
         this.friendId = friendId;
         this.isFriend = isFriend;
         this.hasMessage = hasMessage;
+    }
+    @Builder
+    public FriendRelation(Long id, Member member, String friendId) {
+        this.id = id;
+        this.member = member;
+        this.friendId = friendId;
+        this.isFriend = false;
+        this.hasMessage = false;
     }
 }
