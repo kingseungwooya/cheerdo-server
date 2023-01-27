@@ -36,7 +36,7 @@ public class PostServiceImpl implements PostService {
     public List<?> getMyPosts(PostRequestDto postRequestDto) throws Exception {
         List<Post> posts = postRepository.findAllByReceiverIdAndIsOpenOrderBySendDateTime
                         (postRequestDto.getMemberId(), postRequestDto.isOpen())
-                .orElseThrow(() -> new Exception("현재 등록되어 있는 친구가 없습니다."));
+                .orElseThrow(() -> new Exception("you have no friend"));
         if (postRequestDto.isOpen()) {
             return posts.stream()
                     .map(post -> post.entityToLetterResponseDto())
@@ -57,7 +57,7 @@ public class PostServiceImpl implements PostService {
         Member member = memberRepository.findById(post.getReceiverId()).get();
         int beforeCoinCount = member.getCoinCount();
         if (beforeCoinCount < READ_LETTER_COIN_COST) {
-            throw new Exception("보유하고 있는 코인이 부족합니다.");
+            throw new Exception("you need more coin");
         }
         member.useCoin(READ_LETTER_COIN_COST);
         memberRepository.save(member);

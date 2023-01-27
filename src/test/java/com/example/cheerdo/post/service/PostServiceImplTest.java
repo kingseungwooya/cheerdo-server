@@ -167,7 +167,7 @@ class PostServiceImplTest {
             postService.readLetter(letterId);
         } catch (Exception e) {
             // Then
-            assertThat(e.getMessage(), is("보유하고 있는 코인이 부족합니다."));
+            assertThat(e.getMessage(), is("you need more coin"));
         }
 
     }
