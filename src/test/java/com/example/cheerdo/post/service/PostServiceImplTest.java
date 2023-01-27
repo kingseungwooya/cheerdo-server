@@ -5,6 +5,7 @@ import com.example.cheerdo.entity.Member;
 import com.example.cheerdo.post.dto.request.LetterRequestDto;
 import com.example.cheerdo.post.dto.request.PostRequestDto;
 import com.example.cheerdo.post.dto.response.PostResponseDto;
+import com.example.cheerdo.post.repository.MemberRepository;
 import com.example.cheerdo.post.repository.PostRepository;
 import com.example.cheerdo.post.repository.RelationRepository;
 import org.junit.jupiter.api.*;
@@ -16,10 +17,6 @@ import org.springframework.test.annotation.Commit;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.*;
-
-import javax.transaction.Transactional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
