@@ -45,10 +45,10 @@ public class PostController {
         }
     }
 
-    @GetMapping("/letter/{letterId}")
+    @GetMapping("/letter")
     @ApiOperation(value = "미개봉된 편지를 읽기 요청시 실행된다. "
             , notes = "편지의 고유번호를 통해 읽기 요청시 실행된다.")
-    public ResponseEntity<?> readLetter(@PathVariable Long letterId) {
+    public ResponseEntity<?> readLetter(@RequestParam Long letterId) {
         try {
             return new ResponseEntity<>(postService.readLetter(letterId), HttpStatus.OK);
         } catch (Exception e) {
@@ -60,7 +60,8 @@ public class PostController {
     @PostMapping("/letter")
     public ResponseEntity<?> writeLetter(@RequestBody LetterRequestDto letterRequestDto) {
         postService.writeLetter(letterRequestDto);
-        return new ResponseEntity<>("편지를 성공적으로 보냈습니다", HttpStatus.OK);
+        String message = "Send letter success";
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @GetMapping("/status")
