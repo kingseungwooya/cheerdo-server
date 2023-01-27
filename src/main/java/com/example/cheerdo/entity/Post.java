@@ -63,7 +63,7 @@ public class Post {
     public PostResponseDto entityToPostResponseDto() {
         return PostResponseDto.builder()
                 .letterId(id)
-                .senderId(relation.getFriendId())
+                .senderId(relation.getMember().getId())
                 .senderName(senderName)
                 .sendDate(sendDateTime)
                 .build();
