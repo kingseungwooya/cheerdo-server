@@ -12,7 +12,6 @@ import javax.persistence.Lob;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class Member {
     @Id
@@ -41,5 +40,13 @@ public class Member {
         this.bio = bio;
         this.coinCount = coinCount;
         this.habitProgress = habitProgress;
+    }
+
+    public void rewardCoin(int reward) {
+        this.coinCount = coinCount + reward;
+    }
+
+    public void useCoin(int cost) {
+        this.coinCount = coinCount - cost;
     }
 }

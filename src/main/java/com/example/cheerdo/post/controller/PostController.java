@@ -45,9 +45,9 @@ public class PostController {
         }
     }
 
-    @PutMapping("/letter/{letterId}")
+    @GetMapping("/letter/{letterId}")
     @ApiOperation(value = "미개봉된 편지를 읽기 요청시 실행된다. "
-            , notes = "편지의 고유번호를 통해 읽기 요청시 실행된다. 현재 읽기 요청시에 일어나는 coin에 관한 service는 현재 미구현 ")
+            , notes = "편지의 고유번호를 통해 읽기 요청시 실행된다.")
     public ResponseEntity<?> readLetter(@PathVariable Long letterId) {
         try {
             return new ResponseEntity<>(postService.readLetter(letterId), HttpStatus.OK);

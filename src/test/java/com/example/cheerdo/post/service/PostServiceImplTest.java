@@ -153,7 +153,8 @@ class PostServiceImplTest {
         // Given
 
         Member kim123 = memberRepository.findById("kim123").get();
-        kim123.setCoinCount(0);
+        int beforeCoinCount =  kim123.getCoinCount();
+        kim123.useCoin(beforeCoinCount);
         memberRepository.save(kim123);
 
         PostRequestDto postRequestDto = new PostRequestDto(false, "kim123");

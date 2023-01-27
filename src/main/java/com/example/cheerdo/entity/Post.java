@@ -56,8 +56,8 @@ public class Post {
         this.sendDateTime = sendDateTime;
     }
 
-    public void openLetter(boolean isOpen) {
-        this.isOpen = isOpen;
+    public void openLetter() {
+        this.isOpen = true;
     }
 
     public PostResponseDto entityToPostResponseDto() {
