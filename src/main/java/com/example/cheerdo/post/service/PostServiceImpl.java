@@ -51,7 +51,8 @@ public class PostServiceImpl implements PostService {
     public LetterResponseDto readLetter(Long letterId) throws Exception {
         // Coin에 대한 처리 해야함 읽을 시 편지 상태로 읽음으로 변경해줘야함
         Post post = postRepository.findById(letterId).get();
-
+        post.openLetter(true);
+        postRepository.save(post);
         // 읽기 요청시 coin에 대한 서비스
         Member member = memberRepository.findById(post.getReceiverId()).get();
         int beforeCoinCount = member.getCoinCount();

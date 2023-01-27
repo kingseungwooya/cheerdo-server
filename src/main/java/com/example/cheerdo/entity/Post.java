@@ -5,6 +5,7 @@ import com.example.cheerdo.post.dto.response.PostResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -53,6 +54,10 @@ public class Post {
         this.message = message;
         this.isOpen = isOpen;
         this.sendDateTime = sendDateTime;
+    }
+
+    public void openLetter(boolean isOpen) {
+        this.isOpen = isOpen;
     }
 
     public PostResponseDto entityToPostResponseDto() {
