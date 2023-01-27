@@ -2,6 +2,7 @@ package com.example.cheerdo.login.config.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.example.cheerdo.login.config.CustomUser;
 import com.example.cheerdo.login.config.util.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -69,7 +70,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     // 인증에 성공한 Authentication 을 인자로 담아 successfulAuthentication 을 호출합니다.
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
-        User user = (User) authentication.getPrincipal();
+        CustomUser user = (CustomUser) authentication.getPrincipal();
 
         String access_token = jwtUtil.generateAccessToken(user);
         String refresh_token = jwtUtil.generateRefreshToken(user);
@@ -81,6 +82,9 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         Map<String, String> tokens = new HashMap<>();
         tokens.put("access_token", access_token);
         tokens.put("refresh_token", refresh_token);
+        tokens.put("memberId", user.getUsername());
+        tokens.put("coinCount", String.valueOf(user.getCoinCount()));
+        tokens.put("newLetterCount", String.valueOf(user.getNewLetterCount()));
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
     }

@@ -2,6 +2,7 @@ package com.example.cheerdo.login.service;
 
 import com.example.cheerdo.entity.Member;
 import com.example.cheerdo.entity.Role;
+import com.example.cheerdo.login.config.CustomUser;
 import com.example.cheerdo.login.dto.request.JoinRequestDto;
 import com.example.cheerdo.login.dto.response.MemberInfoResponseDto;
 import com.example.cheerdo.login.repository.MemberRepository;
@@ -67,7 +68,16 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
         member.getRoles().forEach(role -> {
             authorities.add(new SimpleGrantedAuthority(role.getMemberId()));
         });
-        //spring secirity 사용자를 return
-        return new org.springframework.security.core.userdetails.User(member.getId(), member.getPassword(), authorities);
+        // 편지 갯수를 반환하기 위해선 post repo를 통해
+        // recevier_id가 본인이고 isOpen이 false인 값을 찾아 개수를 센다
+        int letterCount = 0; // 추후 구현
+        // spring secirity 사용자를 return
+        return CustomUser.builder()
+                .username(member.getId())
+                .password(member.getPassword())
+                .authorities(authorities)
+                .coinCount(member.getCoinCount())
+                .newLetterCount(letterCount)
+                .build();
     }
 }
