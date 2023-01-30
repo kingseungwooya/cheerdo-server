@@ -24,7 +24,7 @@ public class FriendRelationServiceImpl implements FriendRelationService {
     private final MemberRepository memberRepository;
     private final FriendRelationRepository friendRelationRepository;
     @Override
-    public List<?> getFriendList(String userId) throws Exception {
+    public List<?> getMyFriendList(String userId) throws Exception {
         // 반환값으로 relation id member id name을 가지는 LoadFriendRelationDto의 List가 반환된다.
 
         Optional<Member> member = memberRepository.findById(userId);
@@ -45,3 +45,10 @@ public class FriendRelationServiceImpl implements FriendRelationService {
         }
         return list;
     }
+
+    public void putRequest(PutRequestDto putRequestDto) throws Exception {
+        Long id = 5L;
+        friendRelationRepository.save(putRequestDto.dtoToFriendRelationEntity(id, memberRepository.findById(putRequestDto.getUserId())));
+    }
+
+}

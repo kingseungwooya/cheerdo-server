@@ -39,7 +39,7 @@ public class FriendsController {
         logger.info("request is -> {}", userId);
         try {
             System.out.println(userId);
-            List<LoadFriendResponseDto> LoadFriendResponseDtos = (List<LoadFriendResponseDto>) friendRelationService.getFriendList(userId);
+            List<LoadFriendResponseDto> LoadFriendResponseDtos = (List<LoadFriendResponseDto>) friendRelationService.getMyFriendList(userId);
             return new ResponseEntity<>(LoadFriendResponseDtos, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);

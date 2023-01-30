@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface FriendRelationService {
 
-    List<?> getFriendList(String userId) throws Exception;
+    List<?> getMyFriendList(String userId) throws Exception;
 
     void putRequest(PutRequestDto putRequestDto) throws Exception;
 }
