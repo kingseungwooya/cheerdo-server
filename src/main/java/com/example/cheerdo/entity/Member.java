@@ -3,6 +3,7 @@ package com.example.cheerdo.entity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -44,6 +45,14 @@ public class Member {
         this.coinCount = coinCount;
         this.habitProgress = habitProgress;
         this.roles = roles;
+    }
+    
+    public void rewardCoin(int reward) {
+        this.coinCount = coinCount + reward;
+    }
+
+    public void useCoin(int cost) {
+        this.coinCount = coinCount - cost;
     }
 
 }
