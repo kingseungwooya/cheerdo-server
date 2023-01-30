@@ -3,6 +3,7 @@ package com.example.cheerdo.entity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,5 +40,13 @@ public class Member {
         this.bio = bio;
         this.coinCount = coinCount;
         this.habitProgress = habitProgress;
+    }
+
+    public void rewardCoin(int reward) {
+        this.coinCount = coinCount + reward;
+    }
+
+    public void useCoin(int cost) {
+        this.coinCount = coinCount - cost;
     }
 }
