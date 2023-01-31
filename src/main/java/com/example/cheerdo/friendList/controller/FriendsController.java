@@ -42,7 +42,7 @@ public class FriendsController {
             List<LoadFriendResponseDto> LoadFriendResponseDtos = (List<LoadFriendResponseDto>) friendRelationService.getMyFriendList(userId);
             return new ResponseEntity<>(LoadFriendResponseDtos, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -56,7 +56,7 @@ public class FriendsController {
             friendRelationService.putRequest(putRequestDto);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }
