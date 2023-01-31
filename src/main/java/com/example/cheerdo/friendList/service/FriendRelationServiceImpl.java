@@ -32,6 +32,9 @@ public class FriendRelationServiceImpl implements FriendRelationService {
         // 반환값으로 relation id member id name을 가지는 LoadFriendRelationDto의 List가 반환된다.
 
         Optional<Member> member = memberRepository.findById(userId);
+        if (member.isEmpty()) {
+            throw new Exception("there is no such member");
+        }
         logger.info("member is -> {}", member.get().getName());
 
         Optional<List<FriendRelation>> friendRelations = friendRelationRepository.findAllByMember(member);
@@ -57,6 +60,17 @@ public class FriendRelationServiceImpl implements FriendRelationService {
 
     public void putRequest(PutRequestDto putRequestDto) throws Exception {
         Long id = faker.number().randomNumber();
+        Optional<Member> member = memberRepository.findById(putRequestDto.getUserId());
+        Optional<Member> friend = memberRepository.findById(putRequestDto.getFriendId());
+        if (member.isEmpty() | friend.isEmpty()) {
+            throw new Exception("there is no such member");
+        }
+        logger.info("member is -> {} friend is -> {}", member.get().getName(), friend.get().getName());
+
+        Optional<FriendRelation> friendRelation = friendRelationRepository.findFriendRelationByMemberAndFriendId(member, putRequestDto.getFriendId());
+        if (!friendRelation.isEmpty()) {
+            throw new Exception("friendRelation already exist");
+        }
         friendRelationRepository.save(putRequestDto.dtoToFriendRelationEntity(id, memberRepository.findById(putRequestDto.getUserId())));
     }
 
