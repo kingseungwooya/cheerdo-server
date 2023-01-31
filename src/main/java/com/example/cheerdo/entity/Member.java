@@ -46,4 +46,11 @@ public class Member {
         this.dPlusDay = 0;
     }
 
+    public void rewardCoin(int reward) {
+        this.coinCount = coinCount + reward;
+    }
+
+    public void useCoin(int cost) {
+        this.coinCount = coinCount - cost;
+    }
 }
