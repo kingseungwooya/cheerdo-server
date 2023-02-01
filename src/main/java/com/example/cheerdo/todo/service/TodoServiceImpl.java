@@ -58,11 +58,14 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public void deleteTodo(Long todoId) {
-
+        todoRepository.deleteById(todoId);
     }
 
     @Override
     public void success(Long todoId) {
-
+        Todo todo = todoRepository.findById(todoId)
+                .orElseThrow(() -> new IllegalArgumentException("maybe todo is deleted"));
+        todo.success();
+        todoRepository.save(todo);
     }
 }

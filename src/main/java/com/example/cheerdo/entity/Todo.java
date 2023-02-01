@@ -65,5 +65,9 @@ public class Todo {
         this.content = updatedContent;
     }
 
+    public void success() {
+        this.isSuccess = true;
+    }
+
 
 }
