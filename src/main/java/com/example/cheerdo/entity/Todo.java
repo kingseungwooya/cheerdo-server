@@ -1,6 +1,7 @@
 package com.example.cheerdo.entity;
 
 import com.example.cheerdo.todo.enums.Type;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -38,6 +39,7 @@ public class Todo {
     @Enumerated(EnumType.STRING)
     private Type type;
 
+    @Builder
     public Todo(Long id, Member member, String content, LocalDate date, boolean isSuccess, Type type) {
         this.id = id;
         this.member = member;
