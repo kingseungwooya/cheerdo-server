@@ -1,6 +1,8 @@
 package com.example.cheerdo.entity;
 
+import com.example.cheerdo.todo.dto.response.TodoResponseDto;
 import com.example.cheerdo.todo.enums.Type;
+import com.example.cheerdo.todo.repository.TodoRepository;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +31,7 @@ public class Todo {
     private String content;
 
     @Column(name = "write_date")
-    @DateTimeFormat(pattern= "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
 
 
@@ -48,4 +50,14 @@ public class Todo {
         this.isSuccess = isSuccess;
         this.type = type;
     }
+
+    public TodoResponseDto entityToTodoResponseDto() {
+        return TodoResponseDto.builder()
+                .todoId(id)
+                .typeOfTodo(type.name())
+                .todo(content)
+                .build();
+    }
+
+
 }
