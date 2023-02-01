@@ -6,6 +6,7 @@ import com.example.cheerdo.todo.repository.TodoRepository;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Todo {
     @Id
@@ -57,6 +59,10 @@ public class Todo {
                 .typeOfTodo(type.name())
                 .todo(content)
                 .build();
+    }
+
+    public void updateContent(String updatedContent) {
+        this.content = updatedContent;
     }
 
 

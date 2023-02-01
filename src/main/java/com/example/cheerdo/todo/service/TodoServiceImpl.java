@@ -50,7 +50,10 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public void modifyTodo(ModifyTodoRequestDto modifyTodoRequestDto) {
-
+        Todo todo = todoRepository.findById(modifyTodoRequestDto.getTodoId())
+                .orElseThrow(() -> new IllegalArgumentException("maybe todo is deleted"));
+        todo.updateContent(modifyTodoRequestDto.getTodo());
+        todoRepository.save(todo);
     }
 
     @Override
