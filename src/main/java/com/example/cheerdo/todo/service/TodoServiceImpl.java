@@ -62,7 +62,7 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public void updateTodo(Long todoId) {
+    public void success(Long todoId) {
 
     }
 }
