@@ -1,4 +1,4 @@
-package com.example.cheerdo.todo.repository;
+package com.example.cheerdo.repository;
 
 
 import com.example.cheerdo.entity.Member;

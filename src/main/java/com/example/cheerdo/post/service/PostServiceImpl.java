@@ -6,9 +6,9 @@ import com.example.cheerdo.entity.Post;
 import com.example.cheerdo.post.dto.request.LetterRequestDto;
 import com.example.cheerdo.post.dto.request.PostRequestDto;
 import com.example.cheerdo.post.dto.response.LetterResponseDto;
-import com.example.cheerdo.post.repository.MemberRepository;
-import com.example.cheerdo.post.repository.PostRepository;
-import com.example.cheerdo.post.repository.RelationRepository;
+import com.example.cheerdo.repository.MemberRepository;
+import com.example.cheerdo.repository.PostRepository;
+import com.example.cheerdo.repository.RelationRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

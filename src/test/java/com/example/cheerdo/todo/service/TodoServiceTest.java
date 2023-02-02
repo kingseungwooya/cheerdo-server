@@ -2,11 +2,10 @@ package com.example.cheerdo.todo.service;
 
 import com.example.cheerdo.entity.Member;
 import com.example.cheerdo.entity.Todo;
-import com.example.cheerdo.todo.controller.TodoController;
 import com.example.cheerdo.todo.dto.request.WriteTodoRequestDto;
 import com.example.cheerdo.todo.enums.Type;
 import com.example.cheerdo.todo.repository.MemberRepository;
-import com.example.cheerdo.todo.repository.TodoRepository;
+import com.example.cheerdo.repository.TodoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -18,8 +17,6 @@ import org.springframework.test.annotation.Rollback;
 import javax.transaction.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.MatcherAssert.*;
 
 @SpringBootTest
 @Transactional
