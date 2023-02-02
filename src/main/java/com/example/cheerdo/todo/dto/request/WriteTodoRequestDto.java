@@ -9,6 +9,7 @@ import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class WriteTodoRequestDto {
 
     private static final boolean DEFAULT_STATUS = false;
