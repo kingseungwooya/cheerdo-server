@@ -3,11 +3,7 @@ package com.example.cheerdo.todo.controller;
 import com.example.cheerdo.todo.dto.request.GetTodoRequestDto;
 import com.example.cheerdo.todo.dto.request.ModifyTodoRequestDto;
 import com.example.cheerdo.todo.dto.request.WriteTodoRequestDto;
-import com.example.cheerdo.todo.dto.response.TodoResponseDto;
-import com.example.cheerdo.todo.enums.Type;
 import com.example.cheerdo.todo.service.TodoService;
-import com.github.javafaker.Faker;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -17,10 +13,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+/// TODO: 2023-02-02
 /*
     에러 처리를 위해 너무 많은 try catch와 와일드카드가 사용되었다.
     Controller Advice와 Exception Handler로 refactoring하기
- */
+*/
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/main/todo")
@@ -73,7 +71,7 @@ public class TodoController {
 
     @ApiOperation(value = "Todo 성공체크시 요청되는 api"
             , notes = "반환값이 없는 void")
-    @DeleteMapping("")
+    @PutMapping("/success")
     public ResponseEntity<?> updateSuccess(@RequestParam Long todoId) {
         try {
             todoService.success(todoId);

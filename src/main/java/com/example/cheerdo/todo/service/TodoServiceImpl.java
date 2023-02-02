@@ -2,12 +2,12 @@ package com.example.cheerdo.todo.service;
 
 import com.example.cheerdo.entity.Member;
 import com.example.cheerdo.entity.Todo;
+import com.example.cheerdo.repository.MemberRepository;
 import com.example.cheerdo.todo.dto.request.GetTodoRequestDto;
 import com.example.cheerdo.todo.dto.request.ModifyTodoRequestDto;
 import com.example.cheerdo.todo.dto.request.WriteTodoRequestDto;
 import com.example.cheerdo.todo.dto.response.TodoResponseDto;
 import com.example.cheerdo.todo.enums.Type;
-import com.example.cheerdo.todo.repository.MemberRepository;
 import com.example.cheerdo.repository.TodoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
