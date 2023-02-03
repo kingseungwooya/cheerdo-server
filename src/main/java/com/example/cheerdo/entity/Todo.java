@@ -65,8 +65,14 @@ public class Todo {
     }
 
     public void success() {
+        // 성공을 취소로
+        if (isSuccess) {
+            this.isSuccess = false;
+            return;
+        }
+        // 취소를 성공으로
         this.isSuccess = true;
-    }
 
+    }
 
 }
