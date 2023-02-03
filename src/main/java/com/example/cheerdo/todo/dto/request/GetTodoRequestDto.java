@@ -11,7 +11,6 @@ import java.util.Date;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
 public class GetTodoRequestDto {
     private String userId;
 

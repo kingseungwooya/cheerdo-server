@@ -38,6 +38,7 @@ public class TodoController {
             , notes = "반환값으로 Httpstatus와 body에는 todo list들이 반환된다. ")
     @GetMapping("")
     public ResponseEntity<?> getMyTodo(@ModelAttribute GetTodoRequestDto getTodoRequestDto) {
+        logger.info("input userID is -> {}",getTodoRequestDto.getUserId());
         try {
             return new ResponseEntity<>(todoService.getMyTodos(getTodoRequestDto), HttpStatus.OK);
         } catch (IllegalArgumentException e) {
