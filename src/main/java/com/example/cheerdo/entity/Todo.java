@@ -57,6 +57,7 @@ public class Todo {
                 .todoId(id)
                 .typeOfTodo(type.name())
                 .todo(content)
+                .success(isSuccess)
                 .build();
     }
 
