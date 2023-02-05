@@ -5,20 +5,21 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-import com.example.cheerdo.login.config.filter.CustomAuthorizationFilter;
-import io.jsonwebtoken.Claims;
+import com.example.cheerdo.login.config.CustomUser;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -28,27 +29,40 @@ import static java.util.Arrays.stream;
 
 
 @Component
-public class JwtUtil {
+public class TokenProvider implements InitializingBean {
 
+    private final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
     private static final String AUTHORITIES_KEY = "auth";
-    private static final String BEARER_TYPE = "Bearer";
-    private final int ACCESS_TOKEN_VALIDITY = 60 * 60 * 1000; //1 hour
-    private final int REFRESH_TOKEN_VALIDITY = 365 * 24 * 60 * 60 * 1000; // 1 year
-    private final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
+    private final long accessTokenValidity;
+    private final long refreshTokenValidity;
+    private final String secret;
+    private final String issuer;
 
-    @Value("${spring.jwt.secret}")
-    private String secret;
 
-    @Value("${spring.jwt.issuer}")
-    private String issuer;
-    private Algorithm algorithm = Algorithm.HMAC256(secret);
-    private JWTVerifier verifier = JWT.require(algorithm).build(); // 검증기 제작
+    public TokenProvider(
+            @Value("${spring.jwt.secret}") String secret,
+            @Value("${spring.jwt.issuer}") String issuer,
+            @Value("${spring.jwt.access-token-validity}") long accessTokenValidity,
+            @Value("${spring.jwt.refresh-token-validity}") long refreshTokenValidity ) {
+        this.secret = secret;
+        this.issuer = issuer;
+        this.accessTokenValidity = accessTokenValidity;
+        this.refreshTokenValidity = refreshTokenValidity;
+    }
+    private Algorithm algorithm;
+    private JWTVerifier verifier; // 검증기 제작
 
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        algorithm = Algorithm.HMAC256(secret);
+        verifier = JWT.require(algorithm).build();
+    }
     public String generateRefreshToken(User user) {
         return JWT.create()
                 .withIssuer(issuer)
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + REFRESH_TOKEN_VALIDITY)) //expire after 1 year
+                .withExpiresAt(new Date(System.currentTimeMillis() + refreshTokenValidity)) //expire after 1 year
                 .sign(algorithm);
     }
 
@@ -60,7 +74,7 @@ public class JwtUtil {
                                 .map(GrantedAuthority::getAuthority)
                                 .collect(Collectors.toList()))
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY)) //expire after 1 hour
+                .withExpiresAt(new Date(System.currentTimeMillis() + accessTokenValidity)) //expire after 1 hour
                 .sign(algorithm);
     }
 
@@ -88,8 +102,15 @@ public class JwtUtil {
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             logger.info("잘못된 JWT 서명입니다.");
+        } catch (ExpiredJwtException e) {
+            logger.info("Expired JWT token.");
+            logger.trace("Expired JWT token trace: {}", e);
+        } catch (UnsupportedJwtException e) {
+            logger.info("Unsupported JWT token.");
+            logger.trace("Unsupported JWT token trace: {}", e);
         } catch (IllegalArgumentException e) {
-            logger.info("JWT 토큰이 잘못되었습니다.");
+            logger.info("JWT token compact of handler are invalid.");
+            logger.trace("JWT token compact of handler are invalid trace: {}", e);
         }
         return false;
     }
@@ -104,8 +125,9 @@ public class JwtUtil {
             authorities.add(new SimpleGrantedAuthority(role));
         });
 
-
         return new UsernamePasswordAuthenticationToken(memberId, null, authorities);
     }
+
+
 }
 
