@@ -20,15 +20,15 @@ import java.util.List;
 public class FriendsController {
     private final Logger logger = LoggerFactory.getLogger(FriendsController.class);
     private final FriendRelationService friendRelationService;
-    @GetMapping(value = "/List{userId}")
+    @GetMapping(value = "/list/{userId}")
     @ApiOperation(value = "userId의 초기 Friend 화면에 필요한 data를 가져오는 api"
             , notes = "반환값으로 relationId memberId name list가 반환된다")
     @ApiResponse(code = 200, message = "status ok")
     public ResponseEntity<?> getMyFriendList(@PathVariable("userId") String userId) {
         logger.info("request : UserID -> {}", userId);
         try {
-            List<LoadFriendResponseDto> LoadFriendResponseDtos = friendRelationService.getMyFriendList(userId);
-            return new ResponseEntity<>(LoadFriendResponseDtos, HttpStatus.OK);
+            List<LoadFriendResponseDto> loadFriendResponseDtos = friendRelationService.getMyFriendList(userId);
+            return new ResponseEntity<>(loadFriendResponseDtos, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

@@ -24,7 +24,6 @@ public class FriendRelationServiceImpl implements FriendRelationService {
     private final Logger logger = LoggerFactory.getLogger(FriendRelationServiceImpl.class);
     private final MemberRepository memberRepository;
     private final FriendRelationRepository friendRelationRepository;
-    private final Faker faker = new Faker();
     @Override
     public List<LoadFriendResponseDto> getMyFriendList(String userId) throws Exception {
         // 반환값으로 relation id member id name을 가지는 LoadFriendRelationDto의 List가 반환된다.
