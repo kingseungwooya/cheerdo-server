@@ -9,5 +9,5 @@ public interface FriendRelationService {
 
     List<LoadFriendResponseDto> getMyFriendList(String userId) throws Exception;
 
-    void putRequest(PutRequestDto putRequestDto) throws Exception;
+    void sendRequest(SendRequestDto sendRequestDto) throws Exception;
 }

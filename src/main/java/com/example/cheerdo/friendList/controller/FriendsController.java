@@ -50,12 +50,12 @@ public class FriendsController {
 
     @ApiOperation(value = "친구 요청을 보내는 api"
             , notes = "반환값으로 Http status가 반환된다.")
-    @PostMapping(value = "/putRquest")
+    @PostMapping(value = "/sendrequest")
     @ApiResponse(code = 200, message = "status ok")
-    public ResponseEntity<?> putRequest(@RequestBody PutRequestDto putRequestDto) {
-        logger.info("request is -> {}", putRequestDto.toString());
+    public ResponseEntity<?> sendRequest(@RequestBody SendRequestDto sendRequestDto) {
+        logger.info("request is -> {}", sendRequestDto.toString());
         try {
-            friendRelationService.putRequest(putRequestDto);
+            friendRelationService.sendRequest(sendRequestDto);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

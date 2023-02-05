@@ -56,20 +56,21 @@ public class FriendRelationServiceImpl implements FriendRelationService {
         }
     }
 
-    public void putRequest(PutRequestDto putRequestDto) throws Exception {
-        Long id = faker.number().randomNumber();
-        Optional<Member> member = memberRepository.findById(putRequestDto.getUserId());
-        Optional<Member> friend = memberRepository.findById(putRequestDto.getFriendId());
+    public void sendRequest(SendRequestDto sendRequestDto) throws Exception {
+        Optional<Member> member = memberRepository.findById(sendRequestDto.getUserId());
+        Optional<Member> friend = memberRepository.findById(sendRequestDto.getFriendId());
         if (member.isEmpty() | friend.isEmpty()) {
             throw new Exception("there is no such member");
+        } else if (member.get().equals(friend.get())) {
+            throw new Exception("friend and member are the same");
         }
         logger.info("member is -> {} friend is -> {}", member.get().getName(), friend.get().getName());
 
-        Optional<FriendRelation> friendRelation = friendRelationRepository.findFriendRelationByMemberAndFriendId(member, putRequestDto.getFriendId());
+        Optional<FriendRelation> friendRelation = friendRelationRepository.findFriendRelationByMemberAndFriendId(member, sendRequestDto.getFriendId());
         if (!friendRelation.isEmpty()) {
             throw new Exception("friendRelation already exist");
         }
-        friendRelationRepository.save(putRequestDto.dtoToFriendRelationEntity(id, memberRepository.findById(putRequestDto.getUserId())));
+        friendRelationRepository.save(sendRequestDto.dtoToFriendRelationEntity(memberRepository.findById(sendRequestDto.getUserId())));
     }
 
 }
