@@ -1,33 +1,24 @@
 package com.example.cheerdo.login.config.filter;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.example.cheerdo.login.config.CustomUser;
-import com.example.cheerdo.login.config.util.JwtUtil;
+import com.example.cheerdo.login.config.util.TokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
@@ -38,12 +29,12 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
-    private final JwtUtil jwtUtil;
+    private TokenProvider jwtUtil;
     private final Logger LOGGER = LoggerFactory.getLogger(CustomAuthenticationFilter.class);
     // 인증을 수행하는 객체
 
 
-    public CustomAuthenticationFilter(AuthenticationManager authenticationManager, JwtUtil jwtUtil, AuthenticationManager authenticationManager1) {
+    public CustomAuthenticationFilter(AuthenticationManager authenticationManager, TokenProvider jwtUtil, AuthenticationManager authenticationManager1) {
         super(authenticationManager);
         this.jwtUtil = jwtUtil;
         this.authenticationManager = authenticationManager1;
@@ -89,4 +80,11 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
     }
 
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        super.unsuccessfulAuthentication(request, response, failed);
+        Map<String, String> errors = new HashMap<>();
+        errors.put("error_message", "unsuccessfulAuthentication - by kimseungwoo");
+        new ObjectMapper().writeValue(response.getOutputStream(), errors);
+    }
 }
