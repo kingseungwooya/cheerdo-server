@@ -2,8 +2,9 @@ package com.example.cheerdo.login.config;
 
 import com.example.cheerdo.login.config.filter.CustomAuthenticationFilter;
 import com.example.cheerdo.login.config.filter.CustomAuthorizationFilter;
-import com.example.cheerdo.login.config.util.JwtUtil;
+import com.example.cheerdo.login.config.util.TokenProvider;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,19 +17,17 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
-@AllArgsConstructor
+@RequiredArgsConstructor
 @EnableWebSecurity
 public class SpringSecurity extends WebSecurityConfigurerAdapter {
 
 
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final JwtUtil jwtUtil;
+    private final TokenProvider jwtUtil;
 
     @Override
     public void configure(WebSecurity web) {
@@ -58,8 +57,10 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/login/**", "/api/token/refresh/**", "/api/join/**", "/swagger-ui.html", "/swagger/**",
+                .antMatchers("/api/login/**", "/api/token/refresh/**", "/api/signup/**", "/swagger-ui.html", "/swagger/**",
+                        "/api/role/addtouser",
                         "/swagger-resources/**", "/webjars/**").permitAll()
+                .antMatchers("/api/user/info").hasAuthority("ROLE_USER")
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(customAuthenticationFilter)
