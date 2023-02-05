@@ -3,6 +3,7 @@ package com.example.cheerdo.friendList.service;
 import com.example.cheerdo.entity.FriendRelation;
 import com.example.cheerdo.entity.Member;
 import com.example.cheerdo.friendList.dto.request.SendRequestDto;
+import com.example.cheerdo.friendList.dto.response.GetFriendRequestResponseDto;
 import com.example.cheerdo.friendList.dto.response.LoadFriendResponseDto;
 import com.example.cheerdo.friendList.repository.FriendRelationRepository;
 import com.example.cheerdo.friendList.repository.MemberRepository;
@@ -72,4 +73,31 @@ public class FriendRelationServiceImpl implements FriendRelationService {
         friendRelationRepository.save(sendRequestDto.dtoToFriendRelationEntity(memberRepository.findById(sendRequestDto.getUserId())));
     }
 
+    @Override
+    public List<GetFriendRequestResponseDto> getMyRequest(String userId) throws Exception {
+        Optional<Member> member = memberRepository.findById(userId);
+        if (member.isEmpty()) {
+            throw new Exception("there is no such member");
+        }
+        logger.info("member is -> {}", member.get().getName());
+
+        Optional<List<FriendRelation>> friendRelations = friendRelationRepository.findAllByMemberAndIsFriend(member, false);
+        logger.info("unacceptedFriendRelations size is -> {}", friendRelations.get().size());
+        List<GetFriendRequestResponseDto> list = new ArrayList<>();
+
+        if (friendRelations.get().isEmpty()) {
+            throw new Exception("there are no unaccepted request");
+        } else {
+            for (FriendRelation relation : friendRelations.get()) {
+                Optional<Member> friendMember = memberRepository.findById(relation.getFriendId());
+                list.add(GetFriendRequestResponseDto.builder()
+                        .name(friendMember.get().getName())
+                        .id(relation.getId())
+                        .build());
+                logger.info("build complete");
+            }
+            logger.info("List complete");
+            return list;
+        }
+    }
 }

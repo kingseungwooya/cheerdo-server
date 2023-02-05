@@ -1,6 +1,7 @@
 package com.example.cheerdo.friendList.controller;
 
 import com.example.cheerdo.friendList.dto.request.SendRequestDto;
+import com.example.cheerdo.friendList.dto.response.GetFriendRequestResponseDto;
 import com.example.cheerdo.friendList.dto.response.LoadFriendResponseDto;
 import com.example.cheerdo.friendList.service.FriendRelationService;
 import io.swagger.annotations.ApiOperation;
@@ -34,15 +35,15 @@ public class FriendsController {
         }
     }
 
-    @ApiOperation(value = "받은 친구요청을 가져오는 API"
-            , notes = "반환값으로 relationId memberId name list가 반환된다")
-    @PostMapping(value = "/getrequest/{userId}")
+    @ApiOperation(value = "보낸 친구요청을 가져오는 API"
+            , notes = "반환값으로 relationId name list가 반환된다")
+    @GetMapping(value = "/getrequest/{userId}")
     @ApiResponse(code = 200, message = "status ok")
     public ResponseEntity<?> getMyRequest(@PathVariable("userId") String userId) {
         logger.info("request is -> {}", userId);
         try {
-            //friendRelationService.getMyRequest(userId);
-            return new ResponseEntity<>(HttpStatus.OK);
+            List<GetFriendRequestResponseDto> getFriendRequestResponseDtos = friendRelationService.getMyRequest(userId);
+            return new ResponseEntity<>(getFriendRequestResponseDtos, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
