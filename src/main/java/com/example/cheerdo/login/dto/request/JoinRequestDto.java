@@ -2,10 +2,7 @@ package com.example.cheerdo.login.dto.request;
 
 
 import com.example.cheerdo.entity.Member;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Id;
 import javax.validation.constraints.*;
@@ -13,6 +10,7 @@ import javax.validation.constraints.*;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class JoinRequestDto {
 
     private static final int DEFAULT_COIN_COUNT = 10;
