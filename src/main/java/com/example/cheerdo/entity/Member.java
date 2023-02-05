@@ -1,5 +1,6 @@
 package com.example.cheerdo.entity;
 
+import com.example.cheerdo.login.dto.response.MemberInfoResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,6 +54,16 @@ public class Member {
 
     public void useCoin(int cost) {
         this.coinCount = coinCount - cost;
+    }
+
+    public MemberInfoResponseDto to() {
+        return MemberInfoResponseDto.builder()
+                .memberId(id)
+                .habitProgress(habitProgress)
+                .bio(bio)
+                .name(name)
+                .coinCount(coinCount)
+                .build();
     }
 
 }
