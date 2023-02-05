@@ -9,10 +9,8 @@ import java.util.Collection;
 public class CustomUser extends User {
 
     private int coinCount;
-
     private int newLetterCount;
 
-    @Builder
     public CustomUser(String username, String password
             , Collection<? extends GrantedAuthority> authorities, int coinCount, int newLetterCount) {
         super(username, password, authorities);
