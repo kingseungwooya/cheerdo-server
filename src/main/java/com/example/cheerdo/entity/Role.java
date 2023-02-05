@@ -19,5 +19,5 @@ public class Role {
     private Long id;
 
     // 역할이름 admin, user
-    private String memberId;
+    private String name;
 }
