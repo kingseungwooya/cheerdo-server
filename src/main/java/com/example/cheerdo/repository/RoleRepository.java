@@ -1,4 +1,4 @@
-package com.example.cheerdo.login.repository;
+package com.example.cheerdo.repository;
 
 
 
