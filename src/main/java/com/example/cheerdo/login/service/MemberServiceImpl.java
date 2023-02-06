@@ -15,8 +15,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -61,6 +63,15 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
         return memberRepository.existsById(memberId);
     }
 
+    @Override
+    public String uploadImage(MultipartFile uploadImage, String memberId) throws IOException {
+        Member member = memberRepository.findById(memberId).get();
+        member.updateMemberImage(uploadImage.getBytes());
+        memberRepository.save(member);
+        final String successMessage = "file upload success";
+        return successMessage;
+    }
+
     // 로그인 요청시 일어나는 service
     @Override
     public CustomUser loadUserByUsername(String memberId) throws UsernameNotFoundException {
@@ -75,7 +86,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
         // 편지 갯수를 반환하기 위해선 post repo를 통해
         // recevier_id가 본인이고 isOpen이 false인 값을 찾아 개수를 센다
         int letterCount = 0; // 추후 구현
-        // spring secirity 사용자를 return
+        // spring security 사용자를 return
         return new CustomUser(member.getId(), member.getPassword(), authorities, member.getCoinCount(), letterCount);
         /* CustomUser.builder()
                 .clone(User.builder()

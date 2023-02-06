@@ -33,9 +33,13 @@ public class Member {
     @Column(name = "habit_progress")
     private double habitProgress;
 
-    @ManyToMany(fetch=FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     //@Builder.Default
-    private Collection<Role> roles= new ArrayList<>();
+    private Collection<Role> roles = new ArrayList<>();
+
+    @Lob
+    @Column(name = "member_image")
+    private byte[] memberImage;
 
     @Builder
     public Member(String id, String password, String name, String bio, int coinCount, double habitProgress, List<Role> roles) {
@@ -47,7 +51,7 @@ public class Member {
         this.habitProgress = habitProgress;
         this.roles = roles;
     }
-    
+
     public void rewardCoin(int reward) {
         this.coinCount = coinCount + reward;
     }
@@ -64,6 +68,10 @@ public class Member {
                 .name(name)
                 .coinCount(coinCount)
                 .build();
+    }
+
+    public void updateMemberImage(byte[] uploadImage) {
+        this.memberImage = uploadImage;
     }
 
 }
