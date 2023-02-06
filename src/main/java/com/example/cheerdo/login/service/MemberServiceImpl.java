@@ -5,6 +5,7 @@ import com.example.cheerdo.entity.Role;
 import com.example.cheerdo.login.config.CustomUser;
 import com.example.cheerdo.login.dto.request.JoinRequestDto;
 import com.example.cheerdo.login.dto.response.MemberInfoResponseDto;
+import com.example.cheerdo.repository.PostRepository;
 import com.example.cheerdo.repository.RoleRepository;
 import com.example.cheerdo.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +27,12 @@ import java.util.Collection;
 @RequiredArgsConstructor
 @Transactional
 public class MemberServiceImpl implements MemberService, UserDetailsService {
+    private final Logger logger = LoggerFactory.getLogger(MemberServiceImpl.class);
+
     private final MemberRepository memberRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final Logger logger = LoggerFactory.getLogger(MemberServiceImpl.class);
+    private final PostRepository postRepository;
 
     @Override
     public void join(JoinRequestDto joinRequestDto) {
@@ -48,7 +51,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
         logger.info("회원:{} 에게 권한:{} 부여 완료.", userId, roleName);
         Member member = memberRepository.findById(userId).get();
         Role role = roleRepository.findByName(roleName);
-        logger.info("rolename -> {} 하고 role -> {} 적용되었는지 확인", roleName, role);
+        logger.info("rolename -> {} 하고 role -> {} 적용되었는지 확인", roleName, role.getName());
         member.getRoles().add(role);
         logger.info("role 추가되었는지 확인{}", member);
     }
@@ -83,18 +86,9 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
         member.getRoles().forEach(role -> {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         });
-        // 편지 갯수를 반환하기 위해선 post repo를 통해
-        // recevier_id가 본인이고 isOpen이 false인 값을 찾아 개수를 센다
-        int letterCount = 0; // 추후 구현
-        // spring security 사용자를 return
-        return new CustomUser(member.getId(), member.getPassword(), authorities, member.getCoinCount(), letterCount);
-        /* CustomUser.builder()
-                .clone(User.builder()
-                        .username(member.getId())
-                        .password(member.getPassword())
-                        .authorities(authorities))
-                .coinCount(member.getCoinCount())
-                .newLetterCount(letterCount)
-                .build();*/
+        int letterCount = postRepository.countAllByReceiverIdAndIsOpen(memberId, false).orElse(0);
+
+        return new CustomUser(member.getId(), member.getPassword(), authorities
+                , member.getCoinCount(), letterCount);
     }
 }
