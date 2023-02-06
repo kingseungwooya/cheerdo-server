@@ -1,4 +1,4 @@
-package com.example.cheerdo.todo.enums;
+package com.example.cheerdo.entity.enums;
 
 public enum Type {
     TODO,

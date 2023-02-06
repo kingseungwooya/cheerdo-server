@@ -3,7 +3,7 @@ package com.example.cheerdo.repository;
 
 import com.example.cheerdo.entity.Member;
 import com.example.cheerdo.entity.Todo;
-import com.example.cheerdo.todo.enums.Type;
+import com.example.cheerdo.entity.enums.Type;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 
