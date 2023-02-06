@@ -1,8 +1,11 @@
 package com.example.cheerdo.entity;
 
+import com.example.cheerdo.todo.dto.response.TodoResponseDto;
 import com.example.cheerdo.todo.enums.Type;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -13,6 +16,7 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Todo {
     @Id
@@ -28,7 +32,7 @@ public class Todo {
     private String content;
 
     @Column(name = "write_date")
-    @DateTimeFormat(pattern= "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
 
 
@@ -38,6 +42,7 @@ public class Todo {
     @Enumerated(EnumType.STRING)
     private Type type;
 
+    @Builder
     public Todo(Long id, Member member, String content, LocalDate date, boolean isSuccess, Type type) {
         this.id = id;
         this.member = member;
@@ -46,4 +51,29 @@ public class Todo {
         this.isSuccess = isSuccess;
         this.type = type;
     }
+
+    public TodoResponseDto entityToTodoResponseDto() {
+        return TodoResponseDto.builder()
+                .todoId(id)
+                .typeOfTodo(type.name())
+                .todo(content)
+                .success(isSuccess)
+                .build();
+    }
+
+    public void updateContent(String updatedContent) {
+        this.content = updatedContent;
+    }
+
+    public void success() {
+        // 성공을 취소로
+        if (isSuccess) {
+            this.isSuccess = false;
+            return;
+        }
+        // 취소를 성공으로
+        this.isSuccess = true;
+
+    }
+
 }
