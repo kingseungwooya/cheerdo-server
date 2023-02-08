@@ -26,8 +26,8 @@ import java.util.Collection;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class MemberServiceImpl implements MemberService, UserDetailsService {
-    private final Logger logger = LoggerFactory.getLogger(MemberServiceImpl.class);
+public class LoginServiceImpl implements LoginService, UserDetailsService {
+    private final Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
 
     private final MemberRepository memberRepository;
     private final RoleRepository roleRepository;

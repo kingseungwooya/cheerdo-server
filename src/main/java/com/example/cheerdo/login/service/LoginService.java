@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @Service
-public interface MemberService {
+public interface LoginService {
 
     void join(JoinRequestDto joinRequestDto);
 
