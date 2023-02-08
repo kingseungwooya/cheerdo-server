@@ -73,4 +73,14 @@ public class Member {
         this.memberImage = uploadImage;
     }
 
+    public void updateBio(String updatedBio) {
+        this.bio = updatedBio;
+    }
+
+    public void updateName(String updatedName) {
+        this.name = updatedName;
+    }
+
+
+
 }
