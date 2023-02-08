@@ -1,5 +1,7 @@
 package com.example.cheerdo.login.controller;
 
+import com.example.cheerdo.entity.Role;
+import com.example.cheerdo.entity.enums.RoleName;
 import com.example.cheerdo.login.dto.response.error.ErrorResponseDto;
 import com.example.cheerdo.login.dto.request.JoinRequestDto;
 import com.example.cheerdo.login.service.LoginService;
@@ -38,7 +40,7 @@ public class LoginController {
             return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
         }
         loginService.join(request);
-        loginService.addToRoleToUser(request.getMemberId(), "ROLL_USER");
+        loginService.addToRoleToUser(request.getMemberId(), RoleName.ROLE_USER);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -47,11 +49,12 @@ public class LoginController {
         return new ResponseEntity<>(loginService.checkUsernameDuplication(memberId), HttpStatus.OK);
     }
 
-    @PostMapping("/role/addtouser")
+    /*
+    @PostMapping("/role/add-to-user")
     public ResponseEntity<?> addRoleToMember(@RequestBody RoleToMemberForm form) {
         loginService.addToRoleToUser(form.getMemberId(), form.getRoleName());
         return ResponseEntity.ok().build(); // 코드 200 반환
-    }
+    }*/
 
 }
 

@@ -1,10 +1,9 @@
 package com.example.cheerdo.entity;
 
-import com.example.cheerdo.login.dto.response.MemberInfoResponseDto;
+import com.example.cheerdo.member.dto.response.MemberInfoResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;

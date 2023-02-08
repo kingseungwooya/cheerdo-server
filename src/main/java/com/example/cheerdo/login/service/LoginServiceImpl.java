@@ -2,9 +2,9 @@ package com.example.cheerdo.login.service;
 
 import com.example.cheerdo.entity.Member;
 import com.example.cheerdo.entity.Role;
+import com.example.cheerdo.entity.enums.RoleName;
 import com.example.cheerdo.login.config.CustomUser;
 import com.example.cheerdo.login.dto.request.JoinRequestDto;
-import com.example.cheerdo.login.dto.response.MemberInfoResponseDto;
 import com.example.cheerdo.repository.PostRepository;
 import com.example.cheerdo.repository.RoleRepository;
 import com.example.cheerdo.repository.MemberRepository;
@@ -16,10 +16,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -47,7 +45,7 @@ public class LoginServiceImpl implements LoginService, UserDetailsService {
     }
 
     @Override
-    public void addToRoleToUser(String userId, String roleName) {
+    public void addToRoleToUser(String userId, RoleName roleName) {
         logger.info("회원:{} 에게 권한:{} 부여 완료.", userId, roleName);
         Member member = memberRepository.findById(userId).get();
         Role role = roleRepository.findByName(roleName);
@@ -56,23 +54,11 @@ public class LoginServiceImpl implements LoginService, UserDetailsService {
         logger.info("role 추가되었는지 확인{}", member);
     }
 
-    @Override
-    public MemberInfoResponseDto getInfoById(String memberId) {
-        return memberRepository.findById(memberId).get().to();
-    }
+
 
     @Override
     public boolean checkUsernameDuplication(String memberId) {
         return memberRepository.existsById(memberId);
-    }
-
-    @Override
-    public String uploadImage(MultipartFile uploadImage, String memberId) throws IOException {
-        Member member = memberRepository.findById(memberId).get();
-        member.updateMemberImage(uploadImage.getBytes());
-        memberRepository.save(member);
-        final String successMessage = "file upload success";
-        return successMessage;
     }
 
     // 로그인 요청시 일어나는 service
@@ -84,7 +70,7 @@ public class LoginServiceImpl implements LoginService, UserDetailsService {
         logger.info("멤버가 존재함: {} ", member.getId());
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         member.getRoles().forEach(role -> {
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
+            authorities.add(new SimpleGrantedAuthority(role.getName().name()));
         });
         int letterCount = postRepository.countAllByReceiverIdAndIsOpen(memberId, false).orElse(0);
 

@@ -1,5 +1,6 @@
 package com.example.cheerdo.login.config;
 
+import com.example.cheerdo.entity.enums.RoleName;
 import com.example.cheerdo.login.config.filter.CustomAuthenticationFilter;
 import com.example.cheerdo.login.config.filter.CustomAuthorizationFilter;
 import com.example.cheerdo.login.config.util.TokenProvider;
@@ -60,7 +61,7 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/login/**", "/api/token/refresh/**", "/api/signup/**", "/swagger-ui.html", "/swagger/**",
                         "/api/role/addtouser",
                         "/swagger-resources/**", "/webjars/**").permitAll()
-                .antMatchers("/api/user/info").hasAuthority("ROLE_USER")
+                .antMatchers("/api/user/info").hasAuthority(RoleName.ROLE_USER.name())
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(customAuthenticationFilter)

@@ -1,13 +1,11 @@
 package com.example.cheerdo.entity;
 
+import com.example.cheerdo.entity.enums.RoleName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -19,5 +17,7 @@ public class Role {
     private Long id;
 
     // 역할이름 admin, user
-    private String name;
+
+    @Enumerated(EnumType.STRING)
+    private RoleName name;
 }
