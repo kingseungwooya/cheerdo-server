@@ -1,5 +1,6 @@
 package com.example.cheerdo.post.service;
 
+import com.example.cheerdo.common.enums.SortType;
 import com.example.cheerdo.entity.FriendRelation;
 import com.example.cheerdo.entity.Member;
 import com.example.cheerdo.post.dto.request.LetterRequestDto;
@@ -14,6 +15,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
+import org.springframework.test.annotation.Rollback;
+
+import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.util.*;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.*;
@@ -73,6 +79,7 @@ class PostServiceImplTest {
         relationRepository.save(relation2);
 
     }
+
     @Test
     @Order(1)
     @DisplayName("편지쓰기")
@@ -93,13 +100,17 @@ class PostServiceImplTest {
     @DisplayName("내가 받은 편지 목록 불러오기 ")
     void getMyPosts() throws Exception {
         // Given
-        PostRequestDto postRequestDto = new PostRequestDto(false, "kim123");
+        PostRequestDto postRequestDto = new PostRequestDto(false,
+                "kim123",
+                LocalDate.of(2000, 1, 1),
+                LocalDate.of(2024, 1, 1),
+                SortType.DEFAULT);
 
         // When
         var posts = postService.getMyPosts(postRequestDto);
         logger.info("내 포스트들 -> {}", posts);
         // Then
-        assertThat(posts, hasSize(1));
+        assertThat(posts, hasSize(5));
     }
 
     @Test
@@ -150,11 +161,15 @@ class PostServiceImplTest {
         // Given
 
         Member kim123 = memberRepository.findById("kim123").get();
-        int beforeCoinCount =  kim123.getCoinCount();
+        int beforeCoinCount = kim123.getCoinCount();
         kim123.useCoin(beforeCoinCount);
         memberRepository.save(kim123);
 
-        PostRequestDto postRequestDto = new PostRequestDto(false, "kim123");
+        PostRequestDto postRequestDto = new PostRequestDto(false,
+                "kim123",
+                LocalDate.of(2022, 1, 1),
+                LocalDate.of(2024, 1, 1),
+                SortType.DEFAULT);
 
         PostResponseDto postResponseDto = (PostResponseDto) postService.getMyPosts(postRequestDto).get(0);
         Long letterId = postResponseDto.getLetterId();
@@ -166,6 +181,35 @@ class PostServiceImplTest {
             // Then
             assertThat(e.getMessage(), is("you need more coin"));
         }
+
+    }
+
+    @Test
+    @DisplayName("불러온 글들이 정렬되어있는지 확인한다.")
+    @Transactional
+    @Rollback(value = true)
+    void orderByTest() {
+        // Given
+        PostRequestDto postRequestOrderByASC = new PostRequestDto(false,
+                "kim123",
+                LocalDate.of(2022, 1, 1),
+                LocalDate.of(2024, 1, 1),
+                SortType.ASC);
+
+        PostRequestDto postRequestOrderByDESC = new PostRequestDto(false,
+                "kim123",
+                LocalDate.of(2022, 1, 1),
+                LocalDate.of(2024, 1, 1),
+                SortType.DESC);
+
+        // When
+        List<?> postOrderByASC = postService.getMyPosts(postRequestOrderByASC);
+        List<?> postOrderByDESC = postService.getMyPosts(postRequestOrderByDESC);
+
+        // Then
+        logger.info("orderBy ASC -> {} ", postOrderByASC);
+        logger.info("orderBy DESC -> {} ", postOrderByDESC);
+        assertThat(postOrderByDESC.size(), is(postOrderByASC.size()));
 
     }
 }

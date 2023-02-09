@@ -1,5 +1,7 @@
 package com.example.cheerdo.post.service;
 
+import com.example.cheerdo.common.enums.SortType;
+import com.example.cheerdo.common.sort.SortUtil;
 import com.example.cheerdo.entity.FriendRelation;
 import com.example.cheerdo.entity.Member;
 import com.example.cheerdo.entity.Post;
@@ -30,11 +32,19 @@ public class PostServiceImpl implements PostService {
     private final MemberRepository memberRepository;
 
 
+
     @Override
-    public List<?> getMyPosts(PostRequestDto postRequestDto) throws Exception {
-        List<Post> posts = postRepository.findAllByReceiverIdAndIsOpenOrderBySendDateTime
-                        (postRequestDto.getMemberId(), postRequestDto.isOpen())
-                .orElseThrow(() -> new Exception("you have no friend"));
+    public List<?> getMyPosts(PostRequestDto postRequestDto) throws IllegalArgumentException {
+
+        List<Post> posts = postRepository.findAllByReceiverIdAndIsOpenAndSendDateTimeBetween(
+                postRequestDto.getMemberId(),
+                postRequestDto.isOpen(),
+                postRequestDto.getStartDate(),
+                postRequestDto.getEndDate(),
+                SortUtil.sort(postRequestDto.getSortType(), "sendDateTime")
+        ).orElseThrow(() -> new IllegalArgumentException("you have no friend"));
+
+
         if (postRequestDto.isOpen()) {
             return posts.stream()
                     .map(post -> post.entityToLetterResponseDto())
