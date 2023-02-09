@@ -25,7 +25,7 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 /**
  * 회원 로그인 검증을 위한 filter
  */
-@AllArgsConstructor
+
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
@@ -34,10 +34,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     // 인증을 수행하는 객체
 
 
-    public CustomAuthenticationFilter(AuthenticationManager authenticationManager, TokenProvider jwtUtil, AuthenticationManager authenticationManager1) {
+    public CustomAuthenticationFilter(AuthenticationManager authenticationManager, TokenProvider jwtUtil ) {
         super(authenticationManager);
+        this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
-        this.authenticationManager = authenticationManager1;
     }
 
     // 사용자가 전송한 인증 정보를 추출한다.
