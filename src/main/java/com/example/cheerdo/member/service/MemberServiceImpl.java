@@ -4,12 +4,16 @@ import com.example.cheerdo.entity.Member;
 import com.example.cheerdo.member.dto.request.UpdateProfileRequestDto;
 import com.example.cheerdo.member.dto.response.MemberInfoResponseDto;
 import com.example.cheerdo.repository.MemberRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
+@Service
+@AllArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
-    MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public String updateMyInfo(UpdateProfileRequestDto updateProfileRequestDto) throws IOException {
