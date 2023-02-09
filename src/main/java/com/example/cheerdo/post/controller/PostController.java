@@ -58,7 +58,7 @@ public class PostController {
 
     @ApiOperation(value = "편지를 쓸 수 있다.")
     @PostMapping("/letter")
-    public ResponseEntity<?> writeLetter(@RequestBody LetterRequestDto letterRequestDto) {
+    public ResponseEntity<String> writeLetter(@RequestBody LetterRequestDto letterRequestDto) {
         postService.writeLetter(letterRequestDto);
         String message = "Send letter success";
         return new ResponseEntity<>(message, HttpStatus.OK);
