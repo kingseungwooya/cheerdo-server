@@ -60,7 +60,7 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/login/**", "/api/token/refresh/**", "/api/signup/**", "/swagger-ui.html", "/swagger/**",
                         "/api/role/addtouser",
-                        "/swagger-resources/**", "/webjars/**").permitAll()
+                        "/swagger-resources/**", "/webjars/**" ,"/v2/api-docs").permitAll()
                 .antMatchers("/api/user/info").hasAuthority(RoleName.ROLE_USER.name())
                 .anyRequest().authenticated()
                 .and()

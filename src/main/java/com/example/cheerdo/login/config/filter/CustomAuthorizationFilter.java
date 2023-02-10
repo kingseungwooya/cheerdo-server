@@ -29,7 +29,6 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
  */
 @Component
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
-    public static final String BEARER_PREFIX = "Bearer ";
     private final Logger logger = LoggerFactory.getLogger(CustomAuthorizationFilter.class);
     private TokenProvider jwtUtil;
     public CustomAuthorizationFilter(TokenProvider jwtUtil) {
@@ -40,7 +39,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        String token = resolveToken(request);
+        String token = jwtUtil.resolveToken(request);
         if (token != null && jwtUtil.validateToken(token)) {
             try {
                 UsernamePasswordAuthenticationToken authentication = jwtUtil.getAuthentication(token);
@@ -61,11 +60,4 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         }
     }
 
-    private String resolveToken(HttpServletRequest request) throws IOException {
-        String bearerToken = request.getHeader(AUTHORIZATION);
-        if (bearerToken != null && bearerToken.startsWith(BEARER_PREFIX)) {
-            return bearerToken.substring(7);
-        }
-        return null;
-    }
 }

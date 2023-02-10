@@ -19,6 +19,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,12 +28,15 @@ import java.util.Date;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 
 @Component
 public class TokenProvider implements InitializingBean {
 
     private final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
+    public static final String BEARER_PREFIX = "Bearer ";
+
     private static final String AUTHORITIES_KEY = "auth";
     private final long accessTokenValidity;
     private final long refreshTokenValidity;
@@ -79,19 +84,7 @@ public class TokenProvider implements InitializingBean {
     }
 
 
-    public boolean isTokenExpired(String token) {
-        try {
-            JWTVerifier verifier = JWT.require(algorithm)
-                    .withIssuer(issuer)
-                    .build();
-            DecodedJWT jwt = verifier.verify(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public String getMemberIdFromAccessToken(String token) {
+    public String getMemberIdFromToken(String token) {
         DecodedJWT jwt = JWT.decode(token);
         return jwt.getSubject();
     }
@@ -126,6 +119,14 @@ public class TokenProvider implements InitializingBean {
         });
 
         return new UsernamePasswordAuthenticationToken(memberId, null, authorities);
+    }
+
+    public String resolveToken(HttpServletRequest request) throws IOException {
+        String bearerToken = request.getHeader(AUTHORIZATION);
+        if (bearerToken != null && bearerToken.startsWith(BEARER_PREFIX)) {
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 
 
