@@ -17,7 +17,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/info")
-    public ResponseEntity<String> uploadImage(@RequestBody UpdateProfileRequestDto updateProfileRequestDto) {
+    public ResponseEntity<String> updateProfile(@RequestBody UpdateProfileRequestDto updateProfileRequestDto) {
         try {
             return new ResponseEntity<>(memberService.updateMyInfo(updateProfileRequestDto), HttpStatus.OK);
         } catch (IOException e) {
