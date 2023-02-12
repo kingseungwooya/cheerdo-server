@@ -13,4 +13,7 @@ public interface FriendRelationService {
     void sendRequest(SendRequestDto sendRequestDto) throws Exception;
 
     List<GetFriendRequestResponseDto> getMyRequest(String userId) throws Exception;
+
+    List<LoadFriendResponseDto> getReceivedRequest(String userId) throws Exception;
+
 }

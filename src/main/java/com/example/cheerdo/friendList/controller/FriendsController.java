@@ -62,4 +62,19 @@ public class FriendsController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @ApiOperation(value = "받은 친구요청을 가져오는 API"
+            , notes = "반환값으로 relationId memberId name list가 반환된다")
+    @GetMapping(value = "/receivedRequest/{userId}")
+    @ApiResponse(code = 200, message = "status ok")
+    public ResponseEntity<?> getReceivedRequest(@PathVariable("userId") String userId) {
+        logger.info("request is -> {}", userId);
+        try {
+            List<LoadFriendResponseDto> loadFriendResponseDtos = friendRelationService.getReceivedRequest(userId);
+            return new ResponseEntity<>(loadFriendResponseDtos, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

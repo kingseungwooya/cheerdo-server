@@ -100,4 +100,29 @@ public class FriendRelationServiceImpl implements FriendRelationService {
             return list;
         }
     }
+
+    @Override
+    public List<LoadFriendResponseDto> getReceivedRequest(String userId) throws Exception {
+        logger.info("member is -> {}", userId);
+
+        Optional<List<FriendRelation>> friendRelations = friendRelationRepository.findAllByFriendIdAndIsFriend(userId, false);
+        logger.info("receivedFriendRelations size is -> {}", friendRelations.get().size());
+        List<LoadFriendResponseDto> list = new ArrayList<>();
+
+        if (friendRelations.get().isEmpty()) {
+            throw new Exception("there are no received request");
+        } else {
+            for (FriendRelation relation : friendRelations.get()) {
+                list.add(LoadFriendResponseDto.builder()
+                        .name(relation.getMember().getName())
+                        .memberId(relation.getMember().getId())
+                        .relationId(relation.getId())
+                        .build());
+                logger.info("build complete");
+            }
+            logger.info("List complete");
+            return list;
+        }
+    }
+
 }
