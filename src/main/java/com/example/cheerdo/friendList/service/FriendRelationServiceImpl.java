@@ -2,6 +2,7 @@ package com.example.cheerdo.friendList.service;
 
 import com.example.cheerdo.entity.FriendRelation;
 import com.example.cheerdo.entity.Member;
+import com.example.cheerdo.friendList.dto.request.RemoveOrAcceptRequestDto;
 import com.example.cheerdo.friendList.dto.request.SendRequestDto;
 import com.example.cheerdo.friendList.dto.response.GetFriendRequestResponseDto;
 import com.example.cheerdo.friendList.dto.response.LoadFriendResponseDto;
@@ -125,4 +126,42 @@ public class FriendRelationServiceImpl implements FriendRelationService {
         }
     }
 
+    @Override
+    public void removeOrAcceptRequest(RemoveOrAcceptRequestDto removeOrAcceptRequestDto) throws Exception {
+        Optional<FriendRelation> optionalFriendRelation = friendRelationRepository.findById(removeOrAcceptRequestDto.getRelationId());
+        if (optionalFriendRelation.isEmpty()) {
+            throw new Exception("there is no such relation");
+        }
+        FriendRelation friendRelation = optionalFriendRelation.get();
+
+        if (!removeOrAcceptRequestDto.isAccept()){ // 수락하지 않으면 = 삭제 요청
+            logger.info("remove request");
+            if (friendRelation.isFriend()) {
+                String friendId = friendRelation.getMember().getId();
+                Optional<Member> member = memberRepository.findById(friendRelation.getFriendId());
+                FriendRelation reversedFriendRelation = friendRelationRepository.findFriendRelationByMemberAndFriendId(member, friendId).get();
+                friendRelationRepository.delete(reversedFriendRelation);
+                logger.info("the relation id {}, member {}, friendId {} is removed", reversedFriendRelation.getId(), reversedFriendRelation.getMember(), reversedFriendRelation.getFriendId());
+            }
+            friendRelationRepository.delete(friendRelation);
+            logger.info("the relation id {}, member {}, friendId {} is removed", friendRelation.getId(), friendRelation.getMember(), friendRelation.getFriendId());
+        } else { // 수락 요청
+            logger.info("accept request");
+            friendRelation.setFriend(true);
+            String friendId = friendRelation.getMember().getId();
+            Optional<Member> member = memberRepository.findById(friendRelation.getFriendId());
+            if (member.isEmpty()) {
+                throw new Exception("there is no such member");
+            }
+
+            Optional<FriendRelation> reversedFriendRelation = friendRelationRepository.findFriendRelationByMemberAndFriendId(member, friendId);
+            if (reversedFriendRelation.isEmpty()) {
+                friendRelationRepository.save(removeOrAcceptRequestDto.dtoToFriendRelationEntity(member, friendId));
+                logger.info("the reversed Relation doesn't exist. save new relation");
+            } else {
+                reversedFriendRelation.get().setFriend(true);
+                logger.info("the reversed Relation exists. set id {} isFrined false -> true", reversedFriendRelation.get().getId());
+            }
+        }
+}
 }

@@ -77,4 +77,17 @@ public class FriendsController {
         }
     }
 
+    @ApiOperation(value = "친구 요청을 받거나 삭제하는 api"
+            , notes = "받은 요청을 수락 또는 거절할때, 보낸 요청을 삭제할때 사용이 가능하다. 반환값으로 Http status가 반환된다.")
+    @PostMapping(value = "/removeoracceptrequest")
+    @ApiResponse(code = 200, message = "status ok")
+    public ResponseEntity<?> removeOrAcceptRequest(@RequestBody RemoveOrAcceptRequestDto removeOrAcceptRequestDto) {
+        logger.info("request is -> {}", removeOrAcceptRequestDto.getRelationId());
+        try {
+            friendRelationService.removeOrAcceptRequest(removeOrAcceptRequestDto);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }
