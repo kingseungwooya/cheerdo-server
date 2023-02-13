@@ -1,14 +1,10 @@
 package com.example.cheerdo.entity;
 
-import com.example.cheerdo.todo.enums.Type;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 import static javax.persistence.FetchType.LAZY;
 

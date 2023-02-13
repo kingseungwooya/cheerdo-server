@@ -13,11 +13,11 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Long> {
 
     Optional<List<Post>> findAllByReceiverIdAndIsOpenOrderBySendDateTime(@Param("memberId") String memberId, @Param("isOpen") boolean isOpen);
-
     Optional<List<Post>> findAllByReceiverIdAndIsOpenAndSendDateTimeBetween(@Param("memberId") String memberId,
                                                       @Param("isOpen") boolean isOpen,
                                                       @Param("startDate") LocalDate startDate,
                                                       @Param("endDate") LocalDate endDate,
                                                       Sort sort);
-
+    Optional<Integer> countAllByReceiverIdAndIsOpen(@Param("memberId") String memberId,
+                                                    @Param("isOpen") boolean isOpen);
 }
