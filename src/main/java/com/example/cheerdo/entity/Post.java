@@ -1,12 +1,16 @@
 package com.example.cheerdo.entity;
 
+import com.example.cheerdo.post.dto.response.LetterResponseDto;
+import com.example.cheerdo.post.dto.response.PostResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static javax.persistence.FetchType.LAZY;
@@ -24,6 +28,10 @@ public class Post {
     @JoinColumn(name = "relation_id")
     private FriendRelation relation;
 
+    private String receiverId;
+
+    private String senderName;
+
     private String title;
     @Lob
     private String message;
@@ -31,17 +39,44 @@ public class Post {
     @Column(name = "open_flag", nullable = false, columnDefinition = "TINYINT", length = 1)
     private boolean isOpen;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    // @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @DateTimeFormat(pattern= "yyyy-MM-dd")
     @Column(name = "send_date")
-    private LocalDateTime sendDateTime;
+    private LocalDate sendDateTime;
 
     @Builder
-    public Post(Long id, FriendRelation relation, String title, String message, boolean isOpen, LocalDateTime sendDateTime) {
+    public Post(Long id, FriendRelation relation,String receiverId, String senderName, String title, String message, boolean isOpen, LocalDate sendDateTime) {
         this.id = id;
         this.relation = relation;
+        this.receiverId = receiverId;
+        this.senderName = senderName;
         this.title = title;
         this.message = message;
         this.isOpen = isOpen;
         this.sendDateTime = sendDateTime;
+    }
+
+    public void openLetter() {
+        this.isOpen = true;
+    }
+
+    public PostResponseDto entityToPostResponseDto() {
+        return PostResponseDto.builder()
+                .letterId(id)
+                .senderId(relation.getMember().getId())
+                .senderName(senderName)
+                .sendDate(sendDateTime)
+                .build();
+    }
+
+    public LetterResponseDto entityToLetterResponseDto() {
+        return LetterResponseDto.builder()
+                .letterId(id)
+                .senderName(senderName)
+                .message(message)
+                .title(title)
+                .relationId(relation.getId())
+                .sendDate(sendDateTime)
+                .build();
     }
 }
