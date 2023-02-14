@@ -6,6 +6,7 @@ import com.example.cheerdo.todo.enums.Type;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -13,12 +14,10 @@ import java.time.LocalDate;
 public class WriteTodoRequestDto {
 
     private static final boolean DEFAULT_STATUS = false;
+    private String todoId;
     private String userId;
-
     private String type;
-    // time 프론트에서 받을건지 서버에서 해결할 것인지?
-    // private LocalDateTime writeTime;
-    // private LocalDateTime date;
+     private LocalDateTime endDateTime;
     private String todo;
 
     public Todo requestToEntity(Member member) {
@@ -28,6 +27,8 @@ public class WriteTodoRequestDto {
                 .isSuccess(DEFAULT_STATUS)
                 .member(member)
                 .type(Type.valueOf(type))
+                .endDateTime(endDateTime)
+                .todoId(todoId)
                 .build();
     }
 }

@@ -11,6 +11,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -20,9 +22,8 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 public class Todo {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "todo_id")
-    private Long id;
+    private String todoId;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
@@ -35,6 +36,8 @@ public class Todo {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
 
+    @Column(name = "end_date_time")
+    private LocalDateTime endDateTime;
 
     @Column(name = "success_flag", nullable = false, columnDefinition = "TINYINT", length = 1)
     private boolean isSuccess;
@@ -43,18 +46,19 @@ public class Todo {
     private Type type;
 
     @Builder
-    public Todo(Long id, Member member, String content, LocalDate date, boolean isSuccess, Type type) {
-        this.id = id;
+    public Todo(String todoId, Member member, String content, LocalDate date, boolean isSuccess, Type type, LocalDateTime endDateTime) {
+        this.todoId = todoId;
         this.member = member;
         this.content = content;
         this.date = date;
         this.isSuccess = isSuccess;
         this.type = type;
+        this.endDateTime = endDateTime;
     }
 
     public TodoResponseDto entityToTodoResponseDto() {
         return TodoResponseDto.builder()
-                .todoId(id)
+                .todoId(todoId)
                 .typeOfTodo(type.name())
                 .todo(content)
                 .success(isSuccess)
