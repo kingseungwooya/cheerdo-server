@@ -49,7 +49,7 @@ public class MemberServiceImpl implements MemberService {
         return member.to(calcDayDuration(localDate));
     }
 
-    public Long calcDayDuration(LocalDate localDate) {
+    private Long calcDayDuration(LocalDate localDate) {
         LocalDate now = LocalDate.parse(LocalDate
                 .now()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
