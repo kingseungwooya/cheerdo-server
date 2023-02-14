@@ -59,13 +59,14 @@ public class Member {
         this.coinCount = coinCount - cost;
     }
 
-    public MemberInfoResponseDto to() {
+    public MemberInfoResponseDto to(Long dPlusCount) {
         return MemberInfoResponseDto.builder()
                 .memberId(id)
                 .habitProgress(habitProgress)
                 .bio(bio)
                 .name(name)
                 .coinCount(coinCount)
+                .dPlusCount(dPlusCount)
                 .build();
     }
 
