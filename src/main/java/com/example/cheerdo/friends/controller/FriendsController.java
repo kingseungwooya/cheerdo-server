@@ -1,9 +1,10 @@
-package com.example.cheerdo.friendList.controller;
+package com.example.cheerdo.friends.controller;
 
-import com.example.cheerdo.friendList.dto.request.SendRequestDto;
-import com.example.cheerdo.friendList.dto.response.GetFriendRequestResponseDto;
-import com.example.cheerdo.friendList.dto.response.LoadFriendResponseDto;
-import com.example.cheerdo.friendList.service.FriendRelationService;
+import com.example.cheerdo.friends.dto.request.RemoveOrAcceptRequestDto;
+import com.example.cheerdo.friends.dto.request.SendRequestDto;
+import com.example.cheerdo.friends.dto.response.GetFriendRequestResponseDto;
+import com.example.cheerdo.friends.dto.response.LoadFriendResponseDto;
+import com.example.cheerdo.friends.service.FriendRelationService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -90,4 +91,6 @@ public class FriendsController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    // 편지를 요청하는 api
 }

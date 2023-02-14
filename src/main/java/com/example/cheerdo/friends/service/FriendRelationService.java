@@ -1,9 +1,9 @@
-package com.example.cheerdo.friendList.service;
+package com.example.cheerdo.friends.service;
 
-import com.example.cheerdo.friendList.dto.request.RemoveOrAcceptRequestDto;
-import com.example.cheerdo.friendList.dto.request.SendRequestDto;
-import com.example.cheerdo.friendList.dto.response.GetFriendRequestResponseDto;
-import com.example.cheerdo.friendList.dto.response.LoadFriendResponseDto;
+import com.example.cheerdo.friends.dto.request.RemoveOrAcceptRequestDto;
+import com.example.cheerdo.friends.dto.request.SendRequestDto;
+import com.example.cheerdo.friends.dto.response.GetFriendRequestResponseDto;
+import com.example.cheerdo.friends.dto.response.LoadFriendResponseDto;
 
 import java.util.List;
 

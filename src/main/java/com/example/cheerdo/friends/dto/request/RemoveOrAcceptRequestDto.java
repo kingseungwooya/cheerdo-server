@@ -1,4 +1,4 @@
-package com.example.cheerdo.friendList.dto.request;
+package com.example.cheerdo.friends.dto.request;
 
 import com.example.cheerdo.entity.FriendRelation;
 import com.example.cheerdo.entity.Member;

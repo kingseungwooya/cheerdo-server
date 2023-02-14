@@ -54,12 +54,4 @@ public class Member {
     public void useCoin(int cost) {
         this.coinCount = coinCount - cost;
     }
-
-    public void rewardCoin(int reward) {
-        this.coinCount = coinCount + reward;
-    }
-
-    public void useCoin(int cost) {
-        this.coinCount = coinCount - cost;
-    }
 }

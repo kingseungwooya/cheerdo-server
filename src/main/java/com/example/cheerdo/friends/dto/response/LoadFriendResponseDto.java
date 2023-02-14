@@ -1,4 +1,4 @@
-package com.example.cheerdo.friendList.dto.response;
+package com.example.cheerdo.friends.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

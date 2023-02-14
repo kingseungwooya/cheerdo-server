@@ -1,14 +1,13 @@
-package com.example.cheerdo.friendList.service;
+package com.example.cheerdo.friends.service;
 
 import com.example.cheerdo.entity.FriendRelation;
 import com.example.cheerdo.entity.Member;
-import com.example.cheerdo.friendList.dto.request.RemoveOrAcceptRequestDto;
-import com.example.cheerdo.friendList.dto.request.SendRequestDto;
-import com.example.cheerdo.friendList.dto.response.GetFriendRequestResponseDto;
-import com.example.cheerdo.friendList.dto.response.LoadFriendResponseDto;
-import com.example.cheerdo.friendList.repository.FriendRelationRepository;
-import com.example.cheerdo.friendList.repository.MemberRepository;
-import com.github.javafaker.Faker;
+import com.example.cheerdo.friends.dto.request.RemoveOrAcceptRequestDto;
+import com.example.cheerdo.friends.dto.request.SendRequestDto;
+import com.example.cheerdo.friends.dto.response.GetFriendRequestResponseDto;
+import com.example.cheerdo.friends.dto.response.LoadFriendResponseDto;
+import com.example.cheerdo.friends.repository.FriendRelationRepository;
+import com.example.cheerdo.friends.repository.MemberRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

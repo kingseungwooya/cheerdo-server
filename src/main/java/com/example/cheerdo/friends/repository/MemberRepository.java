@@ -1,4 +1,4 @@
-package com.example.cheerdo.friendList.repository;
+package com.example.cheerdo.friends.repository;
 
 import com.example.cheerdo.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
