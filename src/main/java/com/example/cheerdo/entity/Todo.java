@@ -62,6 +62,7 @@ public class Todo {
                 .typeOfTodo(type.name())
                 .todo(content)
                 .success(isSuccess)
+                .endDateTime(endDateTime)
                 .build();
     }
 
