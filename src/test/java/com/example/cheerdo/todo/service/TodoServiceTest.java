@@ -22,8 +22,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
@@ -61,6 +63,7 @@ class TodoServiceTest {
         memberRepository.save(member);
         // 테스팅 Todo
         todo = Todo.builder()
+                .todoId(UUID.randomUUID().toString())
                 .member(member)
                 .isSuccess(false)
                 .date(testDate)
@@ -75,10 +78,14 @@ class TodoServiceTest {
     void writeTodo() {
         // given
         WriteTodoRequestDto writeTodoRequestDto =
-                new WriteTodoRequestDto(member.getId(), Type.TODO.name(), "오늘의 할일!~");
+                new WriteTodoRequestDto(UUID.randomUUID().toString(),
+                        member.getId(),
+                        Type.TODO.name(),
+                        LocalDateTime.now().plusHours(2),
+                        "test todo 1");
 
         // when
-        Long todoId = todoService.writeTodo(writeTodoRequestDto);
+        String todoId = todoService.writeTodo(writeTodoRequestDto);
         Todo todo = todoRepository.findById(todoId).get();
 
         // then
@@ -126,8 +133,12 @@ class TodoServiceTest {
     void modifyTodo() {
         // given
         WriteTodoRequestDto writeTodoRequestDto =
-                new WriteTodoRequestDto(member.getId(), Type.TODO.name(), "오늘의 할일!~");
-        Long todoId = todoService.writeTodo(writeTodoRequestDto);
+                new WriteTodoRequestDto(UUID.randomUUID().toString(),
+                        member.getId(),
+                        Type.TODO.name(),
+                        LocalDateTime.now().plusHours(2),
+                        "test todo 1");
+        String todoId = todoService.writeTodo(writeTodoRequestDto);
 
         // when
         todoService.modifyTodo(new ModifyTodoRequestDto(todoId, "수정된 할일"));
@@ -135,7 +146,7 @@ class TodoServiceTest {
         // then
         Todo todo = todoRepository.findById(todoId).get();
         assertThat(writeTodoRequestDto.getTodo(), not(todo.getContent()));
-        assertThat(todoId, is(todo.getId()));
+        assertThat(todoId, is(todo.getTodoId()));
     }
 
     @Test
@@ -143,8 +154,12 @@ class TodoServiceTest {
     void deleteTodo() {
         // given
         WriteTodoRequestDto writeTodoRequestDto =
-                new WriteTodoRequestDto(member.getId(), Type.TODO.name(), "곧 지워질 할일!~");
-        Long todoId = todoService.writeTodo(writeTodoRequestDto);
+                new WriteTodoRequestDto(UUID.randomUUID().toString(),
+                        member.getId(),
+                        Type.TODO.name(),
+                        LocalDateTime.now().plusHours(2),
+                        "test todo 1");
+        String todoId = todoService.writeTodo(writeTodoRequestDto);
 
         // when
         todoService.deleteTodo(todoId);
@@ -160,22 +175,24 @@ class TodoServiceTest {
     void success() {
         // given
         Todo todo = Todo.builder()
+                .todoId(UUID.randomUUID().toString())
                 .member(member)
                 .isSuccess(false)
                 .date(testDate)
                 .type(Type.TODO)
                 .content("테스트용")
                 .build();
-        Long todoId = todoRepository.save(todo).getId();
+        String todoId = todoRepository.save(todo).getTodoId();
 
         Todo successTodo = Todo.builder()
+                .todoId(UUID.randomUUID().toString())
                 .member(member)
                 .isSuccess(true)
                 .date(testDate)
                 .type(Type.TODO)
                 .content("테스트용")
                 .build();
-        Long successTodoId = todoRepository.save(successTodo).getId();
+        String successTodoId = todoRepository.save(successTodo).getTodoId();
 
         // when
         todoService.success(todoId);
