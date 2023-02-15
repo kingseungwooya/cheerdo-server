@@ -25,10 +25,10 @@ public class TodoServiceImpl implements TodoService {
     private final MemberRepository memberRepository;
 
     @Override
-    public Long writeTodo(WriteTodoRequestDto writeTodoRequestDto) {
+    public String writeTodo(WriteTodoRequestDto writeTodoRequestDto) {
         Member member = memberRepository.findById(writeTodoRequestDto.getUserId()).get();
         Todo todo = todoRepository.save(writeTodoRequestDto.requestToEntity(member));
-        return todo.getId();
+        return todo.getTodoId();
     }
 
     @Override
@@ -56,14 +56,14 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public void deleteTodo(Long todoId) {
+    public void deleteTodo(String todoId) {
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new IllegalArgumentException("maybe todo is deleted"));
         todoRepository.delete(todo);
     }
 
     @Override
-    public void success(Long todoId) {
+    public void success(String todoId) {
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new IllegalArgumentException("maybe todo is deleted"));
         todo.success();

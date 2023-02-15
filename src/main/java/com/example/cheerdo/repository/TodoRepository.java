@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public interface TodoRepository extends JpaRepository<Todo, Long> {
+public interface TodoRepository extends JpaRepository<Todo, String> {
     Optional<List<Todo>> findAllByMemberAndTypeAndDate(@Param("member") Member member, @Param("type")Type type, @Param("date") LocalDate searchDate);
 
 }

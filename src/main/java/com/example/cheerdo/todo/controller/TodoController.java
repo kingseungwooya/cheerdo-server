@@ -30,7 +30,7 @@ public class TodoController {
     @ApiOperation(value = "Todo를 생성하는 api"
             , notes = "반환값으로 Httpstatus와 body에는 Long타입의 todoId( todo 고유번호 ) 가 반환된다.")
     @PostMapping("")
-    public ResponseEntity<Long> writeTodo(@RequestBody WriteTodoRequestDto todoDto) {
+    public ResponseEntity<String> writeTodo(@RequestBody WriteTodoRequestDto todoDto) {
         return new ResponseEntity<>(todoService.writeTodo(todoDto), HttpStatus.CREATED);
     }
 
@@ -61,7 +61,7 @@ public class TodoController {
 
     @ApiOperation(value = "Todo를 delete하는 api")
     @DeleteMapping("")
-    public ResponseEntity<?> deleteTodo(@RequestParam Long todoId) {
+    public ResponseEntity<?> deleteTodo(@RequestParam String todoId) {
         try {
             todoService.deleteTodo(todoId);
             return ResponseEntity.ok().build();
@@ -73,7 +73,7 @@ public class TodoController {
     @ApiOperation(value = "Todo 성공체크시 요청되는 api"
             , notes = "반환값이 없는 void")
     @PutMapping("/success")
-    public ResponseEntity<?> updateSuccess(@RequestParam Long todoId) {
+    public ResponseEntity<?> updateSuccess(@RequestParam String todoId) {
         try {
             todoService.success(todoId);
             return ResponseEntity.ok().build();

@@ -7,14 +7,14 @@ import com.example.cheerdo.todo.dto.response.TodoResponseDto;
 import java.util.List;
 
 public interface TodoService {
-    Long writeTodo(WriteTodoRequestDto writeTodoRequestDto);
+    String writeTodo(WriteTodoRequestDto writeTodoRequestDto);
 
     List<TodoResponseDto> getMyTodos(GetTodoRequestDto getTodoRequestDto);
 
     void modifyTodo(ModifyTodoRequestDto modifyTodoRequestDto);
 
-    void deleteTodo(Long todoId);
+    void deleteTodo(String todoId);
 
-    void success(Long todoId);
+    void success(String todoId);
 
 }
