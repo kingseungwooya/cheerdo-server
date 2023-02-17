@@ -40,8 +40,6 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     implementation 'junit:junit:4.12'
     // jwt
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'org.springframework.boot:spring-session-data-redis'
     implementation group: 'com.auth0', name: 'java-jwt', version: '3.18.1'
 
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
@@ -52,4 +50,9 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+bootJar {
+    archivesBaseName='cheerdo_app'
+    archiveFileName='cheerdo_app.jar'
 }
