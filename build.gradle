@@ -53,6 +53,5 @@ tasks.named('test') {
 }
 
 bootJar {
-    archivesBaseName='cheerdo_app'
-    archiveFileName='cheerdo_app.jar'
+    archiveFileName='cheerdo-server-0.0.1-SNAPSHOT.jar'
 }
