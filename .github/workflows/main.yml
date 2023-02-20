@@ -72,7 +72,7 @@ jobs:
           port: ${{ secrets.NCP_SERVER_SSH_PORT }}
           script: |
               sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-              sudo docker rm -f $(docker ps -qa)
-              docker create --name $(docker ps -qa)-container -p 8080:8080 -e TZ=Asia/Seoul ${{ secrets.DOCKER_REPO }}/cheerdo
-              docker start $(docker ps -qa)-container
+              sudo docker rm -f ${{ secrets.DOCKER_CONTAINER_NAME }}
+              docker create --name ${{ secrets.DOCKER_CONTAINER_NAME }}-container -p 8080:8080 -e TZ=Asia/Seoul ${{ secrets.DOCKER_REPO }}/cheerdo
+              docker start ${{ secrets.DOCKER_CONTAINER_NAME }}-container
               docker image prune -f  
