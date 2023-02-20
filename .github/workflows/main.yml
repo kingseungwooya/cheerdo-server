@@ -63,7 +63,7 @@ jobs:
           docker push ${{ secrets.DOCKER_REPO }}/cheerdo
   ## deploy
     - name: Deploy
-      runs-on: [ self-hosted, label-go
+      runs-on: [self-hosted, label-go]
       uses: appleboy/ssh-action@master
       id: deploy-prod
       with:
