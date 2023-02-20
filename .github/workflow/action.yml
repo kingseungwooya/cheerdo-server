@@ -57,20 +57,21 @@ jobs:
     - name: Docker build & push to prod
       run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -f Dockerfile -t ${{ secrets.DOCKER_REPO }} .
-          docker push ${{ secrets.DOCKER_REPO }}   
+          docker build -f Dockerfile -t ${{ secrets.DOCKER_REPO }}/cheerdo .
+          docker push ${{ secrets.DOCKER_REPO }}/cheerdo
   ## deploy
     - name: Deploy
       uses: appleboy/ssh-action@master
       id: deploy-prod
       with:
           host: ${{ secrets.HOST_DEV }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          port: 22
+          username: ${{ secrets.NCP_SERVER_USER }}
+          password: ${{ secrets.NCP_SERVER_PASSWORD }}
+          port: ${{ secrets.NCP_SERVER_SSH_PORT }}
           script: |
+              sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
               sudo docker rm -f $(docker ps -qa)
-              sudo docker pull ${{ secrets.DOCKER_REPO }}/dotoriham-prod
+              sudo docker pull ${{ secrets.DOCKER_REPO }}/cheerdo
               docker-compose up -d
               docker image prune -f    
     
