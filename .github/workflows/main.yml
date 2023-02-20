@@ -52,7 +52,9 @@ jobs:
       shell: bash
   ## gradle build    
     - name: Build with Gradle
-      run: ./gradlew clean build -x test  
+      run: ./gradlew clean build -x test
+    - name: Make gradlew executable
+      run: chmod +x ./gradlew
   ## docker build & push to production
     - name: Docker build & push to prod
       run: |
