@@ -36,7 +36,8 @@ public class LoginServiceImpl implements LoginService, UserDetailsService {
     public void join(JoinRequestDto joinRequestDto) {
         String encodedPassword = passwordEncoder.encode(joinRequestDto.getPassword());
         joinRequestDto.setPassword(encodedPassword);
-        memberRepository.save(joinRequestDto.dtoToMember());
+        Role role = roleRepository.findByName(RoleName.ROLE_USER);
+        memberRepository.save(joinRequestDto.dtoToMember(role));
     }
 
     @Override
@@ -46,12 +47,14 @@ public class LoginServiceImpl implements LoginService, UserDetailsService {
 
     @Override
     public void addToRoleToUser(String userId, RoleName roleName) {
+        /*
         logger.info("회원:{} 에게 권한:{} 부여 완료.", userId, roleName);
         Member member = memberRepository.findById(userId).get();
         Role role = roleRepository.findByName(roleName);
         logger.info("rolename -> {} 하고 role -> {} 적용되었는지 확인", roleName, role.getName());
         member.getRoles().add(role);
         logger.info("role 추가되었는지 확인{}", member);
+        */
     }
 
 
