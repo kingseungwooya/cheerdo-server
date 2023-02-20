@@ -63,7 +63,6 @@ jobs:
           docker push ${{ secrets.DOCKER_REPO }}/cheerdo
   ## deploy
     - name: Deploy
-      runs-on: [self-hosted, label-go]
       uses: appleboy/ssh-action@master
       id: deploy-prod
       with:
@@ -75,5 +74,6 @@ jobs:
               sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
               sudo docker rm -f $(docker ps -qa)
               sudo docker pull ${{ secrets.DOCKER_REPO }}/cheerdo
-              docker-compose up -d
+    ## docker-compose up -d
+              docker run ${{ secrets.DOCKER_REPO }}/cheerdo      
               docker image prune -f    
