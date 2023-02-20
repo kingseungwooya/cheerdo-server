@@ -5,7 +5,7 @@ import com.example.cheerdo.entity.enums.RoleName;
 import com.example.cheerdo.login.dto.request.JoinRequestDto;
 import org.springframework.stereotype.Service;
 
-@Service
+
 public interface LoginService {
 
     void join(JoinRequestDto joinRequestDto);
