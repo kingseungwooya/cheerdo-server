@@ -50,11 +50,11 @@ jobs:
         touch ./application-dev.properties
         echo "${{ secrets.PROPERTIES_DEV }}" > ./application-dev.properties
       shell: bash
-  ## gradle build    
-    - name: Build with Gradle
-      run: ./gradlew clean build -x test
+  ## gradle build
     - name: Make gradlew executable
       run: chmod +x ./gradlew
+    - name: Build with Gradle
+      run: ./gradlew clean build -x test
   ## docker build & push to production
     - name: Docker build & push to prod
       run: |
