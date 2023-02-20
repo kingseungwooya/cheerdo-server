@@ -40,8 +40,8 @@ jobs:
     - name: make application.properties
       run: |
         cd ./src/main/resources
-        touch ./application-dev.properties
-        echo "${{ secrets.PROPERTIES }}" > ./application-dev.properties
+        touch ./application.properties
+        echo "${{ secrets.PROPERTIES }}" > ./application.properties
       shell: bash
   ## create application-dev.properties
     - name: make application-dev.properties
@@ -74,6 +74,5 @@ jobs:
               sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
               sudo docker rm -f $(docker ps -qa)
               sudo docker pull ${{ secrets.DOCKER_REPO }}/cheerdo
-    ## docker-compose up -d
-              docker run ${{ secrets.DOCKER_REPO }}/cheerdo      
-              docker image prune -f    
+              docker-compose up -d
+              docker image prune -f  
