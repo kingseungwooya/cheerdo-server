@@ -37,18 +37,18 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
   ## create application.properties
-    - name: make application.properties
+    - name: make application.yml
       run: |
         cd ./src/main/resources
-        touch ./application.properties
-        echo "${{ secrets.PROPERTIES }}" > ./application.properties
+        touch ./application.yml
+        echo "${{ secrets.PROPERTIES }}" > ./application.yml
       shell: bash
   ## create application-dev.properties
-    - name: make application-dev.properties
+    - name: make application-dev.yml
       run: |
         cd ./src/main/resources
-        touch ./application-dev.properties
-        echo "${{ secrets.PROPERTIES_DEV }}" > ./application-dev.properties
+        touch ./application-dev.yml
+        echo "${{ secrets.PROPERTIES_DEV }}" > ./application-dev.yml
       shell: bash
   ## gradle build
     - name: Make gradlew executable
