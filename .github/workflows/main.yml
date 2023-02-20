@@ -74,5 +74,5 @@ jobs:
               sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
               sudo docker rm -f $(docker ps -qa)
               sudo docker pull ${{ secrets.DOCKER_REPO }}/cheerdo
-              docker-compose up -d
+              docker run -p 8080:8080 ${{ secrets.DOCKER_REPO }}/cheerdo
               docker image prune -f  
