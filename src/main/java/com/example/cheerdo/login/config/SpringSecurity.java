@@ -4,10 +4,10 @@ import com.example.cheerdo.entity.enums.RoleName;
 import com.example.cheerdo.login.config.filter.CustomAuthenticationFilter;
 import com.example.cheerdo.login.config.filter.CustomAuthorizationFilter;
 import com.example.cheerdo.login.config.util.TokenProvider;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import org.apache.catalina.filters.CorsFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,17 +16,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Arrays;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
-@RequiredArgsConstructor
 @EnableWebSecurity
 public class SpringSecurity extends WebSecurityConfigurerAdapter {
 
@@ -34,10 +29,32 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final TokenProvider jwtUtil;
-    
+    private final CorsFilter corsFilter;
+
+    public SpringSecurity(UserDetailsService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder, TokenProvider jwtUtil, CorsFilter corsFilter) {
+        this.userDetailsService = userDetailsService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.jwtUtil = jwtUtil;
+        this.corsFilter = corsFilter;
+    }
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/api/token/refresh", "/api/join");
+        web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**")
+                // allow anonymous resource requests
+                .antMatchers(
+                        "/",
+                        "/*.html",
+                        "/favicon.ico",
+                        "/**/*.html",
+                        "/**/*.css",
+                        "/**/*.js",
+                        "/h2-console/**"
+                );
     }
 
     @Override

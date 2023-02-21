@@ -22,24 +22,6 @@ public class CheerdoApplication {
     }
 
     @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:8080", "http://localhost:3000", "*")
-                        .allowedMethods("*")
-                        .exposedHeaders("*");
-            }
-        };
-    }
-
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
     CommandLineRunner run(LoginService LoginService) {
         return args -> {
             LoginService.saveRole(new Role(null, RoleName.ROLE_USER));
