@@ -1,6 +1,7 @@
 package com.example.cheerdo.login.config.filter;
 
 import com.example.cheerdo.login.config.CustomUser;
+import com.example.cheerdo.login.config.filter.dto.LoginRequestDto;
 import com.example.cheerdo.login.config.util.TokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -43,17 +45,20 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     // 사용자가 전송한 인증 정보를 추출한다.
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        String memberId = request.getParameter("memberId");
-        String password = request.getParameter("password");
-
-        LOGGER.info("login 한 너의 id: {} ", memberId);
-        LOGGER.info("login 한 너의 비번 : {} ", password);
-
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(memberId, password);
-
-        // 추출한 인증정보를 토대로 인증을 시도한다.
-        // 인증은 AuthenticationManager 와 AuthenticationProvider 를 사용하여 수행
-        return authenticationManager.authenticate(authenticationToken);
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            LoginRequestDto authRequest = mapper.readValue(request.getInputStream(), LoginRequestDto.class);
+            String memberId = authRequest.getMemberId();
+            String password = authRequest.getPassword();
+            LOGGER.info("login 한 너의 id: {} ", memberId);
+            LOGGER.info("login 한 너의 비번 : {} ", password);
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(memberId, password);
+// 추출한 인증정보를 토대로 인증을 시도한다.
+            // 인증은 AuthenticationManager 와 AuthenticationProvider 를 사용하여 수행
+            return authenticationManager.authenticate(authenticationToken);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
