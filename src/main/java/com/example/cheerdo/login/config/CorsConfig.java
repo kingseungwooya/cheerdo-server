@@ -15,6 +15,8 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addAllowedOrigin("*"); // e.g. http://domain1.com
+        config.addAllowedHeader("Authorization");
+        config.addAllowedHeader("Access-Control-Allow-Origin");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
 
