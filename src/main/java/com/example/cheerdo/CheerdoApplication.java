@@ -27,9 +27,9 @@ public class CheerdoApplication {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("10.188.191.208:3000", "*")
+                        .allowedOrigins("http://localhost:8080", "http://localhost:3000", "*")
                         .allowedMethods("*")
-                        .allowedHeaders("*");
+                        .exposedHeaders("*");
             }
         };
     }
