@@ -32,10 +32,7 @@ public class CheerdoApplication {
             }
         };
     }
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+
     @Bean
     CommandLineRunner run(LoginService LoginService) {
         return args -> {

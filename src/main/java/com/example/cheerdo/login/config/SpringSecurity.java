@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -19,6 +20,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
@@ -54,7 +58,8 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
+        auth.userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -65,8 +70,9 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
         customAuthenticationFilter.setPasswordParameter("password");
         customAuthenticationFilter.setFilterProcessesUrl("/api/login");
 
-
         http
+                .cors()
+                .and()
                 .csrf().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(STATELESS)
@@ -75,15 +81,29 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/login/**", "/api/token/refresh/**", "/api/signup/**", "/swagger-ui.html", "/swagger/**",
                         "/api/role/addtouser",
                         "/swagger-resources/**", "/webjars/**" ,"/v2/api-docs").permitAll()
-                .antMatchers("/api/user/info").hasAuthority(RoleName.ROLE_USER.name())
+                .antMatchers("/api/member/**")
+                .hasAnyAuthority(RoleName.ROLE_USER.name())
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(customAuthenticationFilter)
                 .addFilterBefore( new CustomAuthorizationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
     }
-
     @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.addAllowedOriginPattern("*");
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+    @Bean(BeanIds.AUTHENTICATION_MANAGER)
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
