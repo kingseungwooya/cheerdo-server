@@ -14,7 +14,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         registry.addMapping("/**")
                 .allowedHeaders("*")
                 .allowedOrigins("*")
-                .allowedHeaders("*")
-                .exposedHeaders("*");
+                .allowedHeaders("*");
     }
 }

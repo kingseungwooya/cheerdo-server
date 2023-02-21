@@ -4,7 +4,7 @@ import com.example.cheerdo.entity.enums.RoleName;
 import com.example.cheerdo.login.config.filter.CustomAuthenticationFilter;
 import com.example.cheerdo.login.config.filter.CustomAuthorizationFilter;
 import com.example.cheerdo.login.config.util.TokenProvider;
-import org.apache.catalina.filters.CorsFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,27 +18,22 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.filter.CorsFilter;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
-
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SpringSecurity extends WebSecurityConfigurerAdapter {
 
 
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final TokenProvider jwtUtil;
-    private final CorsFilter corsFilter;
 
-    public SpringSecurity(UserDetailsService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder, TokenProvider jwtUtil, CorsFilter corsFilter) {
-        this.userDetailsService = userDetailsService;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.jwtUtil = jwtUtil;
-        this.corsFilter = corsFilter;
-    }
     @Bean
-    PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -72,8 +67,7 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
 
 
         http
-                .csrf()
-                .disable()
+                .csrf().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(STATELESS)
                 .and()
@@ -85,7 +79,7 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(customAuthenticationFilter)
-                .addFilterBefore(new CustomAuthorizationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore( new CustomAuthorizationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
     }
 
