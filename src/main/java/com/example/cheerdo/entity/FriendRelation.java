@@ -30,16 +30,13 @@ public class FriendRelation {
     @Column(name = "friend_flag", nullable = false, columnDefinition = "TINYINT", length = 1)
     private boolean isFriend;
 
-    @Column(name = "message_flag", nullable = false, columnDefinition = "TINYINT", length = 1)
-    private boolean hasMessage;
 
     @Builder
-    public FriendRelation(Long id, Member member, String friendId, boolean isFriend, boolean hasMessage) {
+    public FriendRelation(Long id, Member member, String friendId, boolean isFriend) {
         this.id = id;
         this.member = member;
         this.friendId = friendId;
         this.isFriend = isFriend;
-        this.hasMessage = hasMessage;
     }
     @Builder
     public FriendRelation(Long id, Member member, String friendId) {
@@ -47,6 +44,5 @@ public class FriendRelation {
         this.member = member;
         this.friendId = friendId;
         this.isFriend = false;
-        this.hasMessage = false;
     }
 }

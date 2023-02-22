@@ -18,7 +18,6 @@ public class RemoveOrAcceptRequestDto {
                 .friendId(friendId)
                 .member(member.get())
                 .isFriend(true)
-                .hasMessage(false)
                 .build();
     }
 }
