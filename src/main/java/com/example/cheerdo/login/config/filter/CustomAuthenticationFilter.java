@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -71,6 +72,20 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         String access_token = jwtUtil.generateAccessToken(user);
         String refresh_token = jwtUtil.generateRefreshToken(user);
+
+        // create a cookie
+        Cookie cookie = new Cookie("platform","mobile");
+
+        // expires in 7 days
+        cookie.setMaxAge(7 * 24 * 60 * 60);
+
+        // optional properties
+        cookie.setSecure(true);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+
+        // add cookie to response
+        response.addCookie(cookie);
 
         // 클라이언트에 토큰 보내기
         /* 헤더에다가만 보내기
