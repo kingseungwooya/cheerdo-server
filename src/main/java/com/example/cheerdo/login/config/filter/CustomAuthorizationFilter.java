@@ -38,25 +38,31 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     // 여기서  url 가로챔
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
-        String token = jwtUtil.resolveToken(request);
-        if (token != null && jwtUtil.validateToken(token)) {
-            try {
-                UsernamePasswordAuthenticationToken authentication = jwtUtil.getAuthentication(token);
-                SecurityContextHolder.getContext()
-                        .setAuthentication(authentication);
-                filterChain.doFilter(request, response);
-
-            } catch (Exception exception) { // 토큰이 valid 만료되었거나 무슨일이 생길때
-                logger.error("토큰 varify 과정중 error발생:{} ", exception.getMessage());
-                response.setStatus(FORBIDDEN.value());
-                Map<String, String> error = new HashMap<>();
-                error.put("error_message", exception.getMessage());
-                response.setContentType(APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(), error);
-            }
+        if (request.getMethod().equals("OPTIONS")) {
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");
+            response.setHeader("Access-Control-Allow-Headers", "authorization, content-type, xsrf-token");
+            response.setHeader("Access-Control-Max-Age", "3600");
+            response.setStatus(HttpServletResponse.SC_OK);
         } else {
-            filterChain.doFilter(request, response);
+            String token = jwtUtil.resolveToken(request);
+            if (token != null && jwtUtil.validateToken(token)) {
+                try {
+                    UsernamePasswordAuthenticationToken authentication = jwtUtil.getAuthentication(token);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    filterChain.doFilter(request, response);
+
+                } catch (Exception exception) { // when the token is valid expired or something else
+                    logger.error("An error occurred during token verification: {} ", exception.getMessage());
+                    response.setStatus(FORBIDDEN.value());
+                    Map<String, String> error = new HashMap<>();
+                    error.put("error_message", exception.getMessage());
+                    response.setContentType(APPLICATION_JSON_VALUE);
+                    new ObjectMapper().writeValue(response.getOutputStream(), error);
+                }
+            } else {
+                filterChain.doFilter(request, response);
+            }
         }
     }
 

@@ -80,7 +80,7 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS, "/**/*").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/*").permitAll()
                 .antMatchers("/api/login/**", "/api/token/refresh/**", "/api/signup/**", "/swagger-ui.html", "/swagger/**",
                         "/api/role/addtouser",
                         "/swagger-resources/**", "/webjars/**", "/v2/api-docs")
