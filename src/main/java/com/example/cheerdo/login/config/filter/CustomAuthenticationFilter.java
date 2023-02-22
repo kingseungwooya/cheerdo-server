@@ -52,6 +52,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             String password = authRequest.getPassword();
             LOGGER.info("login 한 너의 id: {} ", memberId);
             LOGGER.info("login 한 너의 비번 : {} ", password);
+            LOGGER.info("입력 완료");
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(memberId, password);
 // 추출한 인증정보를 토대로 인증을 시도한다.
             // 인증은 AuthenticationManager 와 AuthenticationProvider 를 사용하여 수행

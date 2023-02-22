@@ -73,6 +73,6 @@ jobs:
           script: |
               sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
               sudo docker rm -f ${{ secrets.DOCKER_CONTAINER_NAME }}-container
-              docker create --name ${{ secrets.DOCKER_CONTAINER_NAME }}-container -p 8088:8080 -e TZ=Asia/Seoul ${{ secrets.DOCKER_REPO }}/cheerdo
+              docker create --name ${{ secrets.DOCKER_CONTAINER_NAME }}-container -p 8080:8080 -e TZ=Asia/Seoul ${{ secrets.DOCKER_REPO }}/cheerdo
               docker start ${{ secrets.DOCKER_CONTAINER_NAME }}-container
               docker image prune -f  
