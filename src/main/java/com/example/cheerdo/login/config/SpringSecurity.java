@@ -80,9 +80,11 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(STATELESS)
                 .and()
                 .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS, "/**/*").permitAll()
                 .antMatchers("/api/login/**", "/api/token/refresh/**", "/api/signup/**", "/swagger-ui.html", "/swagger/**",
                         "/api/role/addtouser",
-                        "/swagger-resources/**", "/webjars/**", "/v2/api-docs").permitAll()
+                        "/swagger-resources/**", "/webjars/**", "/v2/api-docs")
+                .permitAll()
                 .antMatchers("/api/member/**")
                 .hasAnyAuthority(RoleName.ROLE_USER.name())
                 .anyRequest().authenticated()
@@ -99,6 +101,7 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
         configuration.setExposedHeaders(Arrays.asList("Authorization"));
+        configuration.setMaxAge(3600L);
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
