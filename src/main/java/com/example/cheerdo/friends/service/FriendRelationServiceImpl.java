@@ -6,8 +6,9 @@ import com.example.cheerdo.friends.dto.request.RemoveOrAcceptRequestDto;
 import com.example.cheerdo.friends.dto.request.SendRequestDto;
 import com.example.cheerdo.friends.dto.response.GetFriendRequestResponseDto;
 import com.example.cheerdo.friends.dto.response.LoadFriendResponseDto;
-import com.example.cheerdo.friends.repository.FriendRelationRepository;
-import com.example.cheerdo.friends.repository.MemberRepository;
+import com.example.cheerdo.repository.PostRequestRepository;
+import com.example.cheerdo.repository.RelationRepository;
+import com.example.cheerdo.repository.MemberRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,8 @@ import java.util.Optional;
 public class FriendRelationServiceImpl implements FriendRelationService {
     private final Logger logger = LoggerFactory.getLogger(FriendRelationServiceImpl.class);
     private final MemberRepository memberRepository;
-    private final FriendRelationRepository friendRelationRepository;
+    private final RelationRepository friendRelationRepository;
+    private final PostRequestRepository postRequestRepository;
     @Override
     public List<LoadFriendResponseDto> getMyFriendList(String userId) throws Exception {
         // 반환값으로 relation id member id name을 가지는 LoadFriendRelationDto의 List가 반환된다.
