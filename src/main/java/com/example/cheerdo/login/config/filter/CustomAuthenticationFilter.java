@@ -74,7 +74,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         String refresh_token = jwtUtil.generateRefreshToken(user);
 
         // create a cookie
-        Cookie cookie = new Cookie("platform","mobile");
+        Cookie cookie = new Cookie("access_token", access_token);
 
         // expires in 7 days
         cookie.setMaxAge(7 * 24 * 60 * 60);
