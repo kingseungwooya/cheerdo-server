@@ -28,4 +28,5 @@ public class CheerdoApplication {
             LoginService.saveRole(new Role(null, RoleName.ROLE_ADMIN));
         };
     }
+
 }

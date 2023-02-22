@@ -24,13 +24,12 @@ import java.util.Collection;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class LoginServiceImpl implements LoginService, UserDetailsService {
+public class LoginServiceImpl implements LoginService {
     private final Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
 
     private final MemberRepository memberRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final PostRepository postRepository;
 
     @Override
     public void join(JoinRequestDto joinRequestDto) {
@@ -64,20 +63,4 @@ public class LoginServiceImpl implements LoginService, UserDetailsService {
         return memberRepository.existsById(memberId);
     }
 
-    // 로그인 요청시 일어나는 service
-    @Override
-    public CustomUser loadUserByUsername(String memberId) throws UsernameNotFoundException {
-        Member member = memberRepository
-                .findById(memberId)
-                .orElseThrow(() -> new UsernameNotFoundException("해당 id의 회원은 DB에 존재하지 않음"));
-        logger.info("멤버가 존재함: {} ", member.getId());
-        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        member.getRoles().forEach(role -> {
-            authorities.add(new SimpleGrantedAuthority(role.getName().name()));
-        });
-        int letterCount = postRepository.countAllByReceiverIdAndIsOpen(memberId, false).orElse(0);
-
-        return new CustomUser(member.getId(), member.getPassword(), authorities
-                , member.getCoinCount(), letterCount);
-    }
 }
