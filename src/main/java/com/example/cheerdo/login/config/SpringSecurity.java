@@ -25,6 +25,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import java.util.Arrays;
+
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -70,10 +72,10 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
         customAuthenticationFilter.setPasswordParameter("password");
         customAuthenticationFilter.setFilterProcessesUrl("/api/login");
 
+        http.httpBasic().disable();
+        http.cors();
+        http.csrf().disable();
         http
-                .cors()
-                .and()
-                .csrf().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(STATELESS)
                 .and()
@@ -93,12 +95,11 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-
-        configuration.addAllowedOriginPattern("*");
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*");
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization"));
         configuration.setAllowCredentials(true);
-
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
