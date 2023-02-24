@@ -1,10 +1,9 @@
-package com.example.cheerdo.login.config.filter;
+package com.example.cheerdo.login.security.filter;
 
-import com.example.cheerdo.login.config.CustomUser;
-import com.example.cheerdo.login.config.filter.dto.LoginRequestDto;
-import com.example.cheerdo.login.config.util.TokenProvider;
+import com.example.cheerdo.login.security.CustomUser;
+import com.example.cheerdo.login.security.filter.dto.LoginRequestDto;
+import com.example.cheerdo.login.security.TokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,7 +11,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

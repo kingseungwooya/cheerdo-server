@@ -1,9 +1,8 @@
-package com.example.cheerdo.login.config;
+package com.example.cheerdo.login.security;
 
 import com.example.cheerdo.entity.enums.RoleName;
-import com.example.cheerdo.login.config.filter.CustomAuthenticationFilter;
-import com.example.cheerdo.login.config.filter.CustomAuthorizationFilter;
-import com.example.cheerdo.login.config.util.TokenProvider;
+import com.example.cheerdo.login.security.filter.CustomAuthenticationFilter;
+import com.example.cheerdo.login.security.filter.CustomAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,11 +18,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
 
