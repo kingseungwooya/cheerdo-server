@@ -1,4 +1,4 @@
-package com.example.cheerdo.login.config.filter.dto;
+package com.example.cheerdo.login.security.filter.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

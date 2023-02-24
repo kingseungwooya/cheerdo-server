@@ -1,6 +1,6 @@
-package com.example.cheerdo.login.config.filter;
+package com.example.cheerdo.login.security.filter;
 
-import com.example.cheerdo.login.config.util.TokenProvider;
+import com.example.cheerdo.login.security.TokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 

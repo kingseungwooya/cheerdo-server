@@ -1,25 +1,17 @@
 package com.example.cheerdo.login.service;
 
-import com.example.cheerdo.entity.Member;
 import com.example.cheerdo.entity.Role;
 import com.example.cheerdo.entity.enums.RoleName;
-import com.example.cheerdo.login.config.CustomUser;
 import com.example.cheerdo.login.dto.request.JoinRequestDto;
-import com.example.cheerdo.repository.PostRepository;
 import com.example.cheerdo.repository.RoleRepository;
 import com.example.cheerdo.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Collection;
 
 @Service
 @RequiredArgsConstructor

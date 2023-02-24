@@ -3,12 +3,18 @@ package com.example.cheerdo.member.service;
 import com.example.cheerdo.common.enums.SortType;
 import com.example.cheerdo.common.sort.SortUtil;
 import com.example.cheerdo.entity.Member;
+import com.example.cheerdo.entity.Todo;
 import com.example.cheerdo.entity.enums.Type;
+import com.example.cheerdo.login.security.filter.CustomAuthorizationFilter;
 import com.example.cheerdo.member.dto.request.UpdateProfileRequestDto;
 import com.example.cheerdo.member.dto.response.MemberInfoResponseDto;
 import com.example.cheerdo.repository.MemberRepository;
 import com.example.cheerdo.repository.TodoRepository;
+import com.sun.xml.bind.v2.TODO;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -21,6 +27,7 @@ import java.time.temporal.ChronoUnit;
 @Service
 @AllArgsConstructor
 public class MemberServiceImpl implements MemberService {
+    private final Logger logger = LoggerFactory.getLogger(MemberServiceImpl.class);
 
     private final MemberRepository memberRepository;
     private final TodoRepository todoRepository;
@@ -41,12 +48,14 @@ public class MemberServiceImpl implements MemberService {
 
         Member member = memberRepository.findById(memberId).get();
 
-        LocalDate localDate = todoRepository.findFirstByMemberAndType(member
+        Optional<Todo> todo = todoRepository.findFirstByMemberAndType(member
                         , Type.HABIT
-                        , SortUtil.sort(SortType.DESC, "date"))
-                .get().getDate();
+                        , SortUtil.sort(SortType.DESC, "date"));
 
-        return member.to(calcDayDuration(localDate));
+        if (todo.isPresent()) {
+           return member.to(calcDayDuration(todo.get().getDate()));
+        }
+        return member.to(0L);
     }
 
     private Long calcDayDuration(LocalDate localDate) {
