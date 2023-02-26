@@ -1,8 +1,6 @@
 package com.example.cheerdo.todo.dto.response;
 
-import com.example.cheerdo.todo.enums.Type;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiOperation;
 import lombok.*;
 
 @Data

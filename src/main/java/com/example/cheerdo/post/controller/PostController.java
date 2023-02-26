@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Locale;
 
 @RestController
-@RequestMapping("api/post")
+@RequestMapping("api/member/post")
 @RequiredArgsConstructor
 public class PostController {
     private final Logger logger = LoggerFactory.getLogger(PostController.class);
@@ -58,7 +58,7 @@ public class PostController {
 
     @ApiOperation(value = "편지를 쓸 수 있다.")
     @PostMapping("/letter")
-    public ResponseEntity<?> writeLetter(@RequestBody LetterRequestDto letterRequestDto) {
+    public ResponseEntity<String> writeLetter(@RequestBody LetterRequestDto letterRequestDto) {
         postService.writeLetter(letterRequestDto);
         String message = "Send letter success";
         return new ResponseEntity<>(message, HttpStatus.OK);

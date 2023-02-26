@@ -8,7 +8,7 @@ import com.example.cheerdo.post.dto.response.PostResponseDto;
 import java.util.List;
 
 public interface PostService {
-    List<?> getMyPosts(PostRequestDto postRequestDto) throws Exception;
+    List<?> getMyPosts(PostRequestDto postRequestDto) throws IllegalArgumentException;
 
     LetterResponseDto readLetter(Long letterId) throws Exception;
 
