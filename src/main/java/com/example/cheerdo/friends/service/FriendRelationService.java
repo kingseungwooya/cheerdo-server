@@ -1,6 +1,7 @@
 package com.example.cheerdo.friends.service;
 
 import com.example.cheerdo.friends.dto.request.RemoveOrAcceptRequestDto;
+import com.example.cheerdo.friends.dto.request.SendPostRequestDto;
 import com.example.cheerdo.friends.dto.request.SendRequestDto;
 import com.example.cheerdo.friends.dto.response.GetFriendRequestResponseDto;
 import com.example.cheerdo.friends.dto.response.LoadFriendResponseDto;
@@ -18,5 +19,7 @@ public interface FriendRelationService {
     List<LoadFriendResponseDto> getReceivedRequest(String userId) throws Exception;
 
     void removeOrAcceptRequest(RemoveOrAcceptRequestDto removeOrAcceptRequestDto) throws Exception;
+
+    void sendPostRequest(SendPostRequestDto sendPostRequestDto) throws Exception;
 
 }

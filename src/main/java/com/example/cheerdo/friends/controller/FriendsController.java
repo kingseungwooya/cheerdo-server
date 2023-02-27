@@ -1,6 +1,7 @@
 package com.example.cheerdo.friends.controller;
 
 import com.example.cheerdo.friends.dto.request.RemoveOrAcceptRequestDto;
+import com.example.cheerdo.friends.dto.request.SendPostRequestDto;
 import com.example.cheerdo.friends.dto.request.SendRequestDto;
 import com.example.cheerdo.friends.dto.response.GetFriendRequestResponseDto;
 import com.example.cheerdo.friends.dto.response.LoadFriendResponseDto;
@@ -86,6 +87,20 @@ public class FriendsController {
         logger.info("request is -> {}", removeOrAcceptRequestDto.getRelationId());
         try {
             friendRelationService.removeOrAcceptRequest(removeOrAcceptRequestDto);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(value = "친구에게 편지요청하는 API"
+            , notes = "relationId를 받아 relation에 해당하는 인원에게 PostRequest를 생성. 반환값으로 Http status가 반환된다.")
+    @PostMapping(value = "/sendpostrequest")
+    @ApiResponse(code = 200, message = "status ok")
+    public ResponseEntity<?> sendPostRequest(@RequestBody SendPostRequestDto sendPostRequestDto) {
+        logger.info("request is -> {}", sendPostRequestDto.getRelationId());
+        try {
+            friendRelationService.sendPostRequest(sendPostRequestDto);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

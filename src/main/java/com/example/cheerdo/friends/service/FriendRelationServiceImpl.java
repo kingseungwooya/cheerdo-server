@@ -3,6 +3,7 @@ package com.example.cheerdo.friends.service;
 import com.example.cheerdo.entity.FriendRelation;
 import com.example.cheerdo.entity.Member;
 import com.example.cheerdo.friends.dto.request.RemoveOrAcceptRequestDto;
+import com.example.cheerdo.friends.dto.request.SendPostRequestDto;
 import com.example.cheerdo.friends.dto.request.SendRequestDto;
 import com.example.cheerdo.friends.dto.response.GetFriendRequestResponseDto;
 import com.example.cheerdo.friends.dto.response.LoadFriendResponseDto;
@@ -165,4 +166,15 @@ public class FriendRelationServiceImpl implements FriendRelationService {
             }
         }
 }
+
+    @Override
+    public void sendPostRequest(SendPostRequestDto sendPostRequestDto) throws Exception {
+        Optional<FriendRelation> optionalFriendRelation = friendRelationRepository.findById(sendPostRequestDto.getRelationId());
+
+        if (optionalFriendRelation.isEmpty()) {
+            throw new Exception("there is no such relation");
+        }
+        postRequestRepository.save(sendPostRequestDto.dtoToPostRequestEntity(optionalFriendRelation));
+    }
+
 }
