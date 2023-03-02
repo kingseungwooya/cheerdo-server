@@ -1,9 +1,11 @@
 package com.example.cheerdo.todo.dto.request;
 
+import com.example.cheerdo.entity.Calender;
 import com.example.cheerdo.entity.Member;
 import com.example.cheerdo.entity.Todo;
 import com.example.cheerdo.entity.enums.Type;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,20 +17,21 @@ public class WriteTodoRequestDto {
 
     private static final boolean DEFAULT_STATUS = false;
     private String todoId;
-    private String userId;
+    private String memberId;
     private String type;
-     private LocalDateTime endDateTime;
+    private LocalDateTime endDateTime;
     private String todo;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date;
 
-    public Todo requestToEntity(Member member) {
+    public Todo requestToEntity(Calender calender) {
         return Todo.builder()
-                .date(LocalDate.now())
                 .content(todo)
                 .isSuccess(DEFAULT_STATUS)
-                .member(member)
                 .type(Type.valueOf(type))
                 .endDateTime(endDateTime)
                 .todoId(todoId)
+                .calender(calender)
                 .build();
     }
 }

@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Getter
 @AllArgsConstructor
 public class GetTodoRequestDto {
-    private String userId;
+    private String memberId;
 
     private String type;
 
