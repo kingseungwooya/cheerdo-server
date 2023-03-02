@@ -1,8 +1,10 @@
 package com.example.cheerdo.todo.controller;
 
+import com.example.cheerdo.entity.Todo;
 import com.example.cheerdo.todo.dto.request.GetTodoRequestDto;
 import com.example.cheerdo.todo.dto.request.ModifyTodoRequestDto;
 import com.example.cheerdo.todo.dto.request.WriteTodoRequestDto;
+import com.example.cheerdo.todo.dto.response.TodoResponseDto;
 import com.example.cheerdo.todo.service.TodoService;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -21,7 +23,7 @@ import java.util.List;
 */
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/member/main/todo")
+@RequestMapping("/api/member/todo")
 public class TodoController {
 
     private final TodoService todoService;
@@ -37,13 +39,9 @@ public class TodoController {
     @ApiOperation(value = "Todo를 Get하는 api"
             , notes = "반환값으로 Httpstatus와 body에는 todo list들이 반환된다. ")
     @GetMapping("")
-    public ResponseEntity<?> getMyTodo(@ModelAttribute GetTodoRequestDto getTodoRequestDto) {
-        logger.info("input userID is -> {}",getTodoRequestDto.getUserId());
-        try {
-            return new ResponseEntity<>(todoService.getMyTodos(getTodoRequestDto), HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<List<TodoResponseDto>> getMyTodo(@ModelAttribute GetTodoRequestDto getTodoRequestDto) {
+        logger.info("input userID is -> {}",getTodoRequestDto.getMemberId());
+        return new ResponseEntity<>(todoService.getMyTodos(getTodoRequestDto), HttpStatus.OK);
 
     }
 
