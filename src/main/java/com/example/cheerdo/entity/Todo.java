@@ -26,15 +26,11 @@ public class Todo {
     private String todoId;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "calender_id")
+    private Calender calender;
 
     @Lob
     private String content;
-
-    @Column(name = "write_date")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate date;
 
     @Column(name = "end_date_time")
     private LocalDateTime endDateTime;
@@ -46,11 +42,10 @@ public class Todo {
     private Type type;
 
     @Builder
-    public Todo(String todoId, Member member, String content, LocalDate date, boolean isSuccess, Type type, LocalDateTime endDateTime) {
+    public Todo(String todoId, Calender calender, String content, boolean isSuccess, Type type, LocalDateTime endDateTime) {
         this.todoId = todoId;
-        this.member = member;
+        this.calender = calender;
         this.content = content;
-        this.date = date;
         this.isSuccess = isSuccess;
         this.type = type;
         this.endDateTime = endDateTime;
