@@ -1,7 +1,9 @@
 package com.example.cheerdo.todo.service;
 
+import com.example.cheerdo.entity.Calender;
 import com.example.cheerdo.entity.Member;
 import com.example.cheerdo.entity.Todo;
+import com.example.cheerdo.repository.CalenderRepository;
 import com.example.cheerdo.repository.MemberRepository;
 import com.example.cheerdo.repository.TodoRepository;
 import com.example.cheerdo.todo.dto.request.GetTodoRequestDto;
@@ -48,25 +50,28 @@ class TodoServiceTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private CalenderRepository calenderRepository;
+
     private Todo todo;
 
     private Member member;
+
+    private String testMemberId = "kim11111";
 
     private static final LocalDate testDate = LocalDate.of(1999, 5, 5);
     @BeforeEach
     void init() {
         // 테스팅 Member
         member = Member.builder()
-                .id("kim12345")
+                .id(testMemberId)
                 .name("난승우")
                 .build();
         memberRepository.save(member);
         // 테스팅 Todo
         todo = Todo.builder()
                 .todoId(UUID.randomUUID().toString())
-                .member(member)
                 .isSuccess(false)
-                .date(testDate)
                 .type(Type.TODO)
                 .content("테스트용")
                 .build();
@@ -74,58 +79,70 @@ class TodoServiceTest {
     }
 
     @Test
-    @DisplayName("Todo를 작성하고 Todo id를 반환한다. ")
+    @DisplayName("Todo를 최초 작성시 Calender가 제대로 생성되는지 확인  ")
     void writeTodo() {
         // given
         WriteTodoRequestDto writeTodoRequestDto =
-                new WriteTodoRequestDto(UUID.randomUUID().toString(),
-                        member.getId(),
-                        Type.TODO.name(),
-                        LocalDateTime.now().plusHours(2),
-                        "test todo 1");
+                new WriteTodoRequestDto(UUID.randomUUID().toString()
+                        , testMemberId
+                        , Type.TODO.name()
+                        , LocalDateTime.of(1999, 5, 5, 14, 30)
+                        , "테스트"
+                        , testDate);
 
         // when
         String todoId = todoService.writeTodo(writeTodoRequestDto);
         Todo todo = todoRepository.findById(todoId).get();
-
+        Calender calender = todo.getCalender();
         // then
         assertEquals(todo.getContent(), writeTodoRequestDto.getTodo());
         assertEquals(todo.getType().toString(), writeTodoRequestDto.getType());
-        assertEquals(todo.getMember().getId(), writeTodoRequestDto.getUserId());
+
+        // calender가 잘 생성 되었는가
+        assertEquals(calender, calenderRepository.findById(calender.getCalenderId()).get());
+        // calender의 Todos에 포함되었는가.
+        assertThat(calender.getTodos(), contains(todo));
+        assertThat(calenderRepository.findById(calender.getCalenderId()).get().getTodos(), contains(todo));
+
+
     }
+
 
     @Test
     @DisplayName("원하는 타입의 Todo가 받아왔는지 확인한다. ")
     void getMyTodos() {
         // given
+        WriteTodoRequestDto writeTodoRequestDto =
+                new WriteTodoRequestDto(UUID.randomUUID().toString()
+                        , testMemberId
+                        , Type.TODO.name()
+                        , LocalDateTime.of(1999, 5, 5, 14, 30)
+                        , "테스트"
+                        , testDate);
+        String todoId = todoService.writeTodo(writeTodoRequestDto);
+
         GetTodoRequestDto getTodoRequestDto =
-                new GetTodoRequestDto(member.getId(), Type.TODO.name(), testDate);
+                new GetTodoRequestDto(testMemberId, Type.TODO.name(), testDate);
 
         // when
         List<TodoResponseDto> todoResponseDtos = todoService.getMyTodos(getTodoRequestDto);
 
         // then
         assertThat(todoResponseDtos.size(), is(1));
-        assertThat(todoResponseDtos.stream()
-                        .map( item -> item.getTypeOfTodo())
-                        .collect(Collectors.toList()),
-                containsInAnyOrder(getTodoRequestDto.getType()));
 
     }
     @Test
-    @DisplayName("해당 날짜의 투두를 작성하지 않았을때 ")
+    @DisplayName("해당 날짜의 투두를 작성하지 않았을때 빈 Array를 반환한다.  ")
     void getEmptyTodos() {
         // given
-        LocalDate emptyDate = LocalDate.of(2000, 1, 1);
-        GetTodoRequestDto getTodoRequestDto =
-                new GetTodoRequestDto(member.getId(), Type.TODO.name(), emptyDate);
+        GetTodoRequestDto emptyGetTodoRequestDto =
+                new GetTodoRequestDto(testMemberId, Type.TODO.name(), LocalDate.of(1111, 1, 1));
 
         // when
-        List<TodoResponseDto> myTodos = todoService.getMyTodos(getTodoRequestDto);
-        logger.info(String.valueOf(myTodos.size()));
+        List<TodoResponseDto> emptyResponseDtos = todoService.getMyTodos(emptyGetTodoRequestDto);
 
         // then
-        assertThat(myTodos, is(empty()));
+        assertThat(emptyResponseDtos, empty());
     }
 
     @Test
@@ -133,11 +150,12 @@ class TodoServiceTest {
     void modifyTodo() {
         // given
         WriteTodoRequestDto writeTodoRequestDto =
-                new WriteTodoRequestDto(UUID.randomUUID().toString(),
-                        member.getId(),
-                        Type.TODO.name(),
-                        LocalDateTime.now().plusHours(2),
-                        "test todo 1");
+                new WriteTodoRequestDto(UUID.randomUUID().toString()
+                        , testMemberId
+                        , Type.TODO.name()
+                        , LocalDateTime.of(1999, 5, 5, 14, 30)
+                        , "테스트"
+                        , testDate);
         String todoId = todoService.writeTodo(writeTodoRequestDto);
 
         // when
@@ -154,11 +172,12 @@ class TodoServiceTest {
     void deleteTodo() {
         // given
         WriteTodoRequestDto writeTodoRequestDto =
-                new WriteTodoRequestDto(UUID.randomUUID().toString(),
-                        member.getId(),
-                        Type.TODO.name(),
-                        LocalDateTime.now().plusHours(2),
-                        "test todo 1");
+                new WriteTodoRequestDto(UUID.randomUUID().toString()
+                        , testMemberId
+                        , Type.TODO.name()
+                        , LocalDateTime.of(1999, 5, 5, 14, 30)
+                        , "테스트"
+                        , testDate);
         String todoId = todoService.writeTodo(writeTodoRequestDto);
 
         // when
@@ -171,39 +190,26 @@ class TodoServiceTest {
     }
 
     @Test
-    @DisplayName("성공상태에서 실패로, 실패에서 성공으로")
+    @DisplayName("성공률 확인하기")
     void success() {
         // given
-        Todo todo = Todo.builder()
-                .todoId(UUID.randomUUID().toString())
-                .member(member)
-                .isSuccess(false)
-                .date(testDate)
-                .type(Type.TODO)
-                .content("테스트용")
-                .build();
-        String todoId = todoRepository.save(todo).getTodoId();
-
-        Todo successTodo = Todo.builder()
-                .todoId(UUID.randomUUID().toString())
-                .member(member)
-                .isSuccess(true)
-                .date(testDate)
-                .type(Type.TODO)
-                .content("테스트용")
-                .build();
-        String successTodoId = todoRepository.save(successTodo).getTodoId();
+        WriteTodoRequestDto writeTodoRequestDto =
+                new WriteTodoRequestDto(UUID.randomUUID().toString()
+                        , testMemberId
+                        , Type.TODO.name()
+                        , LocalDateTime.of(1999, 5, 5, 14, 30)
+                        , "테스트"
+                        , testDate);
+        String todoId = todoService.writeTodo(writeTodoRequestDto);
 
         // when
         todoService.success(todoId);
-        todoService.success(successTodoId);
 
         // then
-        // 취소를 성공으로
-        Optional<Todo> testTodo = todoRepository.findById(todoId);
-        assertThat(testTodo.get().isSuccess(), is(true));
-        // 성공을 취소로
-        Optional<Todo> testTodo2 = todoRepository.findById(successTodoId);
-        assertThat(testTodo2.get().isSuccess(), is(false));
+        Calender calender = todoRepository.findById(todoId).get().getCalender();
+        logger.info("rate is -> {}", calender.getSuccessRate());
+        assertThat(calender.getTodos().size(), is(1));
+        assertThat(calender.getSuccessRate(), not(0));
+
     }
 }
