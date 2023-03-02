@@ -8,7 +8,7 @@ import com.example.cheerdo.todo.dto.request.GetTodoRequestDto;
 import com.example.cheerdo.todo.dto.request.ModifyTodoRequestDto;
 import com.example.cheerdo.todo.dto.request.WriteTodoRequestDto;
 import com.example.cheerdo.todo.dto.response.TodoResponseDto;
-import com.example.cheerdo.todo.enums.Type;
+import com.example.cheerdo.entity.enums.Type;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

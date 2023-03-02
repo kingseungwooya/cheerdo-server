@@ -1,7 +1,7 @@
 package com.example.cheerdo.entity;
 
 import com.example.cheerdo.todo.dto.response.TodoResponseDto;
-import com.example.cheerdo.todo.enums.Type;
+import com.example.cheerdo.entity.enums.Type;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

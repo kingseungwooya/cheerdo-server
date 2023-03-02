@@ -2,7 +2,7 @@ package com.example.cheerdo.todo.dto.request;
 
 import com.example.cheerdo.entity.Member;
 import com.example.cheerdo.entity.Todo;
-import com.example.cheerdo.todo.enums.Type;
+import com.example.cheerdo.entity.enums.Type;
 import lombok.*;
 
 import java.time.LocalDate;
