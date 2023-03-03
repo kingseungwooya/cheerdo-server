@@ -60,6 +60,7 @@ class TodoServiceTest {
     private String testMemberId = "kim11111";
 
     private static final LocalDate testDate = LocalDate.of(1999, 5, 5);
+
     @BeforeEach
     void init() {
         // 테스팅 Member
@@ -131,6 +132,7 @@ class TodoServiceTest {
         assertThat(todoResponseDtos.size(), is(1));
 
     }
+
     @Test
     @DisplayName("해당 날짜의 투두를 작성하지 않았을때 빈 Array를 반환한다.  ")
     void getEmptyTodos() {

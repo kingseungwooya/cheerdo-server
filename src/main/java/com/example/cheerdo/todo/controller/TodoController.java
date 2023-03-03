@@ -40,7 +40,7 @@ public class TodoController {
             , notes = "todo list들이 반환된다. ")
     @GetMapping("")
     public ResponseEntity<List<TodoResponseDto>> getMyTodo(@ModelAttribute GetTodoRequestDto getTodoRequestDto) {
-        logger.info("input userID is -> {}",getTodoRequestDto.getMemberId());
+        logger.info("input userID is -> {}", getTodoRequestDto.getMemberId());
         return new ResponseEntity<>(todoService.getMyTodos(getTodoRequestDto), HttpStatus.OK);
 
     }

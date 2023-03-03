@@ -32,6 +32,7 @@ public class TodoServiceImpl implements TodoService {
     private final TodoRepository todoRepository;
     private final MemberRepository memberRepository;
     private final CalenderRepository calenderRepository;
+
     // todo 작성 요청시 해당 date에 객체가 있는지 확인? 확인 후 없으면 생성
     @Override
     public String writeTodo(WriteTodoRequestDto writeTodoRequestDto) {
@@ -63,7 +64,7 @@ public class TodoServiceImpl implements TodoService {
 
         return todos.stream()
                 .map(todo -> todo.entityToTodoResponseDto())
-                    .collect(Collectors.toList());
+                .collect(Collectors.toList());
     }
 
     @Override
