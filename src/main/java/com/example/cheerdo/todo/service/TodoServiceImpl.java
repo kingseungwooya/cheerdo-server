@@ -49,6 +49,7 @@ public class TodoServiceImpl implements TodoService {
 
         Todo todo = todoRepository.save(writeTodoRequestDto.requestToEntity(calender));
         calender.addTodo(todo);
+        updateRate(todo.getCalender().getCalenderId());
         return todo.getTodoId();
     }
 
@@ -80,6 +81,14 @@ public class TodoServiceImpl implements TodoService {
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new IllegalArgumentException("maybe todo is deleted"));
         todoRepository.delete(todo);
+        Long calenderId = todo.getCalender().getCalenderId();
+        updateRate(calenderId);
+        Calender calender = todo.getCalender();
+        
+        calender.deleteTodo(todo);
+        if (todo.getCalender().getTodos().size() == 0) {
+            calenderRepository.deleteById(calenderId);
+        }
     }
 
     @Override
@@ -87,7 +96,10 @@ public class TodoServiceImpl implements TodoService {
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new IllegalArgumentException("maybe todo is deleted"));
         todo.success();
-        Long calenderId = todo.getCalender().getCalenderId();
+        updateRate(todo.getCalender().getCalenderId());
+    }
+
+    private void updateRate(Long calenderId) {
         Calender calender = calenderRepository.findById(calenderId).get();
         calender.updateRate();
     }

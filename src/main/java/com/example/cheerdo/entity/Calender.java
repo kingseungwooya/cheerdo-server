@@ -59,4 +59,7 @@ public class Calender {
     }
 
 
+    public void deleteTodo(Todo todo) {
+        todos.remove(todo);
+    }
 }
