@@ -6,6 +6,7 @@ import com.example.cheerdo.friends.dto.request.SendRequestDto;
 import com.example.cheerdo.friends.dto.response.GetFriendRequestResponseDto;
 import com.example.cheerdo.friends.dto.response.GetReceivedPostRequestResponseDto;
 import com.example.cheerdo.friends.dto.response.GetFriendResponseDto;
+import com.example.cheerdo.friends.dto.response.GetSearchedFriendResponseDto;
 import com.example.cheerdo.friends.service.FriendRelationService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -117,6 +118,20 @@ public class FriendsController {
         try {
             List<GetReceivedPostRequestResponseDto> getReceivedPostRequestResponseDtos = friendRelationService.getReceivedPostRequest(userId);
             return new ResponseEntity<>(getReceivedPostRequestResponseDtos, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(value = "친구 검색결과를 가져오는 API"
+            , notes = "String값을 받아 반환값으로 이와 Name또는 Id가 일치하는 user를 반환한다.")
+    @GetMapping(value = "/searchedfriendrequest/{searchStr}")
+    @ApiResponse(code = 200, message = "status ok")
+    public ResponseEntity<?> getSearchFriendRequest(@PathVariable("searchStr") String searchStr) {
+        logger.info("request is -> {}", searchStr);
+        try {
+            List<GetSearchedFriendResponseDto> GetSearchedFriendResponseDtos = friendRelationService.getSearchedFriendRequest(searchStr);
+            return new ResponseEntity<>(GetSearchedFriendResponseDtos, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

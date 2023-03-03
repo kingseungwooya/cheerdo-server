@@ -9,6 +9,7 @@ import com.example.cheerdo.friends.dto.request.SendRequestDto;
 import com.example.cheerdo.friends.dto.response.GetFriendRequestResponseDto;
 import com.example.cheerdo.friends.dto.response.GetReceivedPostRequestResponseDto;
 import com.example.cheerdo.friends.dto.response.GetFriendResponseDto;
+import com.example.cheerdo.friends.dto.response.GetSearchedFriendResponseDto;
 import com.example.cheerdo.repository.PostRequestRepository;
 import com.example.cheerdo.repository.RelationRepository;
 import com.example.cheerdo.repository.MemberRepository;
@@ -198,6 +199,33 @@ public class FriendRelationServiceImpl implements FriendRelationService {
         return list;
     }
 
+    @Override
+    public List<GetSearchedFriendResponseDto> getSearchedFriendRequest(String searchStr) throws Exception {
+        List<GetSearchedFriendResponseDto> list = new ArrayList<>();
+        Optional<List<Member>> searchedMembers1 = memberRepository.findAllByIdContainingIgnoreCase(searchStr);
+        Optional<List<Member>> searchedMembers2 = memberRepository.findAllByNameContainingIgnoreCase(searchStr);
+        logger.info("searched memberId length -> {}, searched memberName length -> {}", searchedMembers1.get().size(), searchedMembers2.get().size());
+
+        List<Member> searchedMembers = searchedMembers2.get();
+        searchedMembers.addAll(searchedMembers1.get());
+        if (searchedMembers.size() == 0) {
+            throw new Exception("no search data");
+        } else {
+            HashSet<Member> memberHashSet = new HashSet<Member>();
+            memberHashSet.addAll(searchedMembers);
+            Iterator iterator = memberHashSet.iterator();
+
+            while(iterator.hasNext()) {
+                Member tempMember = (Member) iterator.next();
+                list.add(GetSearchedFriendResponseDto.builder()
+                        .memberId(tempMember.getId())
+                        .name(tempMember.getName())
+                        .build()
+                );
+            }
+        }
+
+        return list;
     }
 
 }
