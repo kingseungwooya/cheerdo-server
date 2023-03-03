@@ -19,7 +19,7 @@ public class WriteTodoRequestDto {
     private String todoId;
     private String memberId;
     private String type;
-    private LocalDateTime endDateTime;
+    private String endDateTime;
     private String todo;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;

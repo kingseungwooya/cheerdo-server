@@ -33,7 +33,7 @@ public class Todo {
     private String content;
 
     @Column(name = "end_date_time")
-    private LocalDateTime endDateTime;
+    private String endDateTime;
 
     @Column(name = "success_flag", nullable = false, columnDefinition = "TINYINT", length = 1)
     private boolean isSuccess;
@@ -42,7 +42,7 @@ public class Todo {
     private Type type;
 
     @Builder
-    public Todo(String todoId, Calender calender, String content, boolean isSuccess, Type type, LocalDateTime endDateTime) {
+    public Todo(String todoId, Calender calender, String content, boolean isSuccess, Type type, String endDateTime) {
         this.todoId = todoId;
         this.calender = calender;
         this.content = content;

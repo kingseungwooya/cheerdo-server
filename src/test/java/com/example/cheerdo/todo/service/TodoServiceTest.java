@@ -87,7 +87,7 @@ class TodoServiceTest {
                 new WriteTodoRequestDto(UUID.randomUUID().toString()
                         , testMemberId
                         , Type.TODO.name()
-                        , LocalDateTime.of(1999, 5, 5, 14, 30)
+                        , "15:50"
                         , "테스트"
                         , testDate);
 
@@ -117,7 +117,7 @@ class TodoServiceTest {
                 new WriteTodoRequestDto(UUID.randomUUID().toString()
                         , testMemberId
                         , Type.TODO.name()
-                        , LocalDateTime.of(1999, 5, 5, 14, 30)
+                        , "15:50"
                         , "테스트"
                         , testDate);
         String todoId = todoService.writeTodo(writeTodoRequestDto);
@@ -155,7 +155,7 @@ class TodoServiceTest {
                 new WriteTodoRequestDto(UUID.randomUUID().toString()
                         , testMemberId
                         , Type.TODO.name()
-                        , LocalDateTime.of(1999, 5, 5, 14, 30)
+                        , "15:50"
                         , "테스트"
                         , testDate);
         String todoId = todoService.writeTodo(writeTodoRequestDto);
@@ -177,7 +177,7 @@ class TodoServiceTest {
                 new WriteTodoRequestDto(UUID.randomUUID().toString()
                         , testMemberId
                         , Type.TODO.name()
-                        , LocalDateTime.of(1999, 5, 5, 14, 30)
+                        , "15:50"
                         , "테스트"
                         , testDate);
         String todoId = todoService.writeTodo(writeTodoRequestDto);
@@ -199,7 +199,7 @@ class TodoServiceTest {
                 new WriteTodoRequestDto(UUID.randomUUID().toString()
                         , testMemberId
                         , Type.TODO.name()
-                        , LocalDateTime.of(1999, 5, 5, 14, 30)
+                        , "15:50"
                         , "테스트"
                         , testDate);
         String todoId = todoService.writeTodo(writeTodoRequestDto);
@@ -211,7 +211,7 @@ class TodoServiceTest {
         Calender calender = todoRepository.findById(todoId).get().getCalender();
         logger.info("rate is -> {}", calender.getSuccessRate());
         assertThat(calender.getTodos().size(), is(1));
-        assertThat(calender.getSuccessRate(), not(0));
+        assertThat(calender.getSuccessRate(), is(100.0));
 
     }
 }

@@ -20,10 +20,10 @@ public class TodoResponseDto {
     private final boolean success;
 
     @ApiModelProperty(example = "todo의 마감기한")
-    private final LocalDateTime endDateTime;
+    private final String endDateTime;
 
     @Builder
-    public TodoResponseDto(String todoId, String typeOfTodo, String todo, boolean success, LocalDateTime endDateTime) {
+    public TodoResponseDto(String todoId, String typeOfTodo, String todo, boolean success, String endDateTime) {
         this.todoId = todoId;
         this.typeOfTodo = typeOfTodo;
         this.todo = todo;
