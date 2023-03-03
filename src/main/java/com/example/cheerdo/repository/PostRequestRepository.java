@@ -8,5 +8,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PostRequestRepository extends JpaRepository<PostRequest, Long> {
-    Optional<List<PostRequest>> findAllByRelationFriendId(String userId);
+    Optional<List<PostRequest>> findAllByReceiverId (String friendId);
 }

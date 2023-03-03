@@ -2,10 +2,12 @@ package com.example.cheerdo.friends.service;
 
 import com.example.cheerdo.entity.FriendRelation;
 import com.example.cheerdo.entity.Member;
+import com.example.cheerdo.entity.PostRequest;
 import com.example.cheerdo.friends.dto.request.RemoveOrAcceptRequestDto;
 import com.example.cheerdo.friends.dto.request.SendPostRequestDto;
 import com.example.cheerdo.friends.dto.request.SendRequestDto;
 import com.example.cheerdo.friends.dto.response.GetFriendRequestResponseDto;
+import com.example.cheerdo.friends.dto.response.GetReceivedPostRequestResponseDto;
 import com.example.cheerdo.friends.dto.response.GetFriendResponseDto;
 import com.example.cheerdo.repository.PostRequestRepository;
 import com.example.cheerdo.repository.RelationRepository;
@@ -16,9 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -177,6 +177,27 @@ public class FriendRelationServiceImpl implements FriendRelationService {
         }
         postRequestRepository.save(sendPostRequestDto.dtoToPostRequestEntity(optionalFriendRelation, friendName, optionalFriendRelation.get().getMember().getId()));
     }
+
+    @Override
+    public List<GetReceivedPostRequestResponseDto> getReceivedPostRequest(String userId) throws Exception {
+        List<GetReceivedPostRequestResponseDto> list = new ArrayList<>();
+        Optional<List<PostRequest>> postRequests = postRequestRepository.findAllByReceiverId(userId);
+        if (!postRequests.isEmpty()) {
+            for ( int i = 0; i < postRequests.get().size(); i++ ) {
+                list.add(GetReceivedPostRequestResponseDto.builder()
+                        .sendDateTime(postRequests.get().get(i).getSendDateTime())
+                        .friendName(postRequests.get().get(i).getSenderName())
+                        .friendId(postRequests.get().get(i).getSenderId())
+                        .build()
+                );
+            }
+        } else {
+            throw new Exception("there is no such request");
+        }
+
+        return list;
+    }
+
     }
 
 }

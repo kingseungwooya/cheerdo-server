@@ -4,6 +4,7 @@ import com.example.cheerdo.friends.dto.request.RemoveOrAcceptRequestDto;
 import com.example.cheerdo.friends.dto.request.SendPostRequestDto;
 import com.example.cheerdo.friends.dto.request.SendRequestDto;
 import com.example.cheerdo.friends.dto.response.GetFriendRequestResponseDto;
+import com.example.cheerdo.friends.dto.response.GetReceivedPostRequestResponseDto;
 import com.example.cheerdo.friends.dto.response.GetFriendResponseDto;
 
 import java.util.List;
@@ -21,5 +22,7 @@ public interface FriendRelationService {
     void removeOrAcceptRequest(RemoveOrAcceptRequestDto removeOrAcceptRequestDto) throws Exception;
 
     void sendPostRequest(SendPostRequestDto sendPostRequestDto) throws Exception;
+
+    List<GetReceivedPostRequestResponseDto> getReceivedPostRequest(String userId) throws Exception;
 
 }

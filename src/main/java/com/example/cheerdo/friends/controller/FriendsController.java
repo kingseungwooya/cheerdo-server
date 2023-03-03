@@ -4,6 +4,7 @@ import com.example.cheerdo.friends.dto.request.RemoveOrAcceptRequestDto;
 import com.example.cheerdo.friends.dto.request.SendPostRequestDto;
 import com.example.cheerdo.friends.dto.request.SendRequestDto;
 import com.example.cheerdo.friends.dto.response.GetFriendRequestResponseDto;
+import com.example.cheerdo.friends.dto.response.GetReceivedPostRequestResponseDto;
 import com.example.cheerdo.friends.dto.response.GetFriendResponseDto;
 import com.example.cheerdo.friends.service.FriendRelationService;
 import io.swagger.annotations.ApiOperation;
@@ -102,6 +103,20 @@ public class FriendsController {
         try {
             friendRelationService.sendPostRequest(sendPostRequestDto);
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(value = "받은 편지요청을 가져오는 API"
+            , notes = "userId를 받고 반환값으로 sendDateTime과 friendId friendName list가 반환된다")
+    @GetMapping(value = "/receivedpostrequest/{userId}")
+    @ApiResponse(code = 200, message = "status ok")
+    public ResponseEntity<?> getReceivedPostRequest(@PathVariable("userId") String userId) {
+        logger.info("request is -> {}", userId);
+        try {
+            List<GetReceivedPostRequestResponseDto> getReceivedPostRequestResponseDtos = friendRelationService.getReceivedPostRequest(userId);
+            return new ResponseEntity<>(getReceivedPostRequestResponseDtos, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
