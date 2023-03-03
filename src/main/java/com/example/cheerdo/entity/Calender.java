@@ -1,9 +1,8 @@
 package com.example.cheerdo.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -49,9 +48,9 @@ public class Calender {
     public void updateRate() {
         long totalSize = todos.size();
         long successCount = todos.stream()
-                .filter( todo -> todo.isSuccess())
+                .filter(todo -> todo.isSuccess())
                 .count();
-        this.successRate = (successCount / totalSize) * 100;
+        successRate = ((double) successCount / (double) totalSize) * 100;
 
     }
 
