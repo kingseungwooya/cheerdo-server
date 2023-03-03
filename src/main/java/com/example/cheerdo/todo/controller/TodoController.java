@@ -30,14 +30,14 @@ public class TodoController {
     private final Logger logger = LoggerFactory.getLogger(TodoController.class);
 
     @ApiOperation(value = "Todo를 생성하는 api"
-            , notes = "반환값으로 Httpstatus와 body에는 Long타입의 todoId( todo 고유번호 ) 가 반환된다.")
+            , notes = "반환값으로 Todo의 id가 반환된다. ")
     @PostMapping("")
     public ResponseEntity<String> writeTodo(@RequestBody WriteTodoRequestDto todoDto) {
         return new ResponseEntity<>(todoService.writeTodo(todoDto), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Todo를 Get하는 api"
-            , notes = "반환값으로 Httpstatus와 body에는 todo list들이 반환된다. ")
+            , notes = "todo list들이 반환된다. ")
     @GetMapping("")
     public ResponseEntity<List<TodoResponseDto>> getMyTodo(@ModelAttribute GetTodoRequestDto getTodoRequestDto) {
         logger.info("input userID is -> {}",getTodoRequestDto.getMemberId());
@@ -46,7 +46,7 @@ public class TodoController {
     }
 
     @ApiOperation(value = "Todo를 put(modify)하는 api"
-            , notes = "반환값으로 Httpstatus와 body에는 Long타입의 todoId( todo 고유번호 ) 가 반환된다.")
+            , notes = "반환값으로 Todo의 id가 반환된다.")
     @PutMapping("")
     public ResponseEntity<?> modifyTodo(@RequestBody ModifyTodoRequestDto modifyTodoRequestDto) {
         try {
@@ -57,7 +57,8 @@ public class TodoController {
         }
     }
 
-    @ApiOperation(value = "Todo를 delete하는 api")
+    @ApiOperation(value = "Todo를 delete하는 api"
+            , notes = "반환값이 존재하지 않는다 error 시 error message 반환")
     @DeleteMapping("")
     public ResponseEntity<?> deleteTodo(@RequestParam String todoId) {
         try {
@@ -69,7 +70,7 @@ public class TodoController {
     }
 
     @ApiOperation(value = "Todo 성공체크시 요청되는 api"
-            , notes = "반환값이 없는 void")
+            , notes = "반환값이 존재하지 않는다 error 시 error message 반환")
     @PutMapping("/success")
     public ResponseEntity<?> updateSuccess(@RequestParam String todoId) {
         try {
