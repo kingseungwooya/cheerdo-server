@@ -21,6 +21,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,7 +40,7 @@ public class TodoServiceImpl implements TodoService {
         Member member = memberRepository.findById(writeTodoRequestDto.getMemberId()).get();
         Calender calender =
                 calenderRepository.findByMemberAndDate(member, writeTodoRequestDto.getDate())
-                        .orElse(calenderRepository.save(
+                        .orElseGet(() -> calenderRepository.save(
                                 Calender.builder()
                                         .member(member)
                                         .date(writeTodoRequestDto.getDate())
