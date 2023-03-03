@@ -80,7 +80,7 @@ class TodoServiceTest {
     }
 
     @Test
-    @DisplayName("Todo를 최초 작성시 Calender가 제대로 생성되는지 확인  ")
+    @DisplayName("Todo를 최초 작성시 연관 관계에 있는 calender에 객체가 생성되고 calender내에 todos에 todo가 추가된다.  ")
     void writeTodo() {
         // given
         WriteTodoRequestDto writeTodoRequestDto =
@@ -192,7 +192,7 @@ class TodoServiceTest {
     }
 
     @Test
-    @DisplayName("성공률 확인하기")
+    @DisplayName("success rate를 update할 수 있다. ")
     void success() {
         // given
         WriteTodoRequestDto writeTodoRequestDto =
