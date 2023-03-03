@@ -2,7 +2,13 @@ package com.example.cheerdo.login.dto.request;
 
 
 import com.example.cheerdo.entity.Member;
+import com.example.cheerdo.entity.Role;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.persistence.Id;
 import javax.validation.constraints.*;
@@ -36,14 +42,16 @@ public class JoinRequestDto {
 
     private String bio;
 
-    public boolean isSamePassword() {
+    @ApiModelProperty(hidden = true)
+    @JsonIgnore
+    public Boolean isSamePassword() {
         if (this.password.equals(this.passwordConfirm)) {
             return true;
         }
         return false;
     }
 
-    public Member dtoToMember() {
+    public Member dtoToMember(Role role) {
         return Member.builder()
                 .id(memberId)
                 .password(password)
@@ -51,6 +59,7 @@ public class JoinRequestDto {
                 .name(name)
                 .coinCount(DEFAULT_COIN_COUNT)
                 .habitProgress(DEFAULT_HABIT_PROGRESS)
+                .roles(List.of(role))
                 .build();
     }
 

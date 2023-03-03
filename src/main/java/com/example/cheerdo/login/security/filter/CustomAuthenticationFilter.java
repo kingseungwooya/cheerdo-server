@@ -1,9 +1,9 @@
-package com.example.cheerdo.login.config.filter;
+package com.example.cheerdo.login.security.filter;
 
-import com.example.cheerdo.login.config.CustomUser;
-import com.example.cheerdo.login.config.util.TokenProvider;
+import com.example.cheerdo.login.security.CustomUser;
+import com.example.cheerdo.login.security.filter.dto.LoginRequestDto;
+import com.example.cheerdo.login.security.TokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -43,17 +44,21 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     // 사용자가 전송한 인증 정보를 추출한다.
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        String memberId = request.getParameter("memberId");
-        String password = request.getParameter("password");
-
-        LOGGER.info("login 한 너의 id: {} ", memberId);
-        LOGGER.info("login 한 너의 비번 : {} ", password);
-
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(memberId, password);
-
-        // 추출한 인증정보를 토대로 인증을 시도한다.
-        // 인증은 AuthenticationManager 와 AuthenticationProvider 를 사용하여 수행
-        return authenticationManager.authenticate(authenticationToken);
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            LoginRequestDto authRequest = mapper.readValue(request.getInputStream(), LoginRequestDto.class);
+            String memberId = authRequest.getMemberId();
+            String password = authRequest.getPassword();
+            LOGGER.info("login 한 너의 id: {} ", memberId);
+            LOGGER.info("login 한 너의 비번 : {} ", password);
+            LOGGER.info("입력 완료");
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(memberId, password);
+// 추출한 인증정보를 토대로 인증을 시도한다.
+            // 인증은 AuthenticationManager 와 AuthenticationProvider 를 사용하여 수행
+            return authenticationManager.authenticate(authenticationToken);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -66,18 +71,18 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         String access_token = jwtUtil.generateAccessToken(user);
         String refresh_token = jwtUtil.generateRefreshToken(user);
 
-        // 클라이언트에 토큰 보내기
-        /* 헤더에다가만 보내기
-        response.setHeader("access_token",access_token);
-        response.setHeader("refresh_token",refresh_token);*/
+        Cookie cookie = jwtUtil.generateCookieForToken(refresh_token);
+
+        response.addCookie(cookie);
+
         Map<String, String> tokens = new HashMap<>();
         tokens.put("access_token", access_token);
-        tokens.put("refresh_token", refresh_token);
         tokens.put("memberId", user.getUsername());
         tokens.put("coinCount", String.valueOf(user.getCoinCount()));
         tokens.put("newLetterCount", String.valueOf(user.getNewLetterCount()));
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
+
     }
 
     @Override

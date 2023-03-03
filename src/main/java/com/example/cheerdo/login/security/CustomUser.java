@@ -1,6 +1,5 @@
-package com.example.cheerdo.login.config;
+package com.example.cheerdo.login.security;
 
-import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 

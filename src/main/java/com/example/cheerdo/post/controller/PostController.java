@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Locale;
 
 @RestController
-@RequestMapping("api/post")
+@RequestMapping("api/member/post")
 @RequiredArgsConstructor
 public class PostController {
     private final Logger logger = LoggerFactory.getLogger(PostController.class);
