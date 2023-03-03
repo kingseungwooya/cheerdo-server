@@ -15,9 +15,11 @@ import java.util.Optional;
 public class SendPostRequestDto {
     Long relationId;
 
-    public PostRequest dtoToPostRequestEntity(Optional<FriendRelation> friendRelation) {
+    public PostRequest dtoToPostRequestEntity(Optional<FriendRelation> friendRelation, String friendName, String userId) {
         return PostRequest.builder()
-                .relation(friendRelation.get())
+                .senderId(friendRelation.get().getFriendId())
+                .senderName(friendName)
+                .receiverId(userId)
                 .sendDateTime(LocalDateTime.now())
                 .build();
     }

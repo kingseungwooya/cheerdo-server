@@ -25,18 +25,24 @@ public class PostRequest {
     @Column(name = "post_id")
     private Long id;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "relation_id")
-    private FriendRelation relation;
+    @Column(name = "receiver_id")
+    private String receiverId;
 
+    @Column(name = "sender_id")
+    private String senderId;
+
+    @Column(name = "sender_name")
+    private String senderName;
     // @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Column(name = "send_date")
     private LocalDateTime sendDateTime;
 
     @Builder
-    public PostRequest(Long id, FriendRelation relation, LocalDateTime sendDateTime) {
+    public PostRequest(Long id, String userId, String friendId, String friendName, LocalDateTime sendDateTime) {
         this.id = id;
-        this.relation = relation;
+        this.receiverId = userId;
+        this.senderId = friendId;
+        this.senderName = friendName;
         this.sendDateTime = sendDateTime;
     }
 }
