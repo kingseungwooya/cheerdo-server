@@ -170,11 +170,13 @@ public class FriendRelationServiceImpl implements FriendRelationService {
     @Override
     public void sendPostRequest(SendPostRequestDto sendPostRequestDto) throws Exception {
         Optional<FriendRelation> optionalFriendRelation = friendRelationRepository.findById(sendPostRequestDto.getRelationId());
-
+        Optional<Member> member = memberRepository.findById(optionalFriendRelation.get().getFriendId());
+        String friendName = member.get().getName();
         if (optionalFriendRelation.isEmpty()) {
             throw new Exception("there is no such relation");
         }
-        postRequestRepository.save(sendPostRequestDto.dtoToPostRequestEntity(optionalFriendRelation));
+        postRequestRepository.save(sendPostRequestDto.dtoToPostRequestEntity(optionalFriendRelation, friendName, optionalFriendRelation.get().getMember().getId()));
+    }
     }
 
 }
