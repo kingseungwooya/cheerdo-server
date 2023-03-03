@@ -6,7 +6,7 @@ import com.example.cheerdo.friends.dto.request.RemoveOrAcceptRequestDto;
 import com.example.cheerdo.friends.dto.request.SendPostRequestDto;
 import com.example.cheerdo.friends.dto.request.SendRequestDto;
 import com.example.cheerdo.friends.dto.response.GetFriendRequestResponseDto;
-import com.example.cheerdo.friends.dto.response.LoadFriendResponseDto;
+import com.example.cheerdo.friends.dto.response.GetFriendResponseDto;
 import com.example.cheerdo.repository.PostRequestRepository;
 import com.example.cheerdo.repository.RelationRepository;
 import com.example.cheerdo.repository.MemberRepository;
@@ -29,7 +29,7 @@ public class FriendRelationServiceImpl implements FriendRelationService {
     private final RelationRepository friendRelationRepository;
     private final PostRequestRepository postRequestRepository;
     @Override
-    public List<LoadFriendResponseDto> getMyFriendList(String userId) throws Exception {
+    public List<GetFriendResponseDto> getMyFriendList(String userId) throws Exception {
         // 반환값으로 relation id member id name을 가지는 LoadFriendRelationDto의 List가 반환된다.
 
         Optional<Member> member = memberRepository.findById(userId);
@@ -40,14 +40,14 @@ public class FriendRelationServiceImpl implements FriendRelationService {
 
         Optional<List<FriendRelation>> friendRelations = friendRelationRepository.findAllByMemberAndIsFriend(member, true);
         logger.info("friendRelations size is -> {}", friendRelations.get().size());
-        List<LoadFriendResponseDto> list = new ArrayList<>();
+        List<GetFriendResponseDto> list = new ArrayList<>();
 
         if (friendRelations.get().isEmpty()) {
             throw new Exception("member has no friends");
         } else {
             for (FriendRelation relation : friendRelations.get()) {
                 Optional<Member> friendMember = memberRepository.findById(relation.getFriendId());
-                list.add(LoadFriendResponseDto.builder()
+                list.add(GetFriendResponseDto.builder()
                         .name(friendMember.get().getName())
                         .relationId(relation.getId())
                         .memberId(relation.getFriendId())
@@ -105,18 +105,18 @@ public class FriendRelationServiceImpl implements FriendRelationService {
     }
 
     @Override
-    public List<LoadFriendResponseDto> getReceivedRequest(String userId) throws Exception {
+    public List<GetFriendResponseDto> getReceivedRequest(String userId) throws Exception {
         logger.info("member is -> {}", userId);
 
         Optional<List<FriendRelation>> friendRelations = friendRelationRepository.findAllByFriendIdAndIsFriend(userId, false);
         logger.info("receivedFriendRelations size is -> {}", friendRelations.get().size());
-        List<LoadFriendResponseDto> list = new ArrayList<>();
+        List<GetFriendResponseDto> list = new ArrayList<>();
 
         if (friendRelations.get().isEmpty()) {
             throw new Exception("there are no received request");
         } else {
             for (FriendRelation relation : friendRelations.get()) {
-                list.add(LoadFriendResponseDto.builder()
+                list.add(GetFriendResponseDto.builder()
                         .name(relation.getMember().getName())
                         .memberId(relation.getMember().getId())
                         .relationId(relation.getId())

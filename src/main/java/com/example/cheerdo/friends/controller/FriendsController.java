@@ -4,7 +4,7 @@ import com.example.cheerdo.friends.dto.request.RemoveOrAcceptRequestDto;
 import com.example.cheerdo.friends.dto.request.SendPostRequestDto;
 import com.example.cheerdo.friends.dto.request.SendRequestDto;
 import com.example.cheerdo.friends.dto.response.GetFriendRequestResponseDto;
-import com.example.cheerdo.friends.dto.response.LoadFriendResponseDto;
+import com.example.cheerdo.friends.dto.response.GetFriendResponseDto;
 import com.example.cheerdo.friends.service.FriendRelationService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -30,8 +30,8 @@ public class FriendsController {
     public ResponseEntity<?> getMyFriendList(@PathVariable("userId") String userId) {
         logger.info("request : UserID -> {}", userId);
         try {
-            List<LoadFriendResponseDto> loadFriendResponseDtos = friendRelationService.getMyFriendList(userId);
-            return new ResponseEntity<>(loadFriendResponseDtos, HttpStatus.OK);
+            List<GetFriendResponseDto> getFriendResponseDtos = friendRelationService.getMyFriendList(userId);
+            return new ResponseEntity<>(getFriendResponseDtos, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -72,8 +72,8 @@ public class FriendsController {
     public ResponseEntity<?> getReceivedRequest(@PathVariable("userId") String userId) {
         logger.info("request is -> {}", userId);
         try {
-            List<LoadFriendResponseDto> loadFriendResponseDtos = friendRelationService.getReceivedRequest(userId);
-            return new ResponseEntity<>(loadFriendResponseDtos, HttpStatus.OK);
+            List<GetFriendResponseDto> getFriendResponseDtos = friendRelationService.getReceivedRequest(userId);
+            return new ResponseEntity<>(getFriendResponseDtos, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
