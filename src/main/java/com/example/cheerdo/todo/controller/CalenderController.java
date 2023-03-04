@@ -24,9 +24,8 @@ public class CalenderController {
     @ApiOperation(value = "calender 일자별 진행도 반환하는 api"
             , notes = "date와 rate가 반환된다.  ")
     @GetMapping("")
-    public ResponseEntity<List<CalenderResponseDto>> writeTodo(@ModelAttribute CalenderRequestDto calenderRequestDto) {
+    public ResponseEntity<List<CalenderResponseDto>> getMonthlyRate(@ModelAttribute CalenderRequestDto calenderRequestDto) {
         return new ResponseEntity<>(calenderService.getSuccessRates(calenderRequestDto), HttpStatus.OK);
     }
-
 
 }
