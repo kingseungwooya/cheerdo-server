@@ -1,5 +1,7 @@
 package com.example.cheerdo.todo.dto.request;
 
+import com.example.cheerdo.entity.Habit;
+import com.example.cheerdo.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,9 +14,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class WriteHabitRequestDto {
     private String memberId;
-
-    private String type;
-
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
 
@@ -23,5 +22,12 @@ public class WriteHabitRequestDto {
 
     private String content;
 
-
+    public Habit requestTodHabit(Member member) {
+        return Habit.builder()
+                .endDate(endDate)
+                .startDate(startDate)
+                .content(content)
+                .member(member)
+                .build();
+    }
 }
