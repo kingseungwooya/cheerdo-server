@@ -8,7 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 
 import java.time.LocalDate;
-
+import java.util.*;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -28,13 +28,16 @@ public class Habit {
     private String content;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate startDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
     @Builder
-    public Habit(Long id, Member member, String content, LocalDate endDate) {
+    public Habit(Long id, Member member, String content, LocalDate startDate, LocalDate endDate) {
         this.id = id;
         this.member = member;
         this.content = content;
         this.endDate = endDate;
+        this.startDate = startDate;
     }
 }

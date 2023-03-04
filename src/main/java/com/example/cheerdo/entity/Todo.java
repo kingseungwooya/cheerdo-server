@@ -29,6 +29,10 @@ public class Todo {
     @JoinColumn(name = "calender_id")
     private Calender calender;
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "habit_id")
+    private Habit habit;
+
     @Lob
     private String content;
 
@@ -42,13 +46,14 @@ public class Todo {
     private Type type;
 
     @Builder
-    public Todo(String todoId, Calender calender, String content, boolean isSuccess, Type type, String endDateTime) {
+    public Todo(String todoId, Calender calender, String content, boolean isSuccess, Type type, String endDateTime, Habit habit) {
         this.todoId = todoId;
         this.calender = calender;
         this.content = content;
         this.isSuccess = isSuccess;
         this.type = type;
         this.endDateTime = endDateTime;
+        this.habit = habit;
     }
 
     public TodoResponseDto entityToTodoResponseDto() {
