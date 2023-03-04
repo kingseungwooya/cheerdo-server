@@ -1,5 +1,6 @@
 package com.example.cheerdo.entity;
 
+import com.example.cheerdo.todo.dto.response.HabitInfoResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,5 +40,15 @@ public class Habit {
         this.content = content;
         this.endDate = endDate;
         this.startDate = startDate;
+    }
+
+    public HabitInfoResponseDto entityToHabitInfoDto(double successRate) {
+        return HabitInfoResponseDto.builder()
+                .habitId(id)
+                .content(content)
+                .startDate(startDate)
+                .endDate(endDate)
+                .successRate(successRate)
+                .build();
     }
 }
