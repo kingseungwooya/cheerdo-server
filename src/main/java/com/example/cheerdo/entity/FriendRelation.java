@@ -1,7 +1,6 @@
 package com.example.cheerdo.entity;
 
-import com.example.cheerdo.todo.enums.Type;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.Setter;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
