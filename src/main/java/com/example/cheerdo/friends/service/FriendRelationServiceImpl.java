@@ -212,9 +212,10 @@ public class FriendRelationServiceImpl implements FriendRelationService {
             while(iterator.hasNext()) {
                 Member tempMember = (Member) iterator.next();
                 list.add(GetSearchedFriendResponseDto.builder()
-                        .memberId(tempMember.getId())
-                        .name(tempMember.getName())
-                        .build()
+                                .memberId(tempMember.getId())
+                                .name(tempMember.getName())
+                                .image(tempMember.getMemberImage())
+                                .build()
                 );
             }
         }

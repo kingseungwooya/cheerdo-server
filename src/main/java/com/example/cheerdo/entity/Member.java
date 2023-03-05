@@ -69,6 +69,7 @@ public class Member {
                 .bio(bio)
                 .name(name)
                 .coinCount(coinCount)
+                .image(memberImage)
                 .dPlusCount(dPlusCount)
                 .build();
     }
