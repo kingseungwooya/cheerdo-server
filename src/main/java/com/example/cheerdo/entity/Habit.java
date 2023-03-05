@@ -1,6 +1,7 @@
 package com.example.cheerdo.entity;
 
 import com.example.cheerdo.todo.dto.response.HabitInfoResponseDto;
+import java.time.Duration;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,7 @@ public class Habit {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
@@ -42,13 +44,18 @@ public class Habit {
         this.startDate = startDate;
     }
 
-    public HabitInfoResponseDto entityToHabitInfoDto(double successRate) {
+    public HabitInfoResponseDto entityToHabitInfoDto() {
         return HabitInfoResponseDto.builder()
                 .habitId(id)
                 .content(content)
                 .startDate(startDate)
                 .endDate(endDate)
-                .successRate(successRate)
+                .dPlusDay(getDDay())
                 .build();
+    }
+
+    public int getDDay() {
+        int duration = (int) Duration.between(startDate, LocalDate.now()).toDays();
+        return duration;
     }
 }
