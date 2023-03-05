@@ -32,6 +32,9 @@ public class Member {
     @Column(name = "habit_progress")
     private double habitProgress;
 
+    @Column(name = "d_plus_day")
+    private int dPlusDay;
+
     @ManyToMany(fetch = FetchType.EAGER)
     //@Builder.Default
     private Collection<Role> roles = new ArrayList<>();
@@ -48,6 +51,7 @@ public class Member {
         this.bio = bio;
         this.coinCount = coinCount;
         this.habitProgress = habitProgress;
+        this.dPlusDay = 0;
         this.roles = roles;
     }
 
