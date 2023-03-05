@@ -1,13 +1,17 @@
 package com.example.cheerdo.member.service;
 
 
+import com.example.cheerdo.entity.FriendRelation;
 import com.example.cheerdo.entity.Habit;
 import com.example.cheerdo.entity.Member;
 import com.example.cheerdo.entity.Todo;
 import com.example.cheerdo.member.dto.request.UpdateProfileRequestDto;
+import com.example.cheerdo.member.dto.response.FriendInfoResponseDto;
 import com.example.cheerdo.member.dto.response.MemberInfoResponseDto;
 import com.example.cheerdo.repository.HabitRepository;
 import com.example.cheerdo.repository.MemberRepository;
+import com.example.cheerdo.repository.PostRepository;
+import com.example.cheerdo.repository.RelationRepository;
 import com.example.cheerdo.repository.TodoRepository;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -30,6 +34,8 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final HabitRepository habitRepository;
+    private final PostRepository postRepository;
+    private final RelationRepository relationRepository;
 
     @Override
     public String updateMyInfo(UpdateProfileRequestDto updateProfileRequestDto) {
@@ -43,20 +49,39 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberInfoResponseDto getInfoById(String memberId) {
-
+    public MemberInfoResponseDto getMyInfo(String memberId) {
         Member member = memberRepository.findById(memberId).get();
         Optional<Habit> habit = habitRepository.findFirstByMemberOrderByStartDate(member);
         if (habit.isPresent()) {
-           return member.to(habit.get().getDDay());
+            return member.to(habit.get().getDDay());
         }
         return member.to(0);
     }
 
     @Override
-    public void getHabitProgress() {
+    public FriendInfoResponseDto getFriendInfo(Long relationId) {
+        FriendRelation meToFriendRelation = relationRepository.findById(relationId).get();
+        // 내가 보낸 개수
+        Long sendLetterCount =postRepository.countAllByRelation(meToFriendRelation);
+        // 내가 이 친구한테 받은 개수
+        String myId = meToFriendRelation.getMember().getId();
+
+        String friendId = meToFriendRelation.getFriendId();
+        Member friend = memberRepository.findById(friendId).get();
+        FriendRelation friendToMeRelation = relationRepository.findFriendRelationByMemberAndFriendId(
+                friend, myId
+        ).get();
+
+        Long getLetterCount = postRepository.countAllByRelation(friendToMeRelation);
+
+        Optional<Habit> habit = habitRepository.findFirstByMemberOrderByStartDate(friend);
+        if ( habit.isPresent() ) {
+            return friend.to(sendLetterCount, getLetterCount, habit.get().getDDay());
+        }
+        return friend.to(sendLetterCount, getLetterCount, 0);
 
     }
+
 }
 
 

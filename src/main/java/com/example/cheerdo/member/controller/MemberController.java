@@ -1,6 +1,7 @@
 package com.example.cheerdo.member.controller;
 
 import com.example.cheerdo.member.dto.request.UpdateProfileRequestDto;
+import com.example.cheerdo.member.dto.response.FriendInfoResponseDto;
 import com.example.cheerdo.member.dto.response.MemberInfoResponseDto;
 import com.example.cheerdo.member.service.MemberService;
 import io.swagger.annotations.ApiOperation;
@@ -29,10 +30,17 @@ public class MemberController {
         }
     }
 
-    @GetMapping("/info")
+    @GetMapping("/my-info")
     @ApiOperation(notes = "member의 info를 반환하는 api 입니다."
     , value = "제일 오래된 habit의 dplus day를 반환, 추후 협의 후 dplus day 처리 의논")
     public ResponseEntity<MemberInfoResponseDto> getMemberInfo(@RequestParam String memberId) {
-        return ResponseEntity.ok().body(memberService.getInfoById(memberId));
+        return ResponseEntity.ok().body(memberService.getMyInfo(memberId));
+    }
+
+    @GetMapping("/friend-info")
+    @ApiOperation(notes = "member의 info를 반환하는 api 입니다."
+            , value = "제일 오래된 habit의 dplus day를 반환, 추후 협의 후 dplus day 처리 의논")
+    public ResponseEntity<FriendInfoResponseDto> getFriendInfo(@RequestParam Long relationId) {
+        return ResponseEntity.ok().body(memberService.getFriendInfo(relationId));
     }
 }
