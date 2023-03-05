@@ -1,5 +1,6 @@
 package com.example.cheerdo.entity;
 
+import lombok.Setter;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Table(name = "friend_relation")
 @Getter
+@Setter
 @NoArgsConstructor
 public class FriendRelation {
     @Id
@@ -19,7 +21,7 @@ public class FriendRelation {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member")
     private Member member;
 
     @Column(name = "friend_id")
@@ -28,15 +30,19 @@ public class FriendRelation {
     @Column(name = "friend_flag", nullable = false, columnDefinition = "TINYINT", length = 1)
     private boolean isFriend;
 
-    @Column(name = "message_flag", nullable = false, columnDefinition = "TINYINT", length = 1)
-    private boolean hasMessage;
 
     @Builder
-    public FriendRelation(Long id, Member member, String friendId, boolean isFriend, boolean hasMessage) {
+    public FriendRelation(Long id, Member member, String friendId, boolean isFriend) {
         this.id = id;
         this.member = member;
         this.friendId = friendId;
         this.isFriend = isFriend;
-        this.hasMessage = hasMessage;
+    }
+    @Builder
+    public FriendRelation(Long id, Member member, String friendId) {
+        this.id = id;
+        this.member = member;
+        this.friendId = friendId;
+        this.isFriend = false;
     }
 }
