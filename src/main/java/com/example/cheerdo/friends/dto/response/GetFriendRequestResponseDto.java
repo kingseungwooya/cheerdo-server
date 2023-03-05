@@ -8,6 +8,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class GetFriendRequestResponseDto {
-    private Long id;
+    private Long relationId;
     private String name;
 }
