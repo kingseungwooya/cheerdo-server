@@ -33,42 +33,39 @@ public class FriendRelationServiceImpl implements FriendRelationService {
     public List<GetFriendResponseDto> getMyFriendList(String memberId) throws Exception {
         // 반환값으로 relation id member id name을 가지는 LoadFriendRelationDto의 List가 반환된다.
 
-        Optional<Member> member = memberRepository.findById(userId);
-        if (member.isEmpty()) {
-            throw new Exception("there is no such member");
-        }
-        logger.info("member is -> {}", member.get().getName());
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                () -> new Exception("there is no such member"));
+        logger.info("member is -> {}", member.getName());
 
-        Optional<List<FriendRelation>> friendRelations = friendRelationRepository.findAllByMemberAndIsFriend(member, true);
-        logger.info("friendRelations size is -> {}", friendRelations.get().size());
+        List<FriendRelation> friendRelations = friendRelationRepository.findAllByMemberAndIsFriend(member, true).orElseThrow(
+                () -> new Exception("member has no friends")
+        );
+        logger.info("friendRelations size is -> {}", friendRelations.size());
         List<GetFriendResponseDto> list = new ArrayList<>();
 
-        if (friendRelations.get().isEmpty()) {
-            throw new Exception("member has no friends");
-        } else {
-            for (FriendRelation relation : friendRelations.get()) {
-                Optional<Member> friendMember = memberRepository.findById(relation.getFriendId());
-                list.add(GetFriendResponseDto.builder()
-                        .name(friendMember.get().getName())
-                        .relationId(relation.getId())
-                        .memberId(relation.getFriendId())
-                        .build());
-                logger.info("build complete");
-            }
-            logger.info("List complete");
-            return list;
+        for (FriendRelation relation : friendRelations) {
+            Optional<Member> friendMember = memberRepository.findById(relation.getFriendId());
+            list.add(GetFriendResponseDto.builder()
+                    .name(friendMember.get().getName())
+                    .relationId(relation.getId())
+                    .memberId(relation.getFriendId())
+                    .build());
+            logger.info("build complete");
         }
+        logger.info("List complete");
+        return list;
+
     }
 
     public void sendRequest(SendRequestDto sendRequestDto) throws Exception {
-        Optional<Member> member = memberRepository.findById(sendRequestDto.getUserId());
-        Optional<Member> friend = memberRepository.findById(sendRequestDto.getFriendId());
-        if (member.isEmpty() | friend.isEmpty()) {
-            throw new Exception("there is no such member");
-        } else if (member.get().equals(friend.get())) {
-            throw new Exception("friend and member are the same");
-        }
-        logger.info("member is -> {} friend is -> {}", member.get().getName(), friend.get().getName());
+        Member member = memberRepository.findById(sendRequestDto.getMemberId()).orElseThrow(
+                () -> new Exception("there is no such member")
+        );
+        Member friend = memberRepository.findById(sendRequestDto.getFriendId()).orElseThrow(
+                () -> new Exception("there is no such member")
+        );
+
+        logger.info("member is -> {} friend is -> {}", member.getName(), sendRequestDto.getFriendId());
 
         Optional<FriendRelation> friendRelation = friendRelationRepository.findFriendRelationByMemberAndFriendId(member, sendRequestDto.getFriendId());
         if (!friendRelation.isEmpty()) {
@@ -78,55 +75,54 @@ public class FriendRelationServiceImpl implements FriendRelationService {
     }
 
     @Override
-        Optional<Member> member = memberRepository.findById(userId);
-        if (member.isEmpty()) {
-            throw new Exception("there is no such member");
-        }
-        logger.info("member is -> {}", member.get().getName());
-
-        Optional<List<FriendRelation>> friendRelations = friendRelationRepository.findAllByMemberAndIsFriend(member, false);
-        logger.info("unacceptedFriendRelations size is -> {}", friendRelations.get().size());
     public List<GetFriendRequestResponseDto> getMyRequest(String memberId) throws Exception {
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                () -> new Exception("there is no such member")
+        );
+        logger.info("member is -> {}", member.getName());
+
+        List<FriendRelation> friendRelations = friendRelationRepository.findAllByMemberAndIsFriend(member, false).orElseThrow(
+                () -> new Exception("there are no unaccepted request")
+        );
+        logger.info("unacceptedFriendRelations size is -> {}", friendRelations.size());
         List<GetFriendRequestResponseDto> list = new ArrayList<>();
 
-        if (friendRelations.get().isEmpty()) {
-            throw new Exception("there are no unaccepted request");
-        } else {
-            for (FriendRelation relation : friendRelations.get()) {
-                Optional<Member> friendMember = memberRepository.findById(relation.getFriendId());
-                list.add(GetFriendRequestResponseDto.builder()
-                        .name(friendMember.get().getName())
-                        .id(relation.getId())
-                        .build());
-                logger.info("build complete");
-            }
-            logger.info("List complete");
-            return list;
+        for (FriendRelation relation : friendRelations) {
+            Optional<Member> friendMember = memberRepository.findById(relation.getFriendId());
+            list.add(GetFriendRequestResponseDto.builder()
+                    .name(friendMember.get().getName())
+                    .relationId(relation.getId())
+                    .build());
+            logger.info("build complete");
         }
+        logger.info("List complete");
+        return list;
+
     }
 
     @Override
-
-        Optional<List<FriendRelation>> friendRelations = friendRelationRepository.findAllByFriendIdAndIsFriend(userId, false);
-        logger.info("receivedFriendRelations size is -> {}", friendRelations.get().size());
     public List<GetFriendResponseDto> getReceivedRequest(String memberId) throws Exception {
         logger.info("member is -> {}", memberId);
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                () -> new Exception("there is no such member")
+        );
+        List<FriendRelation> friendRelations = friendRelationRepository.findAllByFriendIdAndIsFriend(memberId, false).orElseThrow(
+                () -> new Exception("there are no received request")
+        );
+        logger.info("receivedFriendRelations size is -> {}", friendRelations.size());
         List<GetFriendResponseDto> list = new ArrayList<>();
 
-        if (friendRelations.get().isEmpty()) {
-            throw new Exception("there are no received request");
-        } else {
-            for (FriendRelation relation : friendRelations.get()) {
-                list.add(GetFriendResponseDto.builder()
-                        .name(relation.getMember().getName())
-                        .memberId(relation.getMember().getId())
-                        .relationId(relation.getId())
-                        .build());
-                logger.info("build complete");
-            }
-            logger.info("List complete");
-            return list;
+        for (FriendRelation relation : friendRelations) {
+            list.add(GetFriendResponseDto.builder()
+                    .name(relation.getMember().getName())
+                    .memberId(relation.getMember().getId())
+                    .relationId(relation.getId())
+                    .build());
+            logger.info("build complete");
         }
+        logger.info("List complete");
+        return list;
+
     }
 
     @Override
@@ -142,7 +138,7 @@ public class FriendRelationServiceImpl implements FriendRelationService {
             if (friendRelation.isFriend()) {
                 String friendId = friendRelation.getMember().getId();
                 Optional<Member> member = memberRepository.findById(friendRelation.getFriendId());
-                FriendRelation reversedFriendRelation = friendRelationRepository.findFriendRelationByMemberAndFriendId(member, friendId).get();
+                FriendRelation reversedFriendRelation = friendRelationRepository.findFriendRelationByMemberAndFriendId(member.get(), friendId).get();
                 friendRelationRepository.delete(reversedFriendRelation);
                 logger.info("the relation id {}, member {}, friendId {} is removed", reversedFriendRelation.getId(), reversedFriendRelation.getMember(), reversedFriendRelation.getFriendId());
             }
@@ -152,10 +148,9 @@ public class FriendRelationServiceImpl implements FriendRelationService {
             logger.info("accept request");
             friendRelation.setFriend(true);
             String friendId = friendRelation.getMember().getId();
-            Optional<Member> member = memberRepository.findById(friendRelation.getFriendId());
-            if (member.isEmpty()) {
-                throw new Exception("there is no such member");
-            }
+            Member member = memberRepository.findById(friendRelation.getFriendId()).orElseThrow(
+                    () -> new Exception("there is no such member")
+            );
 
             Optional<FriendRelation> reversedFriendRelation = friendRelationRepository.findFriendRelationByMemberAndFriendId(member, friendId);
             if (reversedFriendRelation.isEmpty()) {
@@ -170,19 +165,21 @@ public class FriendRelationServiceImpl implements FriendRelationService {
 
     @Override
     public void sendPostRequest(SendPostRequestDto sendPostRequestDto) throws Exception {
-        Optional<FriendRelation> optionalFriendRelation = friendRelationRepository.findById(sendPostRequestDto.getRelationId());
-        Optional<Member> member = memberRepository.findById(optionalFriendRelation.get().getFriendId());
-        String friendName = member.get().getName();
-        if (optionalFriendRelation.isEmpty()) {
-            throw new Exception("there is no such relation");
-        }
+        FriendRelation friendRelation = friendRelationRepository.findById(sendPostRequestDto.getRelationId()).orElseThrow(
+                () -> new Exception("there is no such relation")
+        );
+        Member member = memberRepository.findById(friendRelation.getFriendId()).orElseThrow(
+                () -> new Exception("there is no such member")
+        );
         postRequestRepository.save(sendPostRequestDto.dtoToPostRequestEntity(friendRelation));
     }
 
     @Override
     public List<GetReceivedPostRequestResponseDto> getReceivedPostRequest(String memberId) throws Exception {
         List<GetReceivedPostRequestResponseDto> list = new ArrayList<>();
-        Optional<List<PostRequest>> postRequests = postRequestRepository.findAllByReceiverId(userId);
+        List<PostRequest> postRequests = postRequestRepository.findAllByFriendRelation_Member_Id(memberId).orElseThrow(
+                () -> new Exception("there is no such request")
+        );
         for ( int i = 0; i < postRequests.size(); i++ ) {
             Optional<Member> friend = memberRepository.findById(postRequests.get(i).getFriendRelation().getFriendId());
 

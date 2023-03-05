@@ -60,6 +60,9 @@ public class FriendsController {
     public ResponseEntity<?> sendRequest(@RequestBody SendRequestDto sendRequestDto) {
         logger.info("request is -> {}", sendRequestDto.toString());
         try {
+            if(sendRequestDto.getFriendId().equals(sendRequestDto.getMemberId())) {
+                throw new Exception("friend and member are the same");
+            }
             friendRelationService.sendRequest(sendRequestDto);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {

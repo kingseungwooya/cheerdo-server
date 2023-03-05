@@ -13,11 +13,11 @@ public class SendRequestDto {
     String memberId;
     String friendId;
 
-    public FriendRelation dtoToFriendRelationEntity(Optional<Member> member) {
+    public FriendRelation dtoToFriendRelationEntity(Member member) {
         return FriendRelation.builder()
                 .friendId(this.friendId)
-                .member(member.get())
-                .isFriend(true)
+                .member(member)
+                .isFriend(false)
                 .build();
     }
 }

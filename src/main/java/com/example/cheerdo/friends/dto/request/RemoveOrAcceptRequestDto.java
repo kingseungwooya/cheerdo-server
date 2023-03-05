@@ -13,10 +13,10 @@ public class RemoveOrAcceptRequestDto {
     private Long relationId;
     private boolean accept;
 
-    public FriendRelation dtoToFriendRelationEntity(Optional<Member> member, String friendId) {
+    public FriendRelation dtoToFriendRelationEntity(Member member, String friendId) {
         return FriendRelation.builder()
                 .friendId(friendId)
-                .member(member.get())
+                .member(member)
                 .isFriend(true)
                 .build();
     }
