@@ -9,12 +9,14 @@ public class CustomUser extends User {
 
     private int coinCount;
     private int newLetterCount;
+    private String memberName;
 
     public CustomUser(String username, String password
-            , Collection<? extends GrantedAuthority> authorities, int coinCount, int newLetterCount) {
+            , Collection<? extends GrantedAuthority> authorities, int coinCount, int newLetterCount, String memberName) {
         super(username, password, authorities);
         this.coinCount = coinCount;
         this.newLetterCount = newLetterCount;
+        this.memberName = memberName;
     }
 
     public int getCoinCount() {
@@ -23,5 +25,9 @@ public class CustomUser extends User {
 
     public int getNewLetterCount() {
         return newLetterCount;
+    }
+
+    public String getMemberName() {
+        return memberName;
     }
 }
