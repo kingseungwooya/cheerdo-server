@@ -1,5 +1,9 @@
 package com.example.cheerdo;
 
+import com.example.cheerdo.entity.Role;
+import com.example.cheerdo.entity.enums.RoleName;
+import com.example.cheerdo.login.service.LoginService;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -18,17 +22,11 @@ public class CheerdoApplication {
     }
 
     @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("*");
-            }
+    CommandLineRunner run(LoginService LoginService) {
+        return args -> {
+            LoginService.saveRole(new Role(null, RoleName.ROLE_USER));
+            LoginService.saveRole(new Role(null, RoleName.ROLE_ADMIN));
         };
-    }
-    @Bean
-    PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
     }
 
 }

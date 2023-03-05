@@ -2,6 +2,8 @@ package com.example.cheerdo.login.dto.request;
 
 
 import com.example.cheerdo.entity.Member;
+import com.example.cheerdo.entity.Role;
+import java.util.List;
 import lombok.*;
 
 import javax.persistence.Id;
@@ -43,7 +45,7 @@ public class JoinRequestDto {
         return false;
     }
 
-    public Member dtoToMember() {
+    public Member dtoToMember(Role role) {
         return Member.builder()
                 .id(memberId)
                 .password(password)
@@ -51,6 +53,7 @@ public class JoinRequestDto {
                 .name(name)
                 .coinCount(DEFAULT_COIN_COUNT)
                 .habitProgress(DEFAULT_HABIT_PROGRESS)
+                .roles(List.of(role))
                 .build();
     }
 

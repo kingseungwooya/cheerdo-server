@@ -11,6 +11,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -20,21 +22,22 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 public class Todo {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "todo_id")
-    private Long id;
+    private String todoId;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "calender_id")
+    private Calender calender;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "habit_id")
+    private Habit habit;
 
     @Lob
     private String content;
 
-    @Column(name = "write_date")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate date;
-
+    @Column(name = "end_date_time")
+    private String endDateTime;
 
     @Column(name = "success_flag", nullable = false, columnDefinition = "TINYINT", length = 1)
     private boolean isSuccess;
@@ -43,21 +46,23 @@ public class Todo {
     private Type type;
 
     @Builder
-    public Todo(Long id, Member member, String content, LocalDate date, boolean isSuccess, Type type) {
-        this.id = id;
-        this.member = member;
+    public Todo(String todoId, Calender calender, String content, boolean isSuccess, Type type, String endDateTime, Habit habit) {
+        this.todoId = todoId;
+        this.calender = calender;
         this.content = content;
-        this.date = date;
         this.isSuccess = isSuccess;
         this.type = type;
+        this.endDateTime = endDateTime;
+        this.habit = habit;
     }
 
     public TodoResponseDto entityToTodoResponseDto() {
         return TodoResponseDto.builder()
-                .todoId(id)
+                .todoId(todoId)
                 .typeOfTodo(type.name())
                 .todo(content)
                 .success(isSuccess)
+                .endDateTime(endDateTime)
                 .build();
     }
 

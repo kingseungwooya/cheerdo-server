@@ -38,7 +38,7 @@ public class Member {
 
     @Lob
     @Column(name = "member_image")
-    private byte[] memberImage;
+    private String memberImage;
 
     @Builder
     public Member(String id, String password, String name, String bio, int coinCount, double habitProgress, List<Role> roles) {
@@ -59,10 +59,9 @@ public class Member {
         this.coinCount = coinCount - cost;
     }
 
-    public MemberInfoResponseDto to(Long dPlusCount) {
+    public MemberInfoResponseDto to(int dPlusCount) {
         return MemberInfoResponseDto.builder()
                 .memberId(id)
-                .habitProgress(habitProgress)
                 .bio(bio)
                 .name(name)
                 .coinCount(coinCount)
@@ -70,7 +69,7 @@ public class Member {
                 .build();
     }
 
-    public void updateMemberImage(byte[] uploadImage) {
+    public void updateMemberImage(String uploadImage) {
         this.memberImage = uploadImage;
     }
 

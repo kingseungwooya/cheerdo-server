@@ -1,11 +1,10 @@
-package com.example.cheerdo.login.config.util;
+package com.example.cheerdo.login.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-import com.example.cheerdo.login.config.CustomUser;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -21,11 +20,12 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
+import javax.servlet.http.Cookie;
+
 
 import static java.util.Arrays.stream;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -42,6 +42,10 @@ public class TokenProvider implements InitializingBean {
     private final long refreshTokenValidity;
     private final String secret;
     private final String issuer;
+    /* 추후 front 배포 후 설정
+    @Value("{spring.front.domain}")
+    private String domain; */
+
 
 
     public TokenProvider(
@@ -83,10 +87,13 @@ public class TokenProvider implements InitializingBean {
                 .sign(algorithm);
     }
 
-
-    public String getMemberIdFromToken(String token) {
-        DecodedJWT jwt = JWT.decode(token);
-        return jwt.getSubject();
+    public Cookie generateCookieForToken(String token) {
+        Cookie cookie = new Cookie("refresh_token", token);
+        cookie.setMaxAge((int) refreshTokenValidity);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/api/login");
+        cookie.setDomain("");
+        return cookie;
     }
 
     public boolean validateToken(String token) {

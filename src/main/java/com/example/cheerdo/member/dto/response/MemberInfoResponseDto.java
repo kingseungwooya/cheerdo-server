@@ -9,16 +9,14 @@ public class MemberInfoResponseDto {
     private final String name;
     private final String bio;
     private final int coinCount;
-    private final double habitProgress;
-    private final Long dPlusCount;
+    private final int dPlusCount;
 
     @Builder
-    public MemberInfoResponseDto(String memberId, String name, String bio, int coinCount, double habitProgress, Long dPlusCount) {
+    public MemberInfoResponseDto(String memberId, String name, String bio, int coinCount, int dPlusCount) {
         this.memberId = memberId;
         this.name = name;
         this.bio = bio;
         this.coinCount = coinCount;
-        this.habitProgress = habitProgress;
         this.dPlusCount = dPlusCount;
     }
 }

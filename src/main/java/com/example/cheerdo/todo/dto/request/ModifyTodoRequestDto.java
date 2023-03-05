@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ModifyTodoRequestDto {
-    private Long todoId;
+    private String todoId;
     private String todo;
 
 }
