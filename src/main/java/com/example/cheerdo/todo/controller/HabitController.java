@@ -30,15 +30,15 @@ public class HabitController {
     private final HabitService habitService;
     private final Logger logger = LoggerFactory.getLogger(HabitController.class);
 
-    @ApiOperation(value = "Habit를 생성하는 api"
-            , notes = "반환값으로 Todo의 id가 반환된다. ")
+    @ApiOperation(value = "Habit을 생성하는 api"
+            , notes = "반환값으로 Habit의 id가 반환된다. ")
     @PostMapping("")
     public ResponseEntity<Long> writeHabit(@RequestBody WriteHabitRequestDto writeHabitRequestDto) {
         return new ResponseEntity<>(habitService.writeHabit(writeHabitRequestDto), HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Todo를 delete하는 api"
-            , notes = "반환값이 존재하지 않는다 error 시 error message 반환")
+    @ApiOperation(value = "Habit을 delete하는 api"
+            , notes = " error 시 error message 반환")
     @DeleteMapping("")
     public ResponseEntity<?> deleteHabit(@RequestParam Long habitId) {
         try {
@@ -49,16 +49,16 @@ public class HabitController {
         }
     }
 
-    @ApiOperation(value = "Todo를 Get하는 api"
-            , notes = "todo list들이 반환된다. ")
+    @ApiOperation(value = "Habit을 불러오는 api"
+            , notes = "todo형태의 Type Habit의  list들이 반환된다. ")
     @GetMapping("")
     public ResponseEntity<List<TodoResponseDto>> getMyHabit(@ModelAttribute GetTodoRequestDto getTodoRequestDto) {
         return new ResponseEntity<>(habitService.getMyHabits(getTodoRequestDto), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Todo를 Get하는 api"
-            , notes = "todo list들이 반환된다. ")
-    @GetMapping("/progress")
+    @ApiOperation(value = "Habit들의 정보를 불러오는 api"
+            , notes = "Habit의 정보들이 반환된다. ")
+    @GetMapping("/d-plus-day")
     public ResponseEntity<List<HabitInfoResponseDto>> getMyHabitProgress(@RequestParam String memberId) {
         return new ResponseEntity<>(habitService.getHabitInfo(memberId), HttpStatus.OK);
     }
