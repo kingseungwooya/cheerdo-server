@@ -78,6 +78,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         Map<String, String> tokens = new HashMap<>();
         tokens.put("access_token", access_token);
         tokens.put("memberId", user.getUsername());
+        tokens.put("memberName", user.getMemberName());
         tokens.put("coinCount", String.valueOf(user.getCoinCount()));
         tokens.put("newLetterCount", String.valueOf(user.getNewLetterCount()));
         response.setContentType(APPLICATION_JSON_VALUE);

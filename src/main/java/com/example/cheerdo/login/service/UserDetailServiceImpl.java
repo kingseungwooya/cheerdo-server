@@ -37,6 +37,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
         int letterCount = postRepository.countAllByReceiverIdAndIsOpen(memberId, false).orElse(0);
 
         return new CustomUser(member.getId(), member.getPassword(), authorities
-                , member.getCoinCount(), letterCount);
+                , member.getCoinCount(), letterCount, member.getName());
     }
 }
