@@ -10,5 +10,5 @@ public class UpdateProfileRequestDto {
     private String memberId;
     private String updateName;
     private String updateBio;
-    private MultipartFile uploadImage;
+    private String uploadImage;
 }
