@@ -1,6 +1,5 @@
 package com.example.cheerdo.login.controller;
 
-import com.example.cheerdo.entity.Role;
 import com.example.cheerdo.entity.enums.RoleName;
 import com.example.cheerdo.login.dto.response.error.ErrorResponseDto;
 import com.example.cheerdo.login.dto.request.JoinRequestDto;
@@ -15,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import org.springframework.web.bind.support.SessionStatus;
 
 @RestController
 @RequestMapping("/api")
@@ -47,6 +47,16 @@ public class LoginController {
     @PostMapping("/signup/check-id")
     public ResponseEntity<Boolean> checkMemberIdDuplicated(@RequestParam("memberId") String memberId) {
         return new ResponseEntity<>(loginService.checkUsernameDuplication(memberId), HttpStatus.OK);
+    }
+
+    @GetMapping("/member/logout")
+    public ResponseEntity<String> logout(SessionStatus status) {
+        //로그인 되있을때만 정상 로그아웃됌
+        if(!status.isComplete()){
+            status.setComplete();
+            return new ResponseEntity<>("logout success", HttpStatus.OK);
+        }
+        return new ResponseEntity<>( "login first before you logout", HttpStatus.BAD_REQUEST);
     }
 
     /*
