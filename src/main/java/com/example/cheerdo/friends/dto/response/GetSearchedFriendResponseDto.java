@@ -13,15 +13,4 @@ public class GetSearchedFriendResponseDto {
     private String name;
     private String memberId;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof GetSearchedFriendResponseDto that)) return false;
-        return Objects.equals(name, that.name) && Objects.equals(memberId, that.memberId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, memberId);
-    }
 }
