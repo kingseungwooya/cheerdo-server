@@ -2,6 +2,7 @@ package com.example.cheerdo.repository;
 
 import com.example.cheerdo.entity.FriendRelation;
 import com.example.cheerdo.entity.Post;
+import javax.management.relation.Relation;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
@@ -20,4 +21,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
                                                       Sort sort);
     Optional<Integer> countAllByReceiverIdAndIsOpen(@Param("memberId") String memberId,
                                                     @Param("isOpen") boolean isOpen);
+    Long countAllByRelation(FriendRelation relation);
 }

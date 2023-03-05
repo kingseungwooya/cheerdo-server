@@ -1,6 +1,5 @@
 package com.example.cheerdo.post.service;
 
-import com.example.cheerdo.common.enums.SortType;
 import com.example.cheerdo.common.sort.SortUtil;
 import com.example.cheerdo.entity.FriendRelation;
 import com.example.cheerdo.entity.Member;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -82,8 +80,4 @@ public class PostServiceImpl implements PostService {
         postRepository.save(letterRequestDto.dtoToPostEntity(relation));
     }
 
-    private List<FriendRelation> getMyRelation(Long memberId) throws Exception {
-        Optional<List<FriendRelation>> friendRelation = relationRepository.findAllByMember_Id(memberId);
-        return friendRelation.orElseThrow(() -> new Exception("현재 등록되어 있는 친구가 없습니다."));
-    }
 }
