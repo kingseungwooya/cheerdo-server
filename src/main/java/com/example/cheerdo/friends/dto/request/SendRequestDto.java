@@ -10,7 +10,7 @@ import java.util.Optional;
 @Getter
 @NoArgsConstructor
 public class SendRequestDto {
-    String userId;
+    String memberId;
     String friendId;
 
     public FriendRelation dtoToFriendRelationEntity(Optional<Member> member) {

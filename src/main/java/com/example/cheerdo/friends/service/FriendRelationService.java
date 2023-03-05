@@ -12,19 +12,19 @@ import java.util.List;
 
 public interface FriendRelationService {
 
-    List<GetFriendResponseDto> getMyFriendList(String userId) throws Exception;
+    List<GetFriendResponseDto> getMyFriendList(String memberId) throws Exception;
 
     void sendRequest(SendRequestDto sendRequestDto) throws Exception;
 
-    List<GetFriendRequestResponseDto> getMyRequest(String userId) throws Exception;
+    List<GetFriendRequestResponseDto> getMyRequest(String memberId) throws Exception;
 
-    List<GetFriendResponseDto> getReceivedRequest(String userId) throws Exception;
+    List<GetFriendResponseDto> getReceivedRequest(String memberId) throws Exception;
 
     void removeOrAcceptRequest(RemoveOrAcceptRequestDto removeOrAcceptRequestDto) throws Exception;
 
     void sendPostRequest(SendPostRequestDto sendPostRequestDto) throws Exception;
 
-    List<GetReceivedPostRequestResponseDto> getReceivedPostRequest(String userId) throws Exception;
+    List<GetReceivedPostRequestResponseDto> getReceivedPostRequest(String memberId) throws Exception;
 
     List<GetSearchedFriendResponseDto> getSearchedFriendRequest(String searchStr) throws Exception;
 

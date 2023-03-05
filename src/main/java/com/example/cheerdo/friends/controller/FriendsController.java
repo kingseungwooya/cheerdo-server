@@ -29,10 +29,10 @@ public class FriendsController {
     @ApiOperation(value = "memberId의 초기 Friend 화면에 필요한 data를 가져오는 api"
             , notes = "반환값으로 relationId memberId name list가 반환된다")
     @ApiResponse(code = 200, message = "status ok")
-    public ResponseEntity<?> getMyFriendList(@PathVariable("userId") String userId) {
-        logger.info("request : UserID -> {}", userId);
+    public ResponseEntity<?> getMyFriendList(@PathVariable("memberId") String memberId) {
+        logger.info("request : memberId -> {}", memberId);
         try {
-            List<GetFriendResponseDto> getFriendResponseDtos = friendRelationService.getMyFriendList(userId);
+            List<GetFriendResponseDto> getFriendResponseDtos = friendRelationService.getMyFriendList(memberId);
             return new ResponseEntity<>(getFriendResponseDtos, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -43,10 +43,10 @@ public class FriendsController {
             , notes = "반환값으로 relationId name list가 반환된다")
     @GetMapping(value = "/requests/{memberId}/send")
     @ApiResponse(code = 200, message = "status ok")
-    public ResponseEntity<?> getMyRequest(@PathVariable("userId") String userId) {
-        logger.info("request is -> {}", userId);
+    public ResponseEntity<?> getMyRequest(@PathVariable("memberId") String memberId) {
+        logger.info("request is -> {}", memberId);
         try {
-            List<GetFriendRequestResponseDto> getFriendRequestResponseDtos = friendRelationService.getMyRequest(userId);
+            List<GetFriendRequestResponseDto> getFriendRequestResponseDtos = friendRelationService.getMyRequest(memberId);
             return new ResponseEntity<>(getFriendRequestResponseDtos, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -71,10 +71,10 @@ public class FriendsController {
             , notes = "반환값으로 relationId memberId name list가 반환된다")
     @GetMapping(value = "/requests/{memberId}/receive")
     @ApiResponse(code = 200, message = "status ok")
-    public ResponseEntity<?> getReceivedRequest(@PathVariable("userId") String userId) {
-        logger.info("request is -> {}", userId);
+    public ResponseEntity<?> getReceivedRequest(@PathVariable("memberId") String memberId) {
+        logger.info("request is -> {}", memberId);
         try {
-            List<GetFriendResponseDto> getFriendResponseDtos = friendRelationService.getReceivedRequest(userId);
+            List<GetFriendResponseDto> getFriendResponseDtos = friendRelationService.getReceivedRequest(memberId);
             return new ResponseEntity<>(getFriendResponseDtos, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -110,13 +110,13 @@ public class FriendsController {
     }
 
     @ApiOperation(value = "받은 편지요청을 가져오는 API"
-            , notes = "userId를 받고 반환값으로 sendDateTime과 friendId friendName list가 반환된다")
+            , notes = "memberId를 받고 반환값으로 sendDateTime과 friendId friendName list가 반환된다")
     @GetMapping(value = "/post-requests/{memberId}/receive")
     @ApiResponse(code = 200, message = "status ok")
-    public ResponseEntity<?> getReceivedPostRequest(@PathVariable("userId") String userId) {
-        logger.info("request is -> {}", userId);
+    public ResponseEntity<?> getReceivedPostRequest(@PathVariable("memberId") String memberId) {
+        logger.info("request is -> {}", memberId);
         try {
-            List<GetReceivedPostRequestResponseDto> getReceivedPostRequestResponseDtos = friendRelationService.getReceivedPostRequest(userId);
+            List<GetReceivedPostRequestResponseDto> getReceivedPostRequestResponseDtos = friendRelationService.getReceivedPostRequest(memberId);
             return new ResponseEntity<>(getReceivedPostRequestResponseDtos, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

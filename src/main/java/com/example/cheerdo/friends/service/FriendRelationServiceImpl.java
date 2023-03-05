@@ -30,7 +30,7 @@ public class FriendRelationServiceImpl implements FriendRelationService {
     private final RelationRepository friendRelationRepository;
     private final PostRequestRepository postRequestRepository;
     @Override
-    public List<GetFriendResponseDto> getMyFriendList(String userId) throws Exception {
+    public List<GetFriendResponseDto> getMyFriendList(String memberId) throws Exception {
         // 반환값으로 relation id member id name을 가지는 LoadFriendRelationDto의 List가 반환된다.
 
         Optional<Member> member = memberRepository.findById(userId);
@@ -74,11 +74,10 @@ public class FriendRelationServiceImpl implements FriendRelationService {
         if (!friendRelation.isEmpty()) {
             throw new Exception("friendRelation already exist");
         }
-        friendRelationRepository.save(sendRequestDto.dtoToFriendRelationEntity(memberRepository.findById(sendRequestDto.getUserId())));
+        friendRelationRepository.save(sendRequestDto.dtoToFriendRelationEntity(memberRepository.findById(sendRequestDto.getMemberId()).get()));
     }
 
     @Override
-    public List<GetFriendRequestResponseDto> getMyRequest(String userId) throws Exception {
         Optional<Member> member = memberRepository.findById(userId);
         if (member.isEmpty()) {
             throw new Exception("there is no such member");
@@ -87,6 +86,7 @@ public class FriendRelationServiceImpl implements FriendRelationService {
 
         Optional<List<FriendRelation>> friendRelations = friendRelationRepository.findAllByMemberAndIsFriend(member, false);
         logger.info("unacceptedFriendRelations size is -> {}", friendRelations.get().size());
+    public List<GetFriendRequestResponseDto> getMyRequest(String memberId) throws Exception {
         List<GetFriendRequestResponseDto> list = new ArrayList<>();
 
         if (friendRelations.get().isEmpty()) {
@@ -106,11 +106,11 @@ public class FriendRelationServiceImpl implements FriendRelationService {
     }
 
     @Override
-    public List<GetFriendResponseDto> getReceivedRequest(String userId) throws Exception {
-        logger.info("member is -> {}", userId);
 
         Optional<List<FriendRelation>> friendRelations = friendRelationRepository.findAllByFriendIdAndIsFriend(userId, false);
         logger.info("receivedFriendRelations size is -> {}", friendRelations.get().size());
+    public List<GetFriendResponseDto> getReceivedRequest(String memberId) throws Exception {
+        logger.info("member is -> {}", memberId);
         List<GetFriendResponseDto> list = new ArrayList<>();
 
         if (friendRelations.get().isEmpty()) {
@@ -180,7 +180,7 @@ public class FriendRelationServiceImpl implements FriendRelationService {
     }
 
     @Override
-    public List<GetReceivedPostRequestResponseDto> getReceivedPostRequest(String userId) throws Exception {
+    public List<GetReceivedPostRequestResponseDto> getReceivedPostRequest(String memberId) throws Exception {
         List<GetReceivedPostRequestResponseDto> list = new ArrayList<>();
         Optional<List<PostRequest>> postRequests = postRequestRepository.findAllByReceiverId(userId);
         for ( int i = 0; i < postRequests.size(); i++ ) {
