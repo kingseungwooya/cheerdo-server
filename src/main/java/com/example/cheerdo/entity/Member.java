@@ -1,14 +1,14 @@
 package com.example.cheerdo.entity;
 
+import com.example.cheerdo.member.dto.response.MemberInfoResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter
@@ -35,9 +35,16 @@ public class Member {
     @Column(name = "d_plus_day")
     private int dPlusDay;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    //@Builder.Default
+    private Collection<Role> roles = new ArrayList<>();
+
+    @Lob
+    @Column(name = "member_image")
+    private byte[] memberImage;
 
     @Builder
-    public Member(String id, String password, String name, String bio, int coinCount, double habitProgress) {
+    public Member(String id, String password, String name, String bio, int coinCount, double habitProgress, List<Role> roles) {
         this.id = id;
         this.password = password;
         this.name = name;
@@ -45,6 +52,7 @@ public class Member {
         this.coinCount = coinCount;
         this.habitProgress = habitProgress;
         this.dPlusDay = 0;
+        this.roles = roles;
     }
 
     public void rewardCoin(int reward) {
@@ -54,4 +62,30 @@ public class Member {
     public void useCoin(int cost) {
         this.coinCount = coinCount - cost;
     }
+
+    public MemberInfoResponseDto to(Long dPlusCount) {
+        return MemberInfoResponseDto.builder()
+                .memberId(id)
+                .habitProgress(habitProgress)
+                .bio(bio)
+                .name(name)
+                .coinCount(coinCount)
+                .dPlusCount(dPlusCount)
+                .build();
+    }
+
+    public void updateMemberImage(byte[] uploadImage) {
+        this.memberImage = uploadImage;
+    }
+
+    public void updateBio(String updatedBio) {
+        this.bio = updatedBio;
+    }
+
+    public void updateName(String updatedName) {
+        this.name = updatedName;
+    }
+
+
+
 }
