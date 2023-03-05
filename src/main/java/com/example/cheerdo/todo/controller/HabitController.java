@@ -4,6 +4,7 @@ import com.example.cheerdo.todo.dto.request.GetTodoRequestDto;
 import com.example.cheerdo.todo.dto.request.WriteHabitRequestDto;
 import com.example.cheerdo.todo.dto.request.WriteTodoRequestDto;
 import com.example.cheerdo.todo.dto.response.HabitInfoResponseDto;
+import com.example.cheerdo.todo.dto.response.HabitResponseDto;
 import com.example.cheerdo.todo.dto.response.TodoResponseDto;
 import com.example.cheerdo.todo.service.HabitService;
 import com.example.cheerdo.todo.service.TodoService;
@@ -52,7 +53,7 @@ public class HabitController {
     @ApiOperation(value = "Habit을 불러오는 api"
             , notes = "todo형태의 Type Habit의  list들이 반환된다. ")
     @GetMapping("")
-    public ResponseEntity<List<TodoResponseDto>> getMyHabit(@ModelAttribute GetTodoRequestDto getTodoRequestDto) {
+    public ResponseEntity<List<HabitResponseDto>> getMyHabit(@ModelAttribute GetTodoRequestDto getTodoRequestDto) {
         return new ResponseEntity<>(habitService.getMyHabits(getTodoRequestDto), HttpStatus.OK);
     }
 
