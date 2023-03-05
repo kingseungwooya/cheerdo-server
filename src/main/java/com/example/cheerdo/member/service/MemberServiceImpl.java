@@ -46,7 +46,7 @@ public class MemberServiceImpl implements MemberService {
     public MemberInfoResponseDto getInfoById(String memberId) {
 
         Member member = memberRepository.findById(memberId).get();
-        Optional<Habit> habit = habitRepository.findFirstByMemberOrderByDDayDesc(member);
+        Optional<Habit> habit = habitRepository.findFirstByMemberOrderByStartDate(member);
         if (habit.isPresent()) {
            return member.to(habit.get().getDDay());
         }
