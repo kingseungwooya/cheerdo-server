@@ -13,8 +13,8 @@ public class HabitInfoResponseDto {
     @ApiModelProperty(example = "Habit의 내용")
     private final String content;
 
-    @ApiModelProperty(example = "Habit의 성공Rate")
-    private final double successRate;
+    @ApiModelProperty(example = "Habit의 dPlusDay")
+    private final int dPlusDay;
 
     @ApiModelProperty(example = "Habit의 시작날짜")
     private final LocalDate startDate;
@@ -23,11 +23,11 @@ public class HabitInfoResponseDto {
     private final LocalDate endDate;
 
     @Builder
-    public HabitInfoResponseDto(Long habitId, String content, double successRate, LocalDate startDate,
+    public HabitInfoResponseDto(Long habitId, String content, int dPlusDay, LocalDate startDate,
                                 LocalDate endDate) {
         this.habitId = habitId;
         this.content = content;
-        this.successRate = successRate;
+        this.dPlusDay = dPlusDay;
         this.startDate = startDate;
         this.endDate = endDate;
     }

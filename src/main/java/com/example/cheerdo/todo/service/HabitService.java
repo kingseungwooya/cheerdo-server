@@ -2,6 +2,7 @@ package com.example.cheerdo.todo.service;
 
 import com.example.cheerdo.todo.dto.request.GetTodoRequestDto;
 import com.example.cheerdo.todo.dto.request.WriteHabitRequestDto;
+import com.example.cheerdo.todo.dto.response.HabitInfoResponseDto;
 import com.example.cheerdo.todo.dto.response.TodoResponseDto;
 import java.util.*;
 
@@ -11,4 +12,6 @@ public interface HabitService {
     void deleteHabit(Long habitId);
 
     List<TodoResponseDto> getMyHabits(GetTodoRequestDto getTodoRequestDto);
+
+    List<HabitInfoResponseDto> getHabitInfo(String memberId);
 }

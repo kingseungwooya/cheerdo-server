@@ -11,7 +11,9 @@ import com.example.cheerdo.repository.MemberRepository;
 import com.example.cheerdo.repository.TodoRepository;
 import com.example.cheerdo.todo.dto.request.GetTodoRequestDto;
 import com.example.cheerdo.todo.dto.request.WriteHabitRequestDto;
+import com.example.cheerdo.todo.dto.response.HabitInfoResponseDto;
 import com.example.cheerdo.todo.dto.response.TodoResponseDto;
+import javax.swing.text.html.Option;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +34,7 @@ public class HabitServiceImpl implements HabitService {
     private final Logger logger = LoggerFactory.getLogger(HabitServiceImpl.class);
 
     private final MemberRepository memberRepository;
+
     private final HabitRepository habitRepository;
 
     private final CalenderRepository calenderRepository;
@@ -78,14 +81,23 @@ public class HabitServiceImpl implements HabitService {
         Habit habit = habitRepository.findById(habitId).get();
         Member member = habit.getMember();
         todoRepository.deleteAllByHabit(habit);
+
         for (LocalDate indexDate = habit.getStartDate();
              indexDate.isBefore(habit.getEndDate().plusDays(1));
              indexDate = indexDate.plusDays(1)) {
             Calender calender = calenderRepository.findByMemberAndDate(member, indexDate).get();
+            Optional<Todo> todo = calender.getTodos().stream()
+                    .filter(t -> t.getHabit() == habit)
+                    .findFirst();
+            if (todo.isPresent()) {
+                calender.deleteTodo(todo.get());
+            }
+            calender.updateRate();
             if (calender.getTodos().size() == 0) {
                 calenderRepository.delete(calender);
             }
         }
+        habitRepository.delete(habit);
     }
 
     @Override
@@ -101,6 +113,15 @@ public class HabitServiceImpl implements HabitService {
 
         return todos.stream()
                 .map(todo -> todo.entityToTodoResponseDto())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<HabitInfoResponseDto> getHabitInfo(String memberId) {
+        return habitRepository.findAllByMember(memberRepository.findById(memberId).get())
+                .get()
+                .stream()
+                .map(habit -> habit.entityToHabitInfoDto())
                 .collect(Collectors.toList());
     }
 }
