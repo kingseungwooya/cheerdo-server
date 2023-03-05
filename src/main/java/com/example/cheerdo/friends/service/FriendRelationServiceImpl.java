@@ -176,26 +176,23 @@ public class FriendRelationServiceImpl implements FriendRelationService {
         if (optionalFriendRelation.isEmpty()) {
             throw new Exception("there is no such relation");
         }
-        postRequestRepository.save(sendPostRequestDto.dtoToPostRequestEntity(optionalFriendRelation, friendName, optionalFriendRelation.get().getMember().getId()));
+        postRequestRepository.save(sendPostRequestDto.dtoToPostRequestEntity(friendRelation));
     }
 
     @Override
     public List<GetReceivedPostRequestResponseDto> getReceivedPostRequest(String userId) throws Exception {
         List<GetReceivedPostRequestResponseDto> list = new ArrayList<>();
         Optional<List<PostRequest>> postRequests = postRequestRepository.findAllByReceiverId(userId);
-        if (!postRequests.isEmpty()) {
-            for ( int i = 0; i < postRequests.get().size(); i++ ) {
-                list.add(GetReceivedPostRequestResponseDto.builder()
-                        .sendDateTime(postRequests.get().get(i).getSendDateTime())
-                        .friendName(postRequests.get().get(i).getSenderName())
-                        .friendId(postRequests.get().get(i).getSenderId())
-                        .build()
-                );
-            }
-        } else {
-            throw new Exception("there is no such request");
-        }
+        for ( int i = 0; i < postRequests.size(); i++ ) {
+            Optional<Member> friend = memberRepository.findById(postRequests.get(i).getFriendRelation().getFriendId());
 
+            list.add(GetReceivedPostRequestResponseDto.builder()
+                    .sendDateTime(postRequests.get(i).getSendDateTime())
+                    .friendName(friend.get().getName())
+                    .friendId(friend.get().getId())
+                    .build()
+            );
+        }
         return list;
     }
 
