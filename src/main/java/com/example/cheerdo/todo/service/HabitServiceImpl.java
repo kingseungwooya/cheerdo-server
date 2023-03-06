@@ -12,6 +12,7 @@ import com.example.cheerdo.repository.TodoRepository;
 import com.example.cheerdo.todo.dto.request.GetTodoRequestDto;
 import com.example.cheerdo.todo.dto.request.WriteHabitRequestDto;
 import com.example.cheerdo.todo.dto.response.HabitInfoResponseDto;
+import com.example.cheerdo.todo.dto.response.HabitResponseDto;
 import com.example.cheerdo.todo.dto.response.TodoResponseDto;
 import javax.swing.text.html.Option;
 import lombok.AllArgsConstructor;
@@ -101,7 +102,7 @@ public class HabitServiceImpl implements HabitService {
     }
 
     @Override
-    public List<TodoResponseDto> getMyHabits(GetTodoRequestDto getTodoRequestDto) {
+    public List<HabitResponseDto> getMyHabits(GetTodoRequestDto getTodoRequestDto) {
         Member member = memberRepository.findById(getTodoRequestDto.getMemberId()).get();
         Optional<Calender> calender = calenderRepository.findByMemberAndDate(member, getTodoRequestDto.getSearchDate());
 
@@ -112,7 +113,7 @@ public class HabitServiceImpl implements HabitService {
                 , Type.valueOf(getTodoRequestDto.getType())).get();
 
         return todos.stream()
-                .map(todo -> todo.entityToTodoResponseDto())
+                .map(todo -> todo.entityToHabitResponseDto())
                 .collect(Collectors.toList());
     }
 

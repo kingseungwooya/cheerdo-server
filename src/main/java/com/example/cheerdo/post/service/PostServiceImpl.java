@@ -1,6 +1,5 @@
 package com.example.cheerdo.post.service;
 
-import com.example.cheerdo.common.enums.SortType;
 import com.example.cheerdo.common.sort.SortUtil;
 import com.example.cheerdo.entity.FriendRelation;
 import com.example.cheerdo.entity.Member;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,24 +30,26 @@ public class PostServiceImpl implements PostService {
     private final MemberRepository memberRepository;
 
 
-
     @Override
     public List<?> getMyPosts(PostRequestDto postRequestDto) throws IllegalArgumentException {
 
-        List<Post> posts = postRepository.findAllByReceiverIdAndIsOpenAndSendDateTimeBetween(
-                postRequestDto.getMemberId(),
-                postRequestDto.isOpen(),
-                postRequestDto.getStartDate(),
-                postRequestDto.getEndDate(),
-                SortUtil.sort(postRequestDto.getSortType(), "sendDateTime")
-        ).orElseThrow(() -> new IllegalArgumentException("you have no friend"));
-
-
         if (postRequestDto.isOpen()) {
-            return posts.stream()
+            List<Post> letters = postRepository.findAllByReceiverIdAndIsOpenAndSendDateTimeBetween(
+                    postRequestDto.getMemberId(),
+                    postRequestDto.isOpen(),
+                    postRequestDto.getStartDate(),
+                    postRequestDto.getEndDate(),
+                    SortUtil.sort(postRequestDto.getSortType(), "sendDateTime")
+            ).orElseThrow(() -> new IllegalArgumentException("you have no friend"));
+            return letters.stream()
                     .map(post -> post.entityToLetterResponseDto())
                     .collect(Collectors.toList());
         }
+        List<Post> posts = postRepository.findAllByReceiverIdAndIsOpen(
+                postRequestDto.getMemberId(),
+                postRequestDto.isOpen(),
+                SortUtil.sort(postRequestDto.getSortType(), "sendDateTime")
+        ).orElseThrow(() -> new IllegalArgumentException("you have no friend"));
         return posts.stream()
                 .map(post -> post.entityToPostResponseDto())
                 .collect(Collectors.toList());
@@ -82,8 +82,4 @@ public class PostServiceImpl implements PostService {
         postRepository.save(letterRequestDto.dtoToPostEntity(relation));
     }
 
-    private List<FriendRelation> getMyRelation(Long memberId) throws Exception {
-        Optional<List<FriendRelation>> friendRelation = relationRepository.findAllByMember_Id(memberId);
-        return friendRelation.orElseThrow(() -> new Exception("현재 등록되어 있는 친구가 없습니다."));
-    }
 }

@@ -3,15 +3,10 @@ package com.example.cheerdo.post.controller;
 import com.example.cheerdo.post.dto.request.LetterRequestDto;
 import com.example.cheerdo.post.dto.request.PostRequestDto;
 import com.example.cheerdo.post.dto.response.PostResponseDto;
-import com.example.cheerdo.post.dto.response.PostStatusResponse;
-import com.example.cheerdo.post.dto.response.LetterResponseDto;
 import com.example.cheerdo.post.service.PostService;
-import com.github.javafaker.Faker;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Locale;
 
 @RestController
 @RequestMapping("api/member/post")
@@ -64,10 +58,4 @@ public class PostController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
-    @GetMapping("/status")
-    public ResponseEntity<?> getStatus(@RequestParam Long userId) {
-        logger.info("request userId is -> {}", userId);
-        return new ResponseEntity<>(
-                new PostStatusResponse(10, 100), HttpStatus.OK);
-    }
 }

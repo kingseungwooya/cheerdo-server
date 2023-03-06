@@ -1,5 +1,6 @@
 package com.example.cheerdo.entity;
 
+import com.example.cheerdo.todo.dto.response.HabitResponseDto;
 import com.example.cheerdo.todo.dto.response.TodoResponseDto;
 import com.example.cheerdo.entity.enums.Type;
 import lombok.Builder;
@@ -63,6 +64,16 @@ public class Todo {
                 .todo(content)
                 .success(isSuccess)
                 .endDateTime(endDateTime)
+                .build();
+    }
+
+    public HabitResponseDto entityToHabitResponseDto() {
+        return HabitResponseDto.builder()
+                .habitId(habit.getId())
+                .todoId(todoId)
+                .typeOfTodo(type.name())
+                .content(content)
+                .success(isSuccess)
                 .build();
     }
 
