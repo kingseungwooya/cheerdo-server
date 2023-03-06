@@ -182,13 +182,16 @@ public class FriendRelationServiceImpl implements FriendRelationService {
         );
         for ( int i = 0; i < postRequests.size(); i++ ) {
             Optional<Member> friend = memberRepository.findById(postRequests.get(i).getFriendRelation().getMember().getId());
-
+            Member reverseMember = memberRepository.findById(postRequests.get(i).getFriendRelation().getFriendId()).get();
+            FriendRelation reversedfriendRelation = friendRelationRepository.findFriendRelationByMemberAndFriendId(reverseMember, postRequests.get(i).getFriendRelation().getMember().getId()).orElseThrow(
+                    () -> new Exception("there is no reversed relation. please use request control")
+            );
             list.add(GetReceivedPostRequestResponseDto.builder()
                     .sendDateTime(postRequests.get(i).getSendDateTime())
                     .friendName(friend.get().getName())
                     .friendId(friend.get().getId())
                     .memberImage(friend.get().getMemberImage())
-                    .relationId(postRequests.get(i).getFriendRelation().getId())
+                    .relationId(reversedfriendRelation.getId())
                     .build()
             );
         }
