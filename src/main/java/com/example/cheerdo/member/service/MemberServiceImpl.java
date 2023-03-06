@@ -13,6 +13,9 @@ import com.example.cheerdo.repository.MemberRepository;
 import com.example.cheerdo.repository.PostRepository;
 import com.example.cheerdo.repository.RelationRepository;
 import com.example.cheerdo.repository.TodoRepository;
+import java.awt.Image;
+import java.io.File;
+import java.nio.file.Files;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -27,6 +30,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @AllArgsConstructor
@@ -39,7 +43,7 @@ public class MemberServiceImpl implements MemberService {
     private final RelationRepository relationRepository;
 
     @Override
-    public String updateMyInfo(UpdateProfileRequestDto updateProfileRequestDto) {
+    public String updateMyInfo(UpdateProfileRequestDto updateProfileRequestDto) throws IOException {
         Member member = memberRepository.findById(updateProfileRequestDto.getMemberId()).get();
         member.updateMemberImage(updateProfileRequestDto.getUploadImage());
         member.updateBio(updateProfileRequestDto.getUpdateBio());
