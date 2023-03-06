@@ -2,6 +2,7 @@ package com.example.cheerdo.post.dto.request;
 
 import com.example.cheerdo.entity.FriendRelation;
 import com.example.cheerdo.entity.Post;
+import com.example.cheerdo.entity.Todo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,8 +20,10 @@ public class LetterRequestDto {
 
     private String message;
 
+    private String todoId;
 
-    public Post dtoToPostEntity(FriendRelation relation) {
+
+    public Post dtoToPostEntity(FriendRelation relation, Todo todo) {
         return Post.builder()
                 .title(title)
                 .message(message)
@@ -28,6 +31,7 @@ public class LetterRequestDto {
                 .senderName(relation.getMember().getName())
                 .receiverId(relation.getFriendId())
                 .relation(relation)
+                .todo(todo)
                 .build();
     }
 }

@@ -66,14 +66,12 @@ class PostServiceImplTest {
                 .member(member)
                 .friendId("chu123")
                 .isFriend(true)
-                .hasMessage(false)
                 .build();
         FriendRelation relation2 = FriendRelation.builder()
                 .id(2L)
                 .member(friend)
                 .friendId("kim123")
                 .isFriend(true)
-                .hasMessage(false)
                 .build();
         relationRepository.save(relation);
         relationRepository.save(relation2);
@@ -87,7 +85,7 @@ class PostServiceImplTest {
     void writeLetter() {
         // Given
         LetterRequestDto letterRequestDto =
-                new LetterRequestDto(2L, "사랑하는 승우에게", "안녕 나는 츄야 널 사랑해");
+                new LetterRequestDto(2L, "사랑하는 승우에게", "안녕 나는 츄야 널 사랑해", "todoId");
         // When
         postService.writeLetter(letterRequestDto);
 
@@ -140,7 +138,8 @@ class PostServiceImplTest {
         LetterRequestDto letterRequestDto = new LetterRequestDto(
                 1L,
                 "새로운 편지 작성",
-                "ksw123 -> chu123"
+                "ksw123 -> chu123",
+                "todoId"
         );
         Member kim123Before = memberRepository.findById("kim123").get();
         int beforeCoinCount = kim123Before.getCoinCount();

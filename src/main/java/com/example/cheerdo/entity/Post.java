@@ -28,6 +28,10 @@ public class Post {
     @JoinColumn(name = "relation_id")
     private FriendRelation relation;
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "todo_id")
+    private Todo todo;
+
     private String receiverId;
 
     private String senderName;
@@ -45,7 +49,7 @@ public class Post {
     private LocalDate sendDateTime;
 
     @Builder
-    public Post(Long id, FriendRelation relation,String receiverId, String senderName, String title, String message, boolean isOpen, LocalDate sendDateTime) {
+    public Post(Long id, FriendRelation relation,String receiverId, String senderName, String title, String message, boolean isOpen, LocalDate sendDateTime, Todo todo) {
         this.id = id;
         this.relation = relation;
         this.receiverId = receiverId;
@@ -54,6 +58,7 @@ public class Post {
         this.message = message;
         this.isOpen = isOpen;
         this.sendDateTime = sendDateTime;
+        this.todo = todo;
     }
 
     public void openLetter() {
@@ -77,6 +82,9 @@ public class Post {
                 .title(title)
                 .relationId(relation.getId())
                 .sendDate(sendDateTime)
+                .todoContent(todo.getContent())
+                .todoId(todo.getTodoId())
+                .todoDate(todo.getCalender().getDate())
                 .build();
     }
 }
