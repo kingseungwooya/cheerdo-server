@@ -13,7 +13,9 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    Optional<List<Post>> findAllByReceiverIdAndIsOpenOrderBySendDateTime(@Param("memberId") String memberId, @Param("isOpen") boolean isOpen);
+    Optional<List<Post>> findAllByReceiverIdAndIsOpen(@Param("memberId") String memberId,
+                                                      @Param("isOpen") boolean isOpen,
+                                                      Sort sort);
     Optional<List<Post>> findAllByReceiverIdAndIsOpenAndSendDateTimeBetween(@Param("memberId") String memberId,
                                                       @Param("isOpen") boolean isOpen,
                                                       @Param("startDate") LocalDate startDate,

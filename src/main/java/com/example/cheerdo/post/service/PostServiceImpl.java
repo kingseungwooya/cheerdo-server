@@ -30,24 +30,26 @@ public class PostServiceImpl implements PostService {
     private final MemberRepository memberRepository;
 
 
-
     @Override
     public List<?> getMyPosts(PostRequestDto postRequestDto) throws IllegalArgumentException {
 
-        List<Post> posts = postRepository.findAllByReceiverIdAndIsOpenAndSendDateTimeBetween(
-                postRequestDto.getMemberId(),
-                postRequestDto.isOpen(),
-                postRequestDto.getStartDate(),
-                postRequestDto.getEndDate(),
-                SortUtil.sort(postRequestDto.getSortType(), "sendDateTime")
-        ).orElseThrow(() -> new IllegalArgumentException("you have no friend"));
-
-
         if (postRequestDto.isOpen()) {
-            return posts.stream()
+            List<Post> letters = postRepository.findAllByReceiverIdAndIsOpenAndSendDateTimeBetween(
+                    postRequestDto.getMemberId(),
+                    postRequestDto.isOpen(),
+                    postRequestDto.getStartDate(),
+                    postRequestDto.getEndDate(),
+                    SortUtil.sort(postRequestDto.getSortType(), "sendDateTime")
+            ).orElseThrow(() -> new IllegalArgumentException("you have no friend"));
+            return letters.stream()
                     .map(post -> post.entityToLetterResponseDto())
                     .collect(Collectors.toList());
         }
+        List<Post> posts = postRepository.findAllByReceiverIdAndIsOpen(
+                postRequestDto.getMemberId(),
+                postRequestDto.isOpen(),
+                SortUtil.sort(postRequestDto.getSortType(), "sendDateTime")
+        ).orElseThrow(() -> new IllegalArgumentException("you have no friend"));
         return posts.stream()
                 .map(post -> post.entityToPostResponseDto())
                 .collect(Collectors.toList());
