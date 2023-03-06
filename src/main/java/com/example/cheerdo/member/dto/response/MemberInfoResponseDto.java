@@ -11,15 +11,19 @@ public class MemberInfoResponseDto {
     private final String image;
     private final int coinCount;
     private final int dPlusCount;
+    private final long sendPostCount;
+    private final long receivePostCount;
 
     @Builder
     public MemberInfoResponseDto(String memberId, String name, String bio, String image, int coinCount,
-                                 int dPlusCount) {
+                                 int dPlusCount, long sendPostCount, long receivePostCount) {
         this.memberId = memberId;
         this.name = name;
         this.bio = bio;
         this.image = image;
         this.coinCount = coinCount;
         this.dPlusCount = dPlusCount;
+        this.sendPostCount = sendPostCount;
+        this.receivePostCount = receivePostCount;
     }
 }

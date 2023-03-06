@@ -59,10 +59,18 @@ public class MemberServiceImpl implements MemberService {
 
         Optional<Habit> habit = habitRepository.findTopByMemberOrderByStartDateDesc(member);
 
+        // 내가 받은 편지 개수
+        long receivePostCount = postRepository.countAllByReceiverId(memberId);
+        // 내가 보낸 편지 개수
+        long sendPostCount = relationRepository.findAllByMemberAndIsFriend(member, true).get()
+                .stream()
+                .map( r -> postRepository.countAllByRelation(r))
+                .reduce(Long::sum)
+                .get();
         if (habit.isPresent()) {
-            return member.to(habit.get().getDDay());
+            return member.to(habit.get().getDDay(), sendPostCount, receivePostCount);
         }
-        return member.to(0);
+        return member.to(0, sendPostCount, receivePostCount);
     }
 
     @Override

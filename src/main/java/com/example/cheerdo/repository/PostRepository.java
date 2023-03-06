@@ -24,4 +24,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<Integer> countAllByReceiverIdAndIsOpen(@Param("memberId") String memberId,
                                                     @Param("isOpen") boolean isOpen);
     Long countAllByRelation(FriendRelation relation);
+
+    Long countAllByReceiverId(String receiverId);
 }

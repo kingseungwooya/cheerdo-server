@@ -64,7 +64,7 @@ public class Member {
         this.coinCount = coinCount - cost;
     }
 
-    public MemberInfoResponseDto to(int dPlusCount) {
+    public MemberInfoResponseDto to(int dPlusCount, long sendPostCount, long receivePostCount ) {
         return MemberInfoResponseDto.builder()
                 .memberId(id)
                 .bio(bio)
@@ -72,6 +72,8 @@ public class Member {
                 .coinCount(coinCount)
                 .image(memberImage)
                 .dPlusCount(dPlusCount)
+                .sendPostCount(sendPostCount)
+                .receivePostCount(receivePostCount)
                 .build();
     }
 
