@@ -5,6 +5,7 @@ import com.example.cheerdo.entity.Member;
 import com.example.cheerdo.entity.Todo;
 import com.example.cheerdo.repository.CalenderRepository;
 import com.example.cheerdo.repository.MemberRepository;
+import com.example.cheerdo.repository.PostRepository;
 import com.example.cheerdo.todo.dto.request.GetTodoRequestDto;
 import com.example.cheerdo.todo.dto.request.ModifyTodoRequestDto;
 import com.example.cheerdo.todo.dto.request.WriteTodoRequestDto;
@@ -33,6 +34,7 @@ public class TodoServiceImpl implements TodoService {
     private final TodoRepository todoRepository;
     private final MemberRepository memberRepository;
     private final CalenderRepository calenderRepository;
+    private final PostRepository postRepository;
 
     // todo 작성 요청시 해당 date에 객체가 있는지 확인? 확인 후 없으면 생성
     @Override
@@ -80,6 +82,9 @@ public class TodoServiceImpl implements TodoService {
     public void deleteTodo(String todoId) {
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new IllegalArgumentException("maybe todo is deleted"));
+        if( postRepository.existsByTodo(todo)) {
+            throw new IllegalArgumentException("this todo have post, you can't delete it");
+        }
         todoRepository.delete(todo);
         Long calenderId = todo.getCalender().getCalenderId();
         updateRate(calenderId);
