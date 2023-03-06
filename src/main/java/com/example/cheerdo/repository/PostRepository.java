@@ -26,4 +26,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Long countAllByRelation(FriendRelation relation);
 
     Long countAllByReceiverId(String receiverId);
+
+    Optional<List<Post>> findAllByReceiverIdAndSendDateTimeBetween(@Param("memberId") String memberId,
+                                                                   @Param("startDate") LocalDate startDate,
+                                                                   @Param("endDate") LocalDate endDate,
+                                                                   Sort sort);
 }

@@ -4,12 +4,17 @@ import com.example.cheerdo.common.sort.SortUtil;
 import com.example.cheerdo.entity.FriendRelation;
 import com.example.cheerdo.entity.Member;
 import com.example.cheerdo.entity.Post;
+import com.example.cheerdo.entity.Todo;
 import com.example.cheerdo.post.dto.request.LetterRequestDto;
 import com.example.cheerdo.post.dto.request.PostRequestDto;
+import com.example.cheerdo.post.dto.request.TotalPostRequestDto;
 import com.example.cheerdo.post.dto.response.LetterResponseDto;
 import com.example.cheerdo.repository.MemberRepository;
 import com.example.cheerdo.repository.PostRepository;
 import com.example.cheerdo.repository.RelationRepository;
+import com.example.cheerdo.repository.TodoRepository;
+import java.util.ArrayList;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,11 +33,12 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final RelationRepository relationRepository;
     private final MemberRepository memberRepository;
+    private final TodoRepository todoRepository;
 
 
     @Override
     public List<?> getMyPosts(PostRequestDto postRequestDto) throws IllegalArgumentException {
-
+        // 개봉된 편지들
         if (postRequestDto.isOpen()) {
             List<Post> letters = postRepository.findAllByReceiverIdAndIsOpenAndSendDateTimeBetween(
                     postRequestDto.getMemberId(),
@@ -45,6 +51,7 @@ public class PostServiceImpl implements PostService {
                     .map(post -> post.entityToLetterResponseDto())
                     .collect(Collectors.toList());
         }
+        // 미개봉된 편지들
         List<Post> posts = postRepository.findAllByReceiverIdAndIsOpen(
                 postRequestDto.getMemberId(),
                 postRequestDto.isOpen(),
@@ -79,7 +86,36 @@ public class PostServiceImpl implements PostService {
         Member member = relation.getMember();
         member.rewardCoin(WRITE_LETTER_COIN_REWARD);
         memberRepository.save(member);
-        postRepository.save(letterRequestDto.dtoToPostEntity(relation));
+
+        Todo todo = todoRepository.findById(letterRequestDto.getTodoId()).get();
+        postRepository.save(letterRequestDto.dtoToPostEntity(relation, todo));
+    }
+
+    @Override
+    public List<?> getAllPosts(TotalPostRequestDto totalPostRequestDto) {
+        Optional<List<Post>> posts = postRepository.findAllByReceiverIdAndSendDateTimeBetween(
+                totalPostRequestDto.getMemberId(),
+                totalPostRequestDto.getStartDate(),
+                totalPostRequestDto.getEndDate(),
+                SortUtil.sort(totalPostRequestDto.getSortType(), "sendDateTime")
+        );
+        List responsePosts = new ArrayList();
+        if (posts.isEmpty()) {
+            return responsePosts;
+        }
+        responsePosts.addAll(
+                posts.get().stream()
+                        .filter( p -> p.isOpen())
+                        .map( s -> s.entityToLetterResponseDto())
+                        .collect(Collectors.toList())
+        );
+        responsePosts.addAll(
+                posts.get().stream()
+                        .filter( p -> !p.isOpen())
+                        .map( s-> s.entityToPostResponseDto())
+                        .collect(Collectors.toList())
+        );
+        return responsePosts;
     }
 
 }

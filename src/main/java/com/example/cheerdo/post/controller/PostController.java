@@ -2,6 +2,7 @@ package com.example.cheerdo.post.controller;
 
 import com.example.cheerdo.post.dto.request.LetterRequestDto;
 import com.example.cheerdo.post.dto.request.PostRequestDto;
+import com.example.cheerdo.post.dto.request.TotalPostRequestDto;
 import com.example.cheerdo.post.dto.response.PostResponseDto;
 import com.example.cheerdo.post.service.PostService;
 import io.swagger.annotations.ApiOperation;
@@ -35,7 +36,22 @@ public class PostController {
             List<PostResponseDto> postResponseDtos = (List<PostResponseDto>) postService.getMyPosts(postRequestDto);
             return new ResponseEntity<>(postResponseDtos, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/all-posts")
+    @ApiOperation(value = "마이페이지에서 모든 편지를 반환하는 api"
+            , notes = "흠 ..")
+    @ApiResponses( {
+            @ApiResponse( code = 200, message = "status ok")
+    })
+    public ResponseEntity<?> getAllPostAtMyPage(@ModelAttribute TotalPostRequestDto totalPostRequestDto) {
+        try {
+            List postResponseDtos = postService.getAllPosts(totalPostRequestDto);
+            return new ResponseEntity<>(postResponseDtos, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
