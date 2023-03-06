@@ -55,7 +55,8 @@ public class Habit {
     }
 
     public int getDDay() {
-        int duration = (int) Duration.between(startDate, LocalDate.now()).toDays();
-        return duration;
+        int duration = (int) Duration.between(startDate.atStartOfDay()
+                , LocalDate.now().atStartOfDay()).toDays();
+        return duration + 1;
     }
 }

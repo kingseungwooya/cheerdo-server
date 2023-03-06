@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface HabitRepository extends JpaRepository<Habit, Long> {
     Optional<List<Habit>> findAllByMember(Member member);
-    Optional<Habit> findFirstByMemberOrderByStartDate(Member member);
+    Optional<Habit> findTopByMemberOrderByStartDateDesc(Member member);
 }

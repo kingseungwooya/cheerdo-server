@@ -17,6 +17,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -51,7 +52,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberInfoResponseDto getMyInfo(String memberId) {
         Member member = memberRepository.findById(memberId).get();
-        Optional<Habit> habit = habitRepository.findFirstByMemberOrderByStartDate(member);
+
+        Optional<Habit> habit = habitRepository.findTopByMemberOrderByStartDateDesc(member);
+
         if (habit.isPresent()) {
             return member.to(habit.get().getDDay());
         }
@@ -74,7 +77,7 @@ public class MemberServiceImpl implements MemberService {
 
         Long getLetterCount = postRepository.countAllByRelation(friendToMeRelation);
 
-        Optional<Habit> habit = habitRepository.findFirstByMemberOrderByStartDate(friend);
+        Optional<Habit> habit = habitRepository.findTopByMemberOrderByStartDateDesc(friend);
         if ( habit.isPresent() ) {
             return friend.to(sendLetterCount, getLetterCount, habit.get().getDDay());
         }
