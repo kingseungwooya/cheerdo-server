@@ -28,4 +28,6 @@ public interface FriendRelationService {
 
     List<GetSearchedFriendResponseDto> getSearchedFriendRequest(String searchStr) throws Exception;
 
+    void deleteRelation(Long relationId) throws Exception;
+
 }

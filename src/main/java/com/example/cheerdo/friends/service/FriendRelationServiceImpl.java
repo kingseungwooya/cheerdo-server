@@ -223,4 +223,16 @@ public class FriendRelationServiceImpl implements FriendRelationService {
         return list;
     }
 
+    @Override
+    public void deleteRelation(Long relationId) throws Exception {
+        FriendRelation friendRelation = friendRelationRepository.findById(relationId).orElseThrow(
+                () -> new Exception("there is no such relation")
+        );
+        Member friend = memberRepository.findById(friendRelation.getFriendId()).get();
+        FriendRelation reversedfriendRelation = friendRelationRepository.findFriendRelationByMemberAndFriendId(friend, friendRelation.getMember().getId()).orElseThrow(
+                () -> new Exception("there is no reversed relation. please use request control")
+        );
+        friendRelationRepository.delete(friendRelation);
+        friendRelationRepository.delete(reversedfriendRelation);
+    }
 }
