@@ -13,4 +13,6 @@ public class GetReceivedPostRequestResponseDto {
     private LocalDateTime sendDateTime;
     private String friendId;
     private String friendName;
+    private String memberImage;
+    private Long relationId;
 }

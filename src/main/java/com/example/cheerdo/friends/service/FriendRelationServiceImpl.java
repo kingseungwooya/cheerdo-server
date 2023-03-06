@@ -177,16 +177,18 @@ public class FriendRelationServiceImpl implements FriendRelationService {
     @Override
     public List<GetReceivedPostRequestResponseDto> getReceivedPostRequest(String memberId) throws Exception {
         List<GetReceivedPostRequestResponseDto> list = new ArrayList<>();
-        List<PostRequest> postRequests = postRequestRepository.findAllByFriendRelation_Member_Id(memberId).orElseThrow(
+        List<PostRequest> postRequests = postRequestRepository.findAllByFriendRelation_FriendId(memberId).orElseThrow(
                 () -> new Exception("there is no such request")
         );
         for ( int i = 0; i < postRequests.size(); i++ ) {
-            Optional<Member> friend = memberRepository.findById(postRequests.get(i).getFriendRelation().getFriendId());
+            Optional<Member> friend = memberRepository.findById(postRequests.get(i).getFriendRelation().getMember().getId());
 
             list.add(GetReceivedPostRequestResponseDto.builder()
                     .sendDateTime(postRequests.get(i).getSendDateTime())
                     .friendName(friend.get().getName())
                     .friendId(friend.get().getId())
+                    .memberImage(friend.get().getMemberImage())
+                    .relationId(postRequests.get(i).getFriendRelation().getId())
                     .build()
             );
         }
