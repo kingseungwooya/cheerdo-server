@@ -98,6 +98,19 @@ public class FriendsController {
         }
     }
 
+    @DeleteMapping(value = "/relation/{relationId}")
+    @ApiOperation(value = "친구를 삭제하는 api"
+            , notes = "쌍방으로 수락된 친구 relation을 삭제하는 api. http status가 return된다.")
+    @ApiResponse(code = 200, message = "status ok")
+    public ResponseEntity<?> removeFriendRelation(@PathVariable("relationId") Long relationId) {
+        logger.info("request : relationId -> {}", relationId);
+        try {
+            friendRelationService.deleteRelation(relationId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
     @ApiOperation(value = "친구에게 편지요청하는 API"
             , notes = "relationId를 받아 relation에 해당하는 인원에게 PostRequest를 생성. 반환값으로 Http status가 반환된다.")
     @PostMapping(value = "/post-requests")
