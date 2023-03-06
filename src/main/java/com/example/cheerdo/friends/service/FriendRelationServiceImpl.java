@@ -233,6 +233,9 @@ public class FriendRelationServiceImpl implements FriendRelationService {
         FriendRelation friendRelation = friendRelationRepository.findById(relationId).orElseThrow(
                 () -> new Exception("there is no such relation")
         );
+        if(!friendRelation.isFriend()) {
+            throw new Exception("this relation does not accepted");
+        }
         Member friend = memberRepository.findById(friendRelation.getFriendId()).get();
         FriendRelation reversedfriendRelation = friendRelationRepository.findFriendRelationByMemberAndFriendId(friend, friendRelation.getMember().getId()).orElseThrow(
                 () -> new Exception("there is no reversed relation. please use request control")
