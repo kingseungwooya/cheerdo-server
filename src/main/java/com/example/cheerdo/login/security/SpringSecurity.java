@@ -83,7 +83,7 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("https://cheerdo-cheerdo.vercel.app/"));
+        configuration.setAllowedOrigins(Arrays.asList("https://cheerdo-cheerdo.vercel.app", "http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
         configuration.setExposedHeaders(Arrays.asList("Authorization", "Set-Cookie"));
