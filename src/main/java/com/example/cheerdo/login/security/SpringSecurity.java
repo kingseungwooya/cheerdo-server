@@ -42,17 +42,7 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**")
-                // allow anonymous resource requests
-                .antMatchers(
-                        "/",
-                        "/*.html",
-                        "/favicon.ico",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js",
-                        "/h2-console/**"
-                );
+        web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
     }
 
     @Override
@@ -79,7 +69,6 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/*").permitAll()
                 .antMatchers("/api/login/**", "/api/token/refresh/**", "/api/signup/**", "/swagger-ui.html", "/swagger/**",
-                        "/api/role/addtouser",
                         "/swagger-resources/**", "/webjars/**", "/v2/api-docs")
                 .permitAll()
                 .antMatchers("/api/member/**")
@@ -94,7 +83,7 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedOrigins(Arrays.asList("https://cheerdo-cheerdo.vercel.app/"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
         configuration.setExposedHeaders(Arrays.asList("Authorization", "Set-Cookie"));
