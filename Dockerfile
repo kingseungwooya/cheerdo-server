@@ -1,6 +1,6 @@
 FROM openjdk:17-oracle
 
-EXPOSE 8080
+EXPOSE 443
 
 ARG JAR_FILE=/build/libs/cheerdo-server-0.0.1-SNAPSHOT.jar
 
