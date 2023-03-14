@@ -75,6 +75,6 @@ jobs:
               sudo docker rm -f $(docker ps -qa)
               sudo docker pull ${{ secrets.DOCKER_REPO }}/cheerdo:latest 
               sudo docker rm -f ${{ secrets.DOCKER_CONTAINER_NAME }}-container
-              docker create --name ${{ secrets.DOCKER_CONTAINER_NAME }}-container -p 8080:8080 -e TZ=Asia/Seoul ${{ secrets.DOCKER_REPO }}/cheerdo:latest
+              docker create --name ${{ secrets.DOCKER_CONTAINER_NAME }}-container -p 443:443 -e TZ=Asia/Seoul ${{ secrets.DOCKER_REPO }}/cheerdo:latest
               docker start ${{ secrets.DOCKER_CONTAINER_NAME }}-container
               docker image prune -f  
