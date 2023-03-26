@@ -7,7 +7,7 @@ import lombok.Getter;
 @Builder
 @Getter
 @AllArgsConstructor
-public class GetFriendResponseDto {
+public class FollowerResponseDto {
 
     private Long relationId;
     private String name;

@@ -15,7 +15,7 @@ public class SendRequestDto {
 
     public FriendRelation dtoToFriendRelationEntity(Member member) {
         return FriendRelation.builder()
-                .friendId(this.friendId)
+                .friendId(friendId)
                 .member(member)
                 .isFriend(false)
                 .build();

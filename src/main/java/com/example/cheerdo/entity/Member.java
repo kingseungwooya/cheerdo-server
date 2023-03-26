@@ -1,5 +1,6 @@
 package com.example.cheerdo.entity;
 
+import com.example.cheerdo.friends.dto.response.SearchedFriendResponseDto;
 import com.example.cheerdo.member.dto.response.FriendInfoResponseDto;
 import com.example.cheerdo.member.dto.response.MemberInfoResponseDto;
 import lombok.Builder;
@@ -86,6 +87,14 @@ public class Member {
                 .dPlusCount(dPlusDay)
                 .getLetterCount(getLetterCount)
                 .sendLetterCount(sendLetterCount)
+                .build();
+    }
+
+    public SearchedFriendResponseDto to() {
+        return SearchedFriendResponseDto.builder()
+                .name(name)
+                .memberId(id)
+                .image(memberImage)
                 .build();
     }
 

@@ -1,37 +1,30 @@
 package com.example.cheerdo.entity;
 
-import com.example.cheerdo.post.dto.response.LetterResponseDto;
-import com.example.cheerdo.post.dto.response.PostResponseDto;
+import com.example.cheerdo.friends.dto.response.PostRequestResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
 public class PostRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "post_id")
+    @Column(name = "post_request_id")
     private Long id;
 
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "friendRelation")
+    @JoinColumn(name = "relation_id")
     private FriendRelation friendRelation;
 
-    // @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    @Column(name = "send_date")
+    @Column(name = "send_date_time")
     private LocalDateTime sendDateTime;
 
     @Builder
@@ -39,5 +32,16 @@ public class PostRequest {
         this.id = id;
         this.friendRelation = friendRelation;
         this.sendDateTime = sendDateTime;
+    }
+
+    public PostRequestResponseDto to() {
+        return PostRequestResponseDto.builder()
+                .friendId(friendRelation.getMember().getId())
+                .friendName(friendRelation.getMember().getName())
+                .relationId(friendRelation.getId())
+                .sendDateTime(sendDateTime)
+                .memberImage(friendRelation.getMember().getMemberImage())
+                .build();
+
     }
 }

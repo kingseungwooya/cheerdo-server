@@ -1,13 +1,9 @@
 package com.example.cheerdo.friends.controller;
 
-import com.example.cheerdo.friends.dto.request.RemoveOrAcceptRequestDto;
-import com.example.cheerdo.friends.dto.request.SendPostRequestDto;
-import com.example.cheerdo.friends.dto.request.SendRequestDto;
-import com.example.cheerdo.friends.dto.response.GetFriendRequestResponseDto;
-import com.example.cheerdo.friends.dto.response.GetReceivedPostRequestResponseDto;
-import com.example.cheerdo.friends.dto.response.GetFriendResponseDto;
-import com.example.cheerdo.friends.dto.response.GetSearchedFriendResponseDto;
+import com.example.cheerdo.friends.dto.response.FollowerResponseDto;
+import com.example.cheerdo.friends.dto.response.SearchedFriendResponseDto;
 import com.example.cheerdo.friends.service.FriendRelationService;
+import com.example.cheerdo.friends.service.SearchService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,115 +18,32 @@ import java.util.List;
 public class FriendsController {
 
     private final FriendRelationService friendRelationService;
+    private final SearchService searchService;
 
-    @GetMapping(value = "/list/{memberId}")
-    @ApiOperation(value = "memberId의 초기 Friend 화면에 필요한 data를 가져오는 api"
-            , notes = "반환값으로 relationId memberId name list가 반환된다")
-    public ResponseEntity<?> getMyFriendList(@PathVariable("memberId") String memberId) {
-        try {
-            List<GetFriendResponseDto> getFriendResponseDtos = friendRelationService.getMyFriendList(memberId);
-            return new ResponseEntity<>(getFriendResponseDtos, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+    @GetMapping(value = "/")
+    @ApiOperation(value = "memberId의 초기 Friend 화면에 필요한 data를 가져오는 api")
+    public ResponseEntity<List<FollowerResponseDto>> getMyFriends(@RequestParam String memberId) {
+
+        List<FollowerResponseDto> followerResponseDtos = friendRelationService.getFriends(memberId);
+        return new ResponseEntity<>(followerResponseDtos, HttpStatus.OK);
+
     }
 
-    @ApiOperation(value = "보낸 친구요청을 가져오는 API"
-            , notes = "반환값으로 relationId name list가 반환된다")
-    @GetMapping(value = "/requests/{memberId}/send")
-    public ResponseEntity<?> getMyRequest(@PathVariable("memberId") String memberId) {
-        try {
-            List<GetFriendRequestResponseDto> getFriendRequestResponseDtos = friendRelationService.getMyRequest(memberId);
-            return new ResponseEntity<>(getFriendRequestResponseDtos, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+    @DeleteMapping(value = "/")
+    @ApiOperation(value = "친구를 삭제하는 api")
+    public ResponseEntity<?> removeFriend(@RequestParam Long relationId) {
+
+        friendRelationService.deleteFriend(relationId);
+        return new ResponseEntity<>(HttpStatus.OK);
+
     }
 
-    @ApiOperation(value = "친구 요청을 보내는 api"
-            , notes = "반환값으로 Http status가 반환된다.")
-    @PostMapping(value = "/requests")
-    public ResponseEntity<?> sendRequest(@RequestBody SendRequestDto sendRequestDto) {
-        try {
-            if(sendRequestDto.getFriendId().equals(sendRequestDto.getMemberId())) {
-                throw new Exception("friend and member are the same");
-            }
-            friendRelationService.sendRequest(sendRequestDto);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @ApiOperation(value = "받은 친구요청을 가져오는 API"
-            , notes = "반환값으로 relationId memberId name list가 반환된다")
-    @GetMapping(value = "/requests/{memberId}/receive")
-    public ResponseEntity<?> getReceivedRequest(@PathVariable("memberId") String memberId) {
-        try {
-            List<GetFriendResponseDto> getFriendResponseDtos = friendRelationService.getReceivedRequest(memberId);
-            return new ResponseEntity<>(getFriendResponseDtos, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @ApiOperation(value = "친구 요청을 받거나 삭제하는 api"
-            , notes = "받은 요청을 수락 또는 거절할때, 보낸 요청을 삭제할때 사용이 가능하다. 반환값으로 Http status가 반환된다.")
-    @PostMapping(value = "/requests/control")
-    public ResponseEntity<?> removeOrAcceptRequest(@RequestBody RemoveOrAcceptRequestDto removeOrAcceptRequestDto) {
-        try {
-            friendRelationService.removeOrAcceptRequest(removeOrAcceptRequestDto);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @DeleteMapping(value = "/relation/{relationId}")
-    @ApiOperation(value = "친구를 삭제하는 api"
-            , notes = "쌍방으로 수락된 친구 relation을 삭제하는 api. http status가 return된다.")
-    public ResponseEntity<?> removeFriendRelation(@PathVariable("relationId") Long relationId) {
-        try {
-            friendRelationService.deleteRelation(relationId);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-    @ApiOperation(value = "친구에게 편지요청하는 API"
-            , notes = "relationId를 받아 relation에 해당하는 인원에게 PostRequest를 생성. 반환값으로 Http status가 반환된다.")
-    @PostMapping(value = "/post-requests")
-    public ResponseEntity<?> sendPostRequest(@RequestBody SendPostRequestDto sendPostRequestDto) {
-        try {
-            friendRelationService.sendPostRequest(sendPostRequestDto);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @ApiOperation(value = "받은 편지요청을 가져오는 API"
-            , notes = "memberId를 받고 반환값으로 sendDateTime과 friendId friendName list가 반환된다")
-    @GetMapping(value = "/post-requests/{memberId}/receive")
-    public ResponseEntity<?> getReceivedPostRequest(@PathVariable("memberId") String memberId) {
-        try {
-            List<GetReceivedPostRequestResponseDto> getReceivedPostRequestResponseDtos = friendRelationService.getReceivedPostRequest(memberId);
-            return new ResponseEntity<>(getReceivedPostRequestResponseDtos, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
 
     @ApiOperation(value = "친구 검색결과를 가져오는 API"
             , notes = "String값을 받아 반환값으로 이와 Name또는 Id가 일치하는 user를 반환한다.")
-    @GetMapping(value = "/search/{searchStr}")
-    public ResponseEntity<?> getSearchFriendRequest(@PathVariable("searchStr") String searchStr) {
-        try {
-            List<GetSearchedFriendResponseDto> GetSearchedFriendResponseDtos = friendRelationService.getSearchedFriendRequest(searchStr);
-            return new ResponseEntity<>(GetSearchedFriendResponseDtos, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+    @GetMapping(value = "/search")
+    public ResponseEntity<List<SearchedFriendResponseDto>> searchMember(@RequestParam String keyword) {
+        return new ResponseEntity<>(searchService.searchFriend(keyword), HttpStatus.OK);
     }
 
 }
