@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface SearchService {
 
-    List<SearchedFriendResponseDto> searchFriend(String keyword);
+    List<SearchedFriendResponseDto> searchFriend(String keyword, String memberId);
 }

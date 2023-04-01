@@ -25,10 +25,13 @@ public class FollowServiceImpl implements FollowService {
     public void sendFollow(SendRequestDto sendRequestDto) throws IllegalArgumentException {
         Member member = memberRepository.findById(sendRequestDto.getMemberId()).get();
 
-        friendRelationRepository.findFriendRelationByMemberAndFriendId(member, sendRequestDto.getFriendId())
+        /*
+        FriendRelation relation = friendRelationRepository.findFriendRelationByMemberAndFriendId(member,
+                        sendRequestDto.getFriendId())
                 .orElseThrow(
                         () -> new IllegalArgumentException("friendRelation already exist")
-                );
+                );*/
+
 
         friendRelationRepository.save(sendRequestDto.dtoToFriendRelationEntity(member));
     }

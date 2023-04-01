@@ -42,8 +42,9 @@ public class FriendsController {
     @ApiOperation(value = "친구 검색결과를 가져오는 API"
             , notes = "String값을 받아 반환값으로 이와 Name또는 Id가 일치하는 user를 반환한다.")
     @GetMapping(value = "/search")
-    public ResponseEntity<List<SearchedFriendResponseDto>> searchMember(@RequestParam String keyword) {
-        return new ResponseEntity<>(searchService.searchFriend(keyword), HttpStatus.OK);
+    public ResponseEntity<List<SearchedFriendResponseDto>> searchMember(@RequestParam String keyword,
+                                                                        @RequestParam String memberId) {
+        return new ResponseEntity<>(searchService.searchFriend(keyword, memberId), HttpStatus.OK);
     }
 
 }
