@@ -12,5 +12,6 @@ public interface RelationRepository extends JpaRepository<FriendRelation, Long> 
     Optional<List<FriendRelation>> findAllByMemberAndIsFriend(Member member, boolean isFriend);
     Optional<FriendRelation> findFriendRelationByMemberAndFriendId(Member member, String friendId);
     Optional<List<FriendRelation>> findAllByFriendIdAndIsFriend(String friendId, boolean isFriend);
+    boolean existsByMemberAndFriendId(Member member, String friendId);
 
 }

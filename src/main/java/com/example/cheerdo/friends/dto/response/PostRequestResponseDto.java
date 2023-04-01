@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @AllArgsConstructor
-public class GetReceivedPostRequestResponseDto {
+public class PostRequestResponseDto {
     private LocalDateTime sendDateTime;
     private String friendId;
     private String friendName;

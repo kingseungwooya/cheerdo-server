@@ -1,5 +1,6 @@
 package com.example.cheerdo.entity;
 
+import com.example.cheerdo.friends.dto.response.FollowerResponseDto;
 import lombok.Setter;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class FriendRelation {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @Column(name = "friend_id")
@@ -38,11 +39,17 @@ public class FriendRelation {
         this.friendId = friendId;
         this.isFriend = isFriend;
     }
-    @Builder
-    public FriendRelation(Long id, Member member, String friendId) {
-        this.id = id;
-        this.member = member;
-        this.friendId = friendId;
-        this.isFriend = false;
+
+    public FollowerResponseDto to(String friendName) {
+        return FollowerResponseDto.builder()
+                .relationId(id)
+                .memberId(friendId)
+                .name(friendName)
+                .build();
     }
+
+    public void accept() {
+        this.isFriend = true;
+    }
+
 }

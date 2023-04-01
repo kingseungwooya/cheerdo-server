@@ -33,4 +33,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
                                                                    @Param("endDate") LocalDate endDate,
                                                                    Sort sort);
     boolean existsByTodo(Todo todo);
+
+    void deleteAllByRelation(FriendRelation relation);
 }

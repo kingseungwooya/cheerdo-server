@@ -10,7 +10,7 @@ public interface LoginService {
 
     void join(JoinRequestDto joinRequestDto);
 
-    Role saveRole(Role role);
+    void saveRole(Role role);
 
     void addToRoleToUser(String userid, RoleName roleName);
 

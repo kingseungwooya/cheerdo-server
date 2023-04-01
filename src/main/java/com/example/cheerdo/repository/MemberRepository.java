@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, String> {
     Optional<Member> findById(String id);
-    Optional<List<Member>> findAllByIdContainingIgnoreCase(String searchStr1);
-    Optional<List<Member>> findAllByNameContainingIgnoreCase(String searchStr1);
+
+    List<Member> findAllByNameContainingIgnoreCaseAndIdContainingIgnoreCase(String str1, String str2);
 }

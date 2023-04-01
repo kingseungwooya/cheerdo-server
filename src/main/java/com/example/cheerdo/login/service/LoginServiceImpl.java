@@ -32,8 +32,10 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public Role saveRole(Role role) {
-        return null;
+    public void saveRole(Role role) {
+        if(!roleRepository.existsByName(role.getName())){
+            roleRepository.save(role);
+        }
     }
 
     @Override
