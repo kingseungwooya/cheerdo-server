@@ -36,7 +36,6 @@ public class FollowController {
     public ResponseEntity<Void> follow(@RequestBody SendRequestDto sendRequestDto) {
         followService.sendFollow(sendRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);
-
     }
 
     @ApiOperation(value = "받은 친구요청을 가져오는 기능")
@@ -48,19 +47,15 @@ public class FollowController {
     @ApiOperation(value = "친구 요청을 거절하는 기능")
     @PostMapping(value = "/refuse")
     public ResponseEntity<Void> requestRefuse(@RequestParam Long relationId) {
-
         followService.refuse(relationId);
         return new ResponseEntity<>(HttpStatus.OK);
-
     }
 
     @ApiOperation(value = "친구 요청을 수락하는기능")
     @PostMapping(value = "/accept")
     public ResponseEntity<Void> requestAccept(@RequestParam Long relationId) {
-
         followService.accept(relationId);
         return new ResponseEntity<>(HttpStatus.OK);
-
     }
 
 }

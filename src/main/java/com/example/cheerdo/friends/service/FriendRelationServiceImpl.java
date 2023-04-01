@@ -48,6 +48,5 @@ public class FriendRelationServiceImpl implements FriendRelationService {
         postRepository.deleteAllByRelation(reversedfriendRelation);
         friendRelationRepository.delete(friendRelation);
         friendRelationRepository.delete(reversedfriendRelation);
-        
     }
 }
